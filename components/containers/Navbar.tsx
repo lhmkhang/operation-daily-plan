@@ -12,7 +12,7 @@ const Navbar = (props: Props) => {
       <div className={styles.navBrand}>
         <span className={styles.navBrand_logo}>
           <Image
-            src='/Logo_DIGI-TEXX_Rut_Gon_2021_White.png'
+            src='/img/Logo_DIGI-TEXX_Rut_Gon_2021_White.png'
             width={50}
             height={35}
             alt="Logo Navbar"
