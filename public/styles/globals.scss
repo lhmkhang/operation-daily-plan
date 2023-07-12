@@ -1,0 +1,13 @@
+@import "./variables";
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  margin: 20px auto;
+  font-family: "Gothic A1", sans-serif;
+  background: $clr-background;
+}
