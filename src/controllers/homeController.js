@@ -18,11 +18,11 @@ const getNavbarItem = async (req, res) => {
         loggerError.error(error);
     }
 
-}
+};
 
 const getRoot = (req, res) => {
     return res.send("Welcome to backend express server!")
-}
+};
 
 const getUser = async (req, res) => {
     const username = req.body.username;
@@ -49,6 +49,6 @@ const getUser = async (req, res) => {
     } catch (err) {
         loggerError.error(err);
     }
-}
+};
 
 export default { getNavbarItem, getRoot, getUser };
