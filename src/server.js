@@ -1,8 +1,8 @@
 import express from "express";
-import dotenv from "dotenv";
 import logger from './middlewaves/logger.js'
 import initWebRoutes from "./routers/router.js";
 import serverConfiguration from "./configs/server.config.js";
+import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
@@ -15,5 +15,5 @@ serverConfiguration(app);
 initWebRoutes(app);
 
 app.listen(process.env.PORT, () => {
-    loggerInfo.info(`Server is running on port ${process.env.PORT}`);
+    loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
 });

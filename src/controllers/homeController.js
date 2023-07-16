@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import { getDBDev, getDBPro } from '../middlewaves/getDatabase.js';
 import logger from '../middlewaves/logger.js';
-dotenv.config();
 
 const loggerError = logger.getLogger('errorLogger');
 const loggerInfo = logger.getLogger('infoLogger');
@@ -40,7 +38,7 @@ const getUser = async (req, res) => {
 
             loggerInfo.info('Login successful');
 
-            const token = jwt.sign({ username }, process.env.SECRET_KEY, { expiresIn: rocess.env.EXPIRE_TOKEN_IN })
+            const token = jwt.sign({ username }, process.env.SECRET_KEY, { expiresIn: process.env.EXPIRE_TOKEN_IN })
             req.session.user = user;
             req.session.user.group = user.group;
             res.cookie('user_id', user._id, { maxAge: Number(process.env.SESSION_LIFE_TIME) });
