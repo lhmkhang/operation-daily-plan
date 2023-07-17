@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken';
-import { getDBDev, getDBPro } from '../middlewaves/getDatabase.js';
-import logger from '../middlewaves/logger.js';
+const jwt = require('jsonwebtoken');
+const { getDatabase } = require('../middlewaves/getDatabase.js');
+const logger = require('../middlewaves/logger.js');
 
 const loggerError = logger.getLogger('errorLogger');
 const loggerInfo = logger.getLogger('infoLogger');
@@ -27,7 +27,7 @@ const getUser = async (req, res) => {
     const password = req.body.password;
 
     try {
-        const database = await getDBDev('operation');
+        const database = await getDatabase('operation');
         const userCollection = database.collection('users');
         const user = await userCollection.findOne({ username: username });
 
@@ -49,4 +49,4 @@ const getUser = async (req, res) => {
     }
 };
 
-export default { getNavbarItem, getRoot, getUser };
+module.exports = { getNavbarItem, getRoot, getUser };

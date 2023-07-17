@@ -1,9 +1,10 @@
-import express from "express";
-import logger from './middlewaves/logger.js'
-import initWebRoutes from "./routers/router.js";
-import serverConfiguration from "./configs/server.config.js";
-import dotenv from "dotenv";
-dotenv.config();
+const express = require("express");
+const path = require("path");
+const logger = require('./middlewaves/logger.js');
+const initWebRoutes = require("./routers/router.js");
+const serverConfiguration = require("./configs/server.config.js");
+const dotenv = require("dotenv");
+dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
 
 const app = express();
 const loggerInfo = logger.getLogger('infoLogger');

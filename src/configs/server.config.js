@@ -1,10 +1,12 @@
-import express from 'express';
-import session from "express-session";
-import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
-import morgan from "morgan";
+const express = require('express');
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const morgan = require("morgan");
+const cors = require("cors");
 
 const serverConfiguration = (app) => {
+    app.use(cors());
     app.use(express.static("./src/public"));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,4 +22,4 @@ const serverConfiguration = (app) => {
     // app.set("views", "./src/views");
 }
 
-export default serverConfiguration;
+module.exports = serverConfiguration;

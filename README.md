@@ -1,8 +1,16 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
+
+### Setup environment
+```bash
+npm i
+```
+
+#### Create .env file by clone the value inside file .env.example and input the suitable value for your enviroment
+Create a .env file
+
+##### Run the project
 
 ```bash
 npm run dev

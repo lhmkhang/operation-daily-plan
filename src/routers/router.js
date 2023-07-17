@@ -1,5 +1,5 @@
-import express from "express";
-import homeController from "../controllers/homeController.js";
+const express = require("express");
+const homeController = require("../controllers/homeController.js");
 
 let router = express.Router();
 
@@ -7,9 +7,9 @@ let initWebRoutes = (app) => {
 
     router.get("/", homeController.getRoot);
     router.get("/navbar-item", homeController.getNavbarItem);
-    router.get("/login", homeController.getUser);
+    router.post("/login", homeController.getUser);
 
     return app.use("/", router);
 }
 
-export default initWebRoutes;
+module.exports = initWebRoutes;

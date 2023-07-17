@@ -1,15 +1,12 @@
-import log4js from 'log4js';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
+const log4js = require('log4js');
+const path = require('path');
 
 const config = {
     "appenders": {
         "console": { "type": "console" },
         "infoFile": {
             "type": "file",
-            "filename": path.join(path.resolve(dirname(fileURLToPath(import.meta.url)), '..'), "Logs/info.log"),
+            "filename": path.resolve(__dirname, '..', "Logs/info.log"),
             "maxLogSize": 10485760, // 10MB
             "backups": 3,
             "layout": {
@@ -20,7 +17,7 @@ const config = {
         },
         "errorFile": {
             "type": "file",
-            "filename": path.join(path.resolve(dirname(fileURLToPath(import.meta.url)), '..'), "Logs/error.log"),
+            "filename": path.resolve(__dirname, '..', "Logs/error.log"),
             "maxLogSize": 10485760, // 10MB
             "backups": 3,
             "layout": {
@@ -37,7 +34,6 @@ const config = {
     }
 }
 
-
 const logger = log4js.configure(config);
 
-export default logger;
+module.exports = logger;
