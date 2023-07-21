@@ -1,16 +1,13 @@
-## Getting Started
+# Getting Started
 
-First, run the development server:
-
-### Setup environment
+## Setup environment
 ```bash
 npm i
 ```
 
-#### Create .env file by clone the value inside file .env.example and input the suitable value for your enviroment
-Create a .env file
+Create .env file by clone the value inside file .env.example and input the suitable value for your enviroment
 
-##### Run the project
+## Run the project
 
 ```bash
 npm run dev

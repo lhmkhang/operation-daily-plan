@@ -8,7 +8,7 @@ const loggerInfo = logger.getLogger('infoLogger');
 const getNavbarItem = async (req, res) => {
 
     try {
-        const database = await getDBDev("operation")
+        const database = await getDatabase("operation")
         const collection = database.collection('menu_item')
         const list_item = await collection.findOne({}, { projection: { _id: 0 } });
         return res.json(list_item);
@@ -42,7 +42,7 @@ const getUser = async (req, res) => {
             req.session.user = user;
             req.session.user.group = user.group;
             res.cookie('user_id', user._id, { maxAge: Number(process.env.SESSION_LIFE_TIME) });
-            res.json({ token });
+            res.json({ token, expiresIn: process.env.EXPIRE_TOKEN_IN, receivedTime: new Date() });
         }
     } catch (err) {
         loggerError.error(err);

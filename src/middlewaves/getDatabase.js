@@ -7,12 +7,12 @@ dotenv.config({ path: path.resolve(__dirname, "../..", ".env") });
 const MongoClient = mongodb.MongoClient;
 const loggerInfo = logger.getLogger('infoLogger');
 const loggerError = logger.getLogger('errorLogger');
-let client1;
+let client;
 
 async function connect() {
     try {
-        client1 = new MongoClient(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true });
-        await client1.connect();
+        client = new MongoClient(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true });
+        await client.connect();
         loggerInfo.info('Connected successfully to databases');
     } catch (err) {
         loggerError.error('Failed to connect to databases', err);
@@ -21,19 +21,19 @@ async function connect() {
 }
 
 async function getDatabase(dbName) {
-    if (!client1 || !client1.topology.isConnected()) {
+    if (!client || !client.topology.isConnected()) {
         await connect();
     }
-    return client1.db(dbName);
+    return client.db(dbName);
 }
 
 connect();  // Kết nối tới DBs ngay khi app start
 
 // Xử lý khi chương trình bị tắt
 process.on('exit', (code) => {
-    if (client1 && client1.topology.isConnected()) {
-        loggerInfo.info('Closing MongoDB connection 1');
-        client1.close();
+    if (client && client.topology.isConnected()) {
+        loggerInfo.info('Closing MongoDB connection');
+        client.close();
     }
 });
 
