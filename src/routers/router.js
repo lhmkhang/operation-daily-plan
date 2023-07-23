@@ -1,8 +1,12 @@
 const express = require("express");
 const fs = require("fs");
+const path = require("path");
 const homeController = require("../controllers/homeController.js");
+const timeAllowUpload = require("../middlewaves/timeAllowUpload.js");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
+const dotenv = require("dotenv");
+dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
 
 const router = express.Router();
 const storage = multer.diskStorage({
@@ -27,6 +31,10 @@ let initWebRoutes = (app) => {
   router.post(
     "/upload-volume",
     upload.single("file"),
+    timeAllowUpload(
+      process.env.START_TIME_UPLOAD_VOLUME,
+      process.env.END_TIME_UPLOAD_VOLUME
+    ),
     homeController.uploadVolume
   );
 
