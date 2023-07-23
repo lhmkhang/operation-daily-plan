@@ -39,3 +39,6 @@ next-env.d.ts
 
 # Eslint
 .eslintrc.json
+
+# Uploads
+/uploads
