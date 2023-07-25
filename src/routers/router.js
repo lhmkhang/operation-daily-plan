@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const homeController = require("../controllers/homeController.js");
 const timeAllowUpload = require("../middlewaves/timeAllowUpload.js");
+const tokenAuthen = require("../middlewaves/tokenAuthen.js");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const dotenv = require("dotenv");
@@ -30,6 +31,7 @@ let initWebRoutes = (app) => {
   router.post("/login", homeController.getUser);
   router.post(
     "/upload-volume",
+    tokenAuthen,
     upload.single("file"),
     timeAllowUpload(
       process.env.START_TIME_UPLOAD_VOLUME,

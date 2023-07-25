@@ -40,12 +40,12 @@ const getUser = async (req, res) => {
       const token = jwt.sign({ username }, process.env.SECRET_KEY, {
         expiresIn: process.env.EXPIRE_TOKEN_IN,
       });
-      req.session.user = user;
-      req.session.user.group = user.group;
-      res.cookie("user_id", user._id, {
-        maxAge: Number(process.env.SESSION_LIFE_TIME),
-      });
-      res.json({
+      // req.session.user = user;
+      // req.session.user.group = user.group;
+      // res.cookie("user_id", user._id, {
+      //   maxAge: Number(process.env.SESSION_LIFE_TIME),
+      // });
+      return res.json({
         token,
         expiresIn: process.env.EXPIRE_TOKEN_IN,
         receivedTime: new Date(),
@@ -76,7 +76,7 @@ const uploadVolume = (req, res) => {
       });
       // const csvData = XLSX.utils.sheet_to_csv(worksheet)
 
-      console.log(jsonData);
+      console.log(jsonData.length);
     });
     return res.json("File uploaded successful!");
   } catch (error) {
