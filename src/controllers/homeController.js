@@ -73,10 +73,50 @@ const uploadVolume = (req, res) => {
       const jsonData = XLSX.utils.sheet_to_json(worksheet, {
         header: 0,
         defval: "",
+      }).map((object) => {
+        delete object.__EMPTY;
+        return object;
       });
+
+      // console.log(jsonData);
+
       // const csvData = XLSX.utils.sheet_to_csv(worksheet)
 
-      console.log(jsonData.length);
+      if (jsonData.length > 0) {
+        try {
+          const database = await getDatabase("operation");
+          let month = new Date().toISOString().split("T")[0].split("-").join("");
+          const collection = database.collection(`volume_${month}`);
+          const insertDB = collection.insertMany(jsonData);
+
+          fs.unlink(req.file.path, (err) => {
+            if (err) {
+              console.error("Error while deleting the file:", err);
+            }
+          });
+
+          const authHeader = req.headers["authorization"];
+          const token = authHeader && authHeader.split(" ")[1];
+          const username = jwt.decode(token, process.env.SECRET_KEY).username;
+
+          const headerFileUpload = Object.keys(jsonData[0]);
+          const logs = {
+            file_header: headerFileUpload,
+            function: "upload weekly plan",
+            user_upload: username,
+            project_list: jsonData.map(object => {
+              return object["Project name as PIM"]
+            }),
+            created_date: new Date()
+          }
+
+          const logsCollection = database.collection(`volume_logs_${month}`)
+          const insertLogsDB = logsCollection.insertOne(logs);
+
+        } catch (error) {
+          loggerError.error("Error while inserting data into DB:", error);
+        }
+      }
     });
     return res.json("File uploaded successful!");
   } catch (error) {
@@ -85,4 +125,54 @@ const uploadVolume = (req, res) => {
   }
 };
 
-module.exports = { getNavbarItem, getRoot, getUser, uploadVolume };
+const getDailyData = async (req, res) => {
+  try {
+    let month = new Date().toISOString().split("T")[0].split("-").join("");
+    const database = await getDatabase("operation");
+    const collection = database.collection(`volume_${month}`);
+    const date = '2023-07-12';
+
+    const result = await collection.aggregate([
+      {
+        $addFields: {
+          data: {
+            $objectToArray: "$$ROOT"
+          }
+        }
+      },
+      {
+        $project: {
+          data: {
+            $filter: {
+              input: "$data",
+              as: "item",
+              cond: {
+                $or: [
+                  { $not: { $regexMatch: { input: "$$item.k", regex: /Forecast|Plan|Real/ } } },
+                  { $regexMatch: { input: "$$item.k", regex: new RegExp(date) } }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $arrayToObject: "$data"
+          }
+        }
+      }
+    ]).toArray();
+
+    res.status(200).json({
+      message: `Get daily data of ${date} successful!`
+    })
+
+    return result;
+  } catch (error) {
+    loggerError.error(error);
+  }
+}
+
+module.exports = { getNavbarItem, getRoot, getUser, uploadVolume, getDailyData };

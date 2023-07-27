@@ -50,7 +50,7 @@ const checkTimeValidity = (startTime, endTime) => async (req, res, next) => {
       // Trong khoảng thời gian cho phép
       next();
     } else {
-      return res.status(403).json("Ngoài khoảng thời gian cho phép.");
+      return res.status(403).json({ error: "Ngoài khoảng thời gian cho phép." });
     }
   } catch (err) {
     loggerError.error(err);
