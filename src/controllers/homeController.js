@@ -3,6 +3,11 @@ const XLSX = require("xlsx");
 const fs = require("fs");
 const { getDatabase } = require("../middlewaves/getDatabase.js");
 const logger = require("../middlewaves/logger.js");
+const {
+  VolumeModel,
+  UserModel,
+  LogsVolumeModel,
+} = require("../schemas/mySchema.js");
 
 const loggerError = logger.getLogger("errorLogger");
 const loggerInfo = logger.getLogger("infoLogger");
@@ -27,9 +32,11 @@ const getUser = async (req, res) => {
   const password = req.body.password;
 
   try {
-    const database = await getDatabase("operation");
-    const userCollection = database.collection("users");
-    const user = await userCollection.findOne({ username: username });
+    // const database = await getDatabase("operation");
+    /* const userCollection = database.collection("users");
+    const user = await userCollection.findOne({ username: username }); */
+
+    const user = await UserModel.findOne({ username: username });
 
     if (!user || user.password !== password) {
       loggerError.error("Invalid username or password");
@@ -70,28 +77,31 @@ const uploadVolume = (req, res) => {
       const buffer = Buffer.concat(data);
       const workbook = XLSX.read(buffer, { type: "buffer" });
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-        header: 0,
-        defval: "",
-      }).map((object) => {
-        delete object.__EMPTY;
-        return object;
-      });
-
-      // console.log(jsonData);
-
-      // const csvData = XLSX.utils.sheet_to_csv(worksheet)
+      const jsonData = XLSX.utils
+        .sheet_to_json(worksheet, {
+          header: 0,
+          defval: "",
+        })
+        .map((object) => {
+          delete object.__EMPTY;
+          return object;
+        });
 
       if (jsonData.length > 0) {
         try {
-          const database = await getDatabase("operation");
-          let month = new Date().toISOString().split("T")[0].split("-").join("");
-          const collection = database.collection(`volume_${month}`);
-          const insertDB = collection.insertMany(jsonData);
+          /* let month = new Date()
+            .toISOString()
+            .split("T")[0]
+            .split("-")
+            .join("");
+          const collection = database.collection(`volume_${month}`); */
+          const insertDB = await VolumeModel.insertMany(jsonData);
 
           fs.unlink(req.file.path, (err) => {
             if (err) {
-              console.error("Error while deleting the file:", err);
+              loggerError.error("Error while deleting the file:", err);
+            } else {
+              loggerInfo.info("File upload has been deleted successfully!");
             }
           });
 
@@ -104,15 +114,11 @@ const uploadVolume = (req, res) => {
             file_header: headerFileUpload,
             function: "upload weekly plan",
             user_upload: username,
-            project_list: jsonData.map(object => {
-              return object["Project name as PIM"]
+            project_list: jsonData.map((object) => {
+              return object["Project name as PIM"];
             }),
-            created_date: new Date()
-          }
-
-          const logsCollection = database.collection(`volume_logs_${month}`)
-          const insertLogsDB = logsCollection.insertOne(logs);
-
+          };
+          const insertLogsDB = await LogsVolumeModel.create(logs);
         } catch (error) {
           loggerError.error("Error while inserting data into DB:", error);
         }
@@ -130,49 +136,69 @@ const getDailyData = async (req, res) => {
     let month = new Date().toISOString().split("T")[0].split("-").join("");
     const database = await getDatabase("operation");
     const collection = database.collection(`volume_${month}`);
-    const date = '2023-07-12';
+    const date = "2023-07-12";
 
-    const result = await collection.aggregate([
-      {
-        $addFields: {
-          data: {
-            $objectToArray: "$$ROOT"
-          }
-        }
-      },
-      {
-        $project: {
-          data: {
-            $filter: {
-              input: "$data",
-              as: "item",
-              cond: {
-                $or: [
-                  { $not: { $regexMatch: { input: "$$item.k", regex: /Forecast|Plan|Real/ } } },
-                  { $regexMatch: { input: "$$item.k", regex: new RegExp(date) } }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        $replaceRoot: {
-          newRoot: {
-            $arrayToObject: "$data"
-          }
-        }
-      }
-    ]).toArray();
+    const result = await collection
+      .aggregate([
+        {
+          $addFields: {
+            data: {
+              $objectToArray: "$$ROOT",
+            },
+          },
+        },
+        {
+          $project: {
+            data: {
+              $filter: {
+                input: "$data",
+                as: "item",
+                cond: {
+                  $or: [
+                    {
+                      $not: {
+                        $regexMatch: {
+                          input: "$$item.k",
+                          regex: /Forecast|Plan|Real/,
+                        },
+                      },
+                    },
+                    {
+                      $regexMatch: {
+                        input: "$$item.k",
+                        regex: new RegExp(date),
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $arrayToObject: "$data",
+            },
+          },
+        },
+      ])
+      .toArray();
 
     res.status(200).json({
-      message: `Get daily data of ${date} successful!`
-    })
+      message: `Get daily data of ${date} successful!`,
+    });
 
     return result;
   } catch (error) {
     loggerError.error(error);
   }
-}
+};
 
-module.exports = { getNavbarItem, getRoot, getUser, uploadVolume, getDailyData };
+module.exports = {
+  getNavbarItem,
+  getRoot,
+  getUser,
+  uploadVolume,
+  getDailyData,
+};

@@ -1,5 +1,6 @@
 const path = require("path");
-const { getDatabase } = require("../middlewaves/getDatabase.js");
+// const { getDatabase } = require("../middlewaves/getDatabase.js");
+const { UserModel } = require("../schemas/mySchema.js");
 const logger = require("../middlewaves/logger.js");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
@@ -13,9 +14,9 @@ const checkTimeValidity = (startTime, endTime) => async (req, res, next) => {
     const token = authHeader && authHeader.split(" ")[1];
     const username = jwt.decode(token, process.env.SECRET_KEY).username;
 
-    const database = await getDatabase("operation");
-    const userCollection = database.collection("users");
-    const user = await userCollection.findOne({ username: username });
+    // const database = await getDatabase("operation");
+    // const userCollection = database.collection("users");
+    const user = await UserModel.findOne({ username: username });
 
     const now = new Date();
     const offset = 7; // GMT+7
@@ -50,7 +51,9 @@ const checkTimeValidity = (startTime, endTime) => async (req, res, next) => {
       // Trong khoảng thời gian cho phép
       next();
     } else {
-      return res.status(403).json({ error: "Ngoài khoảng thời gian cho phép." });
+      return res
+        .status(403)
+        .json({ error: "Ngoài khoảng thời gian cho phép." });
     }
   } catch (err) {
     loggerError.error(err);
