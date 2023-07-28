@@ -8,6 +8,7 @@ const {
   UserModel,
   LogsVolumeModel,
 } = require("../schemas/mySchema.js");
+const { default: mongoose } = require("mongoose");
 
 const loggerError = logger.getLogger("errorLogger");
 const loggerInfo = logger.getLogger("infoLogger");
@@ -80,7 +81,7 @@ const uploadVolume = (req, res) => {
       const jsonData = XLSX.utils
         .sheet_to_json(worksheet, {
           header: 0,
-          defval: "",
+          defval: ""
         })
         .map((object) => {
           delete object.__EMPTY;
@@ -89,21 +90,7 @@ const uploadVolume = (req, res) => {
 
       if (jsonData.length > 0) {
         try {
-          /* let month = new Date()
-            .toISOString()
-            .split("T")[0]
-            .split("-")
-            .join("");
-          const collection = database.collection(`volume_${month}`); */
-          const insertDB = await VolumeModel.insertMany(jsonData);
-
-          fs.unlink(req.file.path, (err) => {
-            if (err) {
-              loggerError.error("Error while deleting the file:", err);
-            } else {
-              loggerInfo.info("File upload has been deleted successfully!");
-            }
-          });
+          const insertDB = await VolumeModel.insertMany(jsonData, { ordered: false });
 
           const authHeader = req.headers["authorization"];
           const token = authHeader && authHeader.split(" ")[1];
@@ -115,25 +102,41 @@ const uploadVolume = (req, res) => {
             function: "upload weekly plan",
             user_upload: username,
             project_list: jsonData.map((object) => {
-              return object["Project name as PIM"];
+              return ["Project name as PIM"];
             }),
+            isSuccess: true
           };
+
           const insertLogsDB = await LogsVolumeModel.create(logs);
+          return res.json("File uploaded successful!");
         } catch (error) {
           loggerError.error("Error while inserting data into DB:", error);
+          return res.status(500).json(error);
+        } finally {
+          fs.unlink(req.file.path, (err) => {
+            if (err) {
+              loggerError.error("Error while deleting the file:", err);
+            } else {
+              loggerInfo.info("File upload has been deleted successfully!");
+            }
+          });
         }
+      } else {
+        return res.status(400).json("No data found in the uploaded file.");
       }
+
     });
-    return res.json("File uploaded successful!");
   } catch (error) {
     loggerError.error("Error while processing the uploaded file:", error);
-    return res.status(500).json("File processing failed.");
+    return res.status(500).json(error);
   }
 };
 
 const getDailyData = async (req, res) => {
   try {
-    let month = new Date().toISOString().split("T")[0].split("-").join("");
+    const mongoose = require("mongoose");
+    const { ObjectId } = mongoose.Types;
+    /* let month = new Date().toISOString().split("T")[0].split("-").join("");
     const database = await getDatabase("operation");
     const collection = database.collection(`volume_${month}`);
     const date = "2023-07-12";
@@ -183,13 +186,28 @@ const getDailyData = async (req, res) => {
           },
         },
       ])
-      .toArray();
+      .toArray(); */
 
-    res.status(200).json({
-      message: `Get daily data of ${date} successful!`,
-    });
+    const existingData = await VolumeModel.findOne({ _id: new ObjectId("64c31c43c0e8ee5e3795d314") });
 
-    return result;
+    let dataFromClient = {
+      "Customer short name": "Lê Hoàng Minh Khang",
+      "HEAD of team": "Khang Lê",
+      "username": "Khang"
+    }
+
+    if (existingData) {
+      await VolumeModel.findOneAndUpdate({ _id: new ObjectId("64c31c43c0e8ee5e3795d314") }, dataFromClient);
+      console.log('Cập nhật thành công!');
+    } else {
+      // Nếu không tồn tại, thực hiện lưu mới
+      await VolumeModel.create(dataFromClient);
+      console.log('Lưu mới thành công!');
+    }
+
+    return res.status(200).json("Updated data successful!");
+
+    // return result;
   } catch (error) {
     loggerError.error(error);
   }

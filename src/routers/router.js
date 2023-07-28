@@ -39,7 +39,7 @@ let initWebRoutes = (app) => {
     ),
     homeController.uploadVolume
   );
-  router.get("/getDailyData", tokenAuthen, homeController.getDailyData)
+  router.put("/getDailyData", tokenAuthen, homeController.getDailyData)
 
   return app.use("/", router);
 };
