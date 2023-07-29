@@ -1,7 +1,7 @@
 const path = require("path");
 // const { getDatabase } = require("../middlewaves/getDatabase.js");
-const { UserModel } = require("../schemas/mySchema.js");
-const logger = require("../middlewaves/logger.js");
+const { UserModel } = require("../schemas/userSchema");
+const logger = require("../helpers/logger");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config({ path: path.resolve(__dirname, "..", ".env") });

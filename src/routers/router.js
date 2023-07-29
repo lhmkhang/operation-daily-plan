@@ -1,6 +1,8 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const userController = require("../controllers/userController");
+const uploadController = require("../controllers/uploadController");
 const homeController = require("../controllers/homeController.js");
 const timeAllowUpload = require("../middlewaves/timeAllowUpload.js");
 const tokenAuthen = require("../middlewaves/tokenAuthen.js");
@@ -27,8 +29,11 @@ const upload = multer({ storage: storage });
 
 let initWebRoutes = (app) => {
   router.get("/", homeController.getRoot);
+
   router.get("/navbar-item", homeController.getNavbarItem);
-  router.post("/login", homeController.getUser);
+
+  router.post("/login", userController.getUser);
+
   router.post(
     "/upload-volume",
     tokenAuthen,
@@ -37,12 +42,11 @@ let initWebRoutes = (app) => {
       process.env.START_TIME_UPLOAD_VOLUME,
       process.env.END_TIME_UPLOAD_VOLUME
     ),
-    homeController.uploadVolume
+    uploadController.uploadVolume
   );
-  router.put("/getDailyData", tokenAuthen, homeController.getDailyData)
+  router.put("/getDailyData", tokenAuthen, homeController.getDailyData);
 
   return app.use("/", router);
 };
-
 
 module.exports = initWebRoutes;

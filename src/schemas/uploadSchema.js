@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-const month = `${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, "0")}`;
+const month = `${new Date().getFullYear()}${(new Date().getMonth() + 1)
+  .toString()
+  .padStart(2, "0")}`;
 
 const volumeSchema = new mongoose.Schema(
   {
@@ -37,7 +39,7 @@ const volumeSchema = new mongoose.Schema(
     "Forecast Week 29": { type: Number, require: true },
     "Plan Week 29": { type: Number, require: true },
     "Real Week 29": { type: Number, require: true },
-    "username": { type: String, require: true },
+    username: { type: String, require: true },
     createdDate: { type: Date, default: Date.now },
     updatedDate: { type: Date, default: Date.now },
   },
@@ -49,17 +51,6 @@ volumeSchema.index(
   { unique: true }
 );
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, require: true, unique: true },
-  password: { type: String, require: true },
-  group: { type: String, require: true },
-});
-
-/* userSchema.pre("save", function (next) {
-  this.updatedDate = new Date();
-  next();
-}); */
-
 const logsVolumeSchema = new mongoose.Schema(
   {
     file_header: { type: Array, require: true },
@@ -68,37 +59,41 @@ const logsVolumeSchema = new mongoose.Schema(
     project_list: { type: Array, require: true },
     createdDate: { type: Date, default: Date.now },
     updatedDate: { type: Date, default: Date.now },
-    isSuccess: { type: Boolean, require: true }
+    isSuccess: { type: Boolean, require: true },
   },
   { versionKey: false }
 );
 
-/* logsVolumeSchema.pre("save", function (next) {
-  this.updatedDate = new Date();
-  next();
-}); */
+const logsDailyUpdateSchema = new mongoose.Schema(
+  {
+    username: { type: String, require: true },
+    dataId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    oldData: { type: mongoose.Schema.Types.Mixed },
+    updatedFields: { type: mongoose.Schema.Types.Mixed },
+    timestamp: { type: Date, default: Date.now },
+  },
+  { versionKey: false }
+);
 
-const logsDailyUpdateSchema = new mongoose.Schema({
-  username: { type: String, require: true },
-  dataId: { type: mongoose.Schema.Types.ObjectId, required: true },
-  oldData: { type: mongoose.Schema.Types.Mixed },
-  updatedFields: { type: mongoose.Schema.Types.Mixed },
-  timestamp: { type: Date, default: Date.now },
-}, { versionKey: false });
+const LogDailyUpdateModel = mongoose.model(
+  `logs_daily_plan_data_${month}`,
+  logsDailyUpdateSchema
+);
 
-const LogDailyUpdateModel = mongoose.model(`logs_daily_plan_data_${month}`, logsDailyUpdateSchema);
-
-volumeSchema.pre('findOneAndUpdate', async function (next) {
+volumeSchema.pre("findOneAndUpdate", async function (next) {
   this._tempOldData = await this.model.findOne(this.getQuery());
   next();
 });
-volumeSchema.post('findOneAndUpdate', async function (doc) {
+volumeSchema.post("findOneAndUpdate", async function (doc) {
   const oldData = await this._tempOldData;
   const updatedFields = {};
 
   for (const field in this._update.$set) {
     if (this._update.$set.hasOwnProperty(field)) {
-      if (JSON.stringify(this._update.$set[field]) !== JSON.stringify(oldData[field])) {
+      if (
+        JSON.stringify(this._update.$set[field]) !==
+        JSON.stringify(oldData[field])
+      ) {
         if (field !== "updatedDate") {
           updatedFields[field] = this._update.$set[field];
         }
@@ -107,12 +102,17 @@ volumeSchema.post('findOneAndUpdate', async function (doc) {
   }
 
   if (Object.keys(updatedFields).length === 0) {
-    return
+    return;
   }
   const user = doc.username;
-  await LogDailyUpdateModel.create({ dataId: doc._id, oldData, updatedFields, username: user });
-});
 
+  await LogDailyUpdateModel.create({
+    dataId: doc._id,
+    oldData,
+    updatedFields,
+    username: user,
+  });
+});
 
 volumeSchema.pre("findOneAndUpdate", function (next) {
   const updateFields = this.getUpdate();
@@ -123,10 +123,10 @@ volumeSchema.pre("findOneAndUpdate", function (next) {
 });
 
 const VolumeModel = mongoose.model(`volume_${month}`, volumeSchema);
-const UserModel = mongoose.model("User", userSchema);
+
 const LogsVolumeModel = mongoose.model(
   `volume_logs_${month}`,
   logsVolumeSchema
 );
 
-module.exports = { VolumeModel, UserModel, LogsVolumeModel };
+module.exports = { VolumeModel, LogsVolumeModel, logsDailyUpdateSchema };
