@@ -1,5 +1,5 @@
 const logger = require("../helpers/logger");
-const { VolumeModel } = require("../schemas/uploadSchema");
+const dailyPlanModel = require("../schemas/dailyPlanSchema");
 
 const loggerError = logger.getLogger("errorLogger");
 const loggerInfo = logger.getLogger("infoLogger");
@@ -75,19 +75,63 @@ const getDailyData = async (req, res) => {
       ])
       .toArray(); */
 
-    const existingData = await VolumeModel.findOne({
-      _id: new ObjectId("64c475ec714608654db194d9"),
-    });
+    // const existingData = await VolumeModel.findOne({
+    //   _id: new ObjectId("64c475ec714608654db194d9"),
+    // });
 
+    const existingData = await dailyPlanModel.findOne({
+      _id: new ObjectId("64c5ff1f33a317066853f022"),
+    });
     let dataFromClient = {
-      "Project name as PIM": "Hoanh nhấn đầu Khang vô lồn Hoanh",
-      "Service Type": "Khang bú lồn Hoanh",
-      username: "Khang",
+      "Project name as PIM": "Nguyễn Thị Kiều Hoanh",
+      "Service Type": "Data Entry",
+      Plan: {
+        "2023-07-10": {
+          Forecast: "1000",
+          Plan: "1000",
+          Real: "1500",
+        },
+        "2023-07-11": {
+          Forecast: "",
+          Plan: "",
+          Real: "",
+        },
+        "2023-07-12": {
+          Forecast: "",
+          Plan: "",
+          Real: "",
+        },
+        "2023-07-13": {
+          Forecast: "",
+          Plan: "",
+          Real: "",
+        },
+        "2023-07-14": {
+          Forecast: "",
+          Plan: "",
+          Real: "",
+        },
+        "2023-07-15": {
+          Forecast: "",
+          Plan: "",
+          Real: "",
+        },
+        "2023-07-16": {
+          Forecast: "",
+          Plan: "",
+          Real: "",
+        },
+        "Week 29": {
+          Forecast: 300000,
+          Plan: 291000,
+          Real: 328500,
+        },
+      },
     };
 
     if (existingData) {
-      await VolumeModel.findOneAndUpdate(
-        { _id: new ObjectId("64c475ec714608654db194d9") },
+      await dailyPlanModel.findOneAndUpdate(
+        { _id: new ObjectId("64c5ff1f33a317066853f022") },
         dataFromClient
       );
       loggerInfo.info("Cập nhật thành công!");

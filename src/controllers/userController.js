@@ -9,10 +9,6 @@ const getUser = async (req, res) => {
   const password = req.body.password;
 
   try {
-    // const database = await getDatabase("operation");
-    /* const userCollection = database.collection("users");
-      const user = await userCollection.findOne({ username: username }); */
-
     const user = await UserModel.findOne({ username: username });
 
     if (!user || user.password !== password) {
