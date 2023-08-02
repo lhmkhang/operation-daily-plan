@@ -80,7 +80,7 @@ const getDailyData = async (req, res) => {
     // });
 
     const existingData = await dailyPlanModel.findOne({
-      _id: new ObjectId("64c5ff1f33a317066853f022"),
+      _id: new ObjectId("64c708f6a239ac341c86b0e1"),
     });
     let dataFromClient = {
       "Project name as PIM": "Nguyễn Thị Kiều Hoanh",
@@ -131,7 +131,7 @@ const getDailyData = async (req, res) => {
 
     if (existingData) {
       await dailyPlanModel.findOneAndUpdate(
-        { _id: new ObjectId("64c5ff1f33a317066853f022") },
+        { _id: new ObjectId("64c708f6a239ac341c86b0e1") },
         dataFromClient
       );
       loggerInfo.info("Cập nhật thành công!");
