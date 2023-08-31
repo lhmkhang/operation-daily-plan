@@ -27,10 +27,11 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-let initWebRoutes = (app) => {
-  router.get("/", homeController.getRoot);
-
+let initApiRoutes = (app) => {
   router.get("/navbar-item", homeController.getNavbarItem);
+
+  router.post("/create-user", userController.createUser);
+  router.post("/change-password", userController.changePassword);
 
   router.post("/login", userController.getUser);
 
@@ -44,9 +45,12 @@ let initWebRoutes = (app) => {
     ),
     uploadController.uploadVolume
   );
+
   router.put("/getDailyData", tokenAuthen, homeController.getDailyData);
 
-  return app.use("/", router);
+  router.get("/incident", homeController.getIncidentData);
+
+  return app.use("/api/v1", router);
 };
 
-module.exports = initWebRoutes;
+module.exports = initApiRoutes;

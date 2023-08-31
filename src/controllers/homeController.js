@@ -1,5 +1,6 @@
 const logger = require("../helpers/logger");
 const dailyPlanModel = require("../schemas/dailyPlanSchema");
+const trackingIssueModel = require("../schemas/trackingIssueSchema");
 
 const loggerError = logger.getLogger("errorLogger");
 const loggerInfo = logger.getLogger("infoLogger");
@@ -13,10 +14,6 @@ const getNavbarItem = async (req, res) => {
   } catch (error) {
     loggerError.error(error);
   }
-};
-
-const getRoot = (req, res) => {
-  return res.send("Welcome to backend express server!");
 };
 
 const getDailyData = async (req, res) => {
@@ -147,8 +144,41 @@ const getDailyData = async (req, res) => {
   }
 };
 
+const getIncidentData = async (req, res) => {
+  try {
+    const existingData = await trackingIssueModel.find({});
+
+    if (existingData) {
+
+      return res.status(200).json(existingData);
+
+    } else {
+      return res.status(400).json({ message: "process fail" })
+    }
+
+
+  } catch (error) {
+    loggerError.error(error);
+  }
+}
+
+const getHomePage = async (req, res) => {
+  return res.render("home");
+}
+
+const getChangePasswordPage = (req, res) => {
+  return res.render("changePassword");
+}
+
+const getLoginPage = (req, res) => {
+  return res.render("login");
+}
+
 module.exports = {
   getNavbarItem,
-  getRoot,
   getDailyData,
+  getIncidentData,
+  getHomePage,
+  getChangePasswordPage,
+  getLoginPage
 };

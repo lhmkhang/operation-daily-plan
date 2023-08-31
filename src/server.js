@@ -1,7 +1,8 @@
 const express = require("express");
 const path = require("path");
 const logger = require("./helpers/logger");
-const initWebRoutes = require("./routers/router.js");
+const initApiRoutes = require("./routers/api.js");
+const initWebRoutes = require("./routers/web.js");
 const serverConfiguration = require("./configs/server.config.js");
 const connectDB = require("./helpers/connectDB.js");
 const dotenv = require("dotenv");
@@ -15,6 +16,8 @@ connectDB();
 
 // Configuration of express server
 serverConfiguration(app);
+
+initApiRoutes(app);
 
 // handle request from express
 initWebRoutes(app);
