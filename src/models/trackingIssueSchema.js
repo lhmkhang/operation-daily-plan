@@ -9,12 +9,12 @@ const trackingIssueSchema = new mongoose.Schema(
   {
     "PROJECT NAME": { type: String, require: true },
     "ISSUE DESCRIPTION": { type: String, require: true },
-    "STATUS": { type: String, require: true },
-    "PRIORITY": { type: String, require: true },
-    "ASSIGNEE": { type: String, require: true },
+    STATUS: { type: String, require: true },
+    PRIORITY: { type: String, require: true },
+    ASSIGNEE: { type: String, require: true },
     "OPEN AT": { type: String, require: true },
     "CLOSE AT": { type: String, require: true },
-    "COMMENTS": { type: String, require: true },
+    COMMENTS: { type: String, require: true },
     "ROOT CAUSES": { type: String, require: true },
     "CORRECTIVE / PREVENTIVE ACTIONS": { type: String, require: true },
     "ROOT CAUSE CATEGORY": { type: String, require: true },
@@ -71,6 +71,9 @@ trackingIssueSchema.pre("findOneAndUpdate", function (next) {
 });
 
 // Biên dịch và trả về model
-const trackingIssueModel = mongoose.model(`incident_tracking_${month}`, trackingIssueSchema);
+const trackingIssueModel = mongoose.model(
+  `incident_tracking_${month}`,
+  trackingIssueSchema
+);
 
 module.exports = trackingIssueModel;

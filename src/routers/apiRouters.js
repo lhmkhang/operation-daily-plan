@@ -1,11 +1,11 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const userController = require("../controllers/userController");
+const userControllers = require("../controllers/userControllers");
 const uploadController = require("../controllers/uploadController");
-const homeController = require("../controllers/homeController.js");
+const pageControllers = require("../controllers/pageControllers.js");
 const timeAllowUpload = require("../middlewaves/timeAllowUpload.js");
-const tokenAuthen = require("../middlewaves/tokenAuthen.js");
+const validToken = require("../middlewaves/validToken.js");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const dotenv = require("dotenv");
@@ -28,16 +28,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 let initApiRoutes = (app) => {
-  router.get("/navbar-item", homeController.getNavbarItem);
+  router.get("/navbar-item", pageControllers.getNavbarItem);
 
-  router.post("/create-user", userController.createUser);
-  router.post("/change-password", userController.changePassword);
-
-  router.post("/login", userController.getUser);
+  // Handle user's actions
+  router.post("/create-user", userControllers.handleCreateNewUser);
+  router.post("/change-password", userControllers.handleChangePassword);
+  router.post("/login", userControllers.handleLogin);
 
   router.post(
     "/upload-volume",
-    tokenAuthen,
+    validToken,
     upload.single("file"),
     timeAllowUpload(
       process.env.START_TIME_UPLOAD_VOLUME,
@@ -46,9 +46,9 @@ let initApiRoutes = (app) => {
     uploadController.uploadVolume
   );
 
-  router.put("/getDailyData", tokenAuthen, homeController.getDailyData);
+  router.put("/getDailyData", validToken, pageControllers.getDailyData);
 
-  router.get("/incident", homeController.getIncidentData);
+  router.get("/incident", pageControllers.getIncidentData);
 
   return app.use("/api/v1", router);
 };

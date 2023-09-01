@@ -4,8 +4,8 @@ const fs = require("fs");
 const logger = require("../helpers/logger");
 const loggerError = logger.getLogger("errorLogger");
 const loggerInfo = logger.getLogger("infoLogger");
-const logsUploadModel = require("../schemas/logsUploadSchema");
-const trackingIssueModel = require("../schemas/trackingIssueSchema");
+const logsUploadModel = require("../models/logsUploadSchema");
+const trackingIssueModel = require("../models/trackingIssueSchema");
 
 const uploadVolume = (req, res) => {
   // const workbook = XLSX.utils.book_new();
@@ -27,7 +27,6 @@ const uploadVolume = (req, res) => {
           delete object.__EMPTY;
           return object;
         });
-
 
       if (jsonData.length > 0) {
         try {
@@ -52,18 +51,13 @@ const uploadVolume = (req, res) => {
           await logsUploadModel.create(logs);
           return res.json("File uploaded successful!");
         } catch (error) {
-
           loggerError.error("Error while inserting data into DB:", error);
           return res.status(500).json(error);
-
         } finally {
-
           fs.unlink(req.file.path, (err) => {
             if (err) {
-
               loggerError.error("Error while deleting the file:", err);
             } else {
-
               loggerInfo.info("File upload has been deleted successfully!");
             }
           });

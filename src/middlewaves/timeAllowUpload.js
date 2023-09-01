@@ -1,6 +1,6 @@
 const path = require("path");
 // const { getDatabase } = require("../middlewaves/getDatabase.js");
-const { UserModel } = require("../schemas/userSchema");
+const { UserModel } = require("../models/userModel");
 const logger = require("../helpers/logger");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
