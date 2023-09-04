@@ -22,6 +22,12 @@ initApiRoutes(app);
 // handle request from express
 initWebRoutes(app);
 
+// test rabbitmq
+/* app.post("/sendLog", async (req, res, next) => {
+  await producer.publishMessage(req.body.logType, req.body.message);
+  res.send();
+}); */
+
 app.listen(process.env.PORT || 8090, () => {
   loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
 });

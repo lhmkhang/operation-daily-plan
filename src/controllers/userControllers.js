@@ -15,7 +15,11 @@ const handleChangePassword = async (req, res) => {
 const handleLogin = async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  userServices.userLogin(username, password, res);
+  userServices.userLogin(username, password, req, res);
 };
 
-module.exports = { handleLogin, handleCreateNewUser, handleChangePassword };
+const handleLogout = async (req, res) => {
+  userServices.userLogout(req, res);
+};
+
+module.exports = { handleLogin, handleCreateNewUser, handleChangePassword, handleLogout };

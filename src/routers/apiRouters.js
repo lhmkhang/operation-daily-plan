@@ -2,10 +2,12 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const userControllers = require("../controllers/userControllers");
-const uploadController = require("../controllers/uploadController");
+const JWTControllers = require("../controllers/JWTControllers.js");
+// const uploadController = require("../controllers/uploadController");
 const pageControllers = require("../controllers/pageControllers.js");
-const timeAllowUpload = require("../middlewaves/timeAllowUpload.js");
-const validToken = require("../middlewaves/validToken.js");
+// const timeAllowUpload = require("../middlewaves/timeAllowUpload.js");
+const verifyJWTToken = require("../middlewaves/verifyJWTToken.js");
+const verifyRoles = require("../middlewaves/verifyRoles.js");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const dotenv = require("dotenv");
@@ -25,17 +27,20 @@ const storage = multer.diskStorage({
     cb(null, uniqueFileName);
   },
 });
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
 
 let initApiRoutes = (app) => {
-  router.get("/navbar-item", pageControllers.getNavbarItem);
+  // router.get("/navbar-item", pageControllers.getNavbarItem);
 
   // Handle user's actions
-  router.post("/create-user", userControllers.handleCreateNewUser);
-  router.post("/change-password", userControllers.handleChangePassword);
-  router.post("/login", userControllers.handleLogin);
+  router
+    .post("/create-user", userControllers.handleCreateNewUser)
+    .post("/change-password", verifyJWTToken, userControllers.handleChangePassword)
+    .post("/login", userControllers.handleLogin)
+    .get("/logout", userControllers.handleLogout)
+    .get("/refresh-token", JWTControllers.handleRenewToken);
 
-  router.post(
+  /* router.post(
     "/upload-volume",
     validToken,
     upload.single("file"),
@@ -47,8 +52,7 @@ let initApiRoutes = (app) => {
   );
 
   router.put("/getDailyData", validToken, pageControllers.getDailyData);
-
-  router.get("/incident", pageControllers.getIncidentData);
+  router.get("/incident", pageControllers.getIncidentData); */
 
   return app.use("/api/v1", router);
 };
