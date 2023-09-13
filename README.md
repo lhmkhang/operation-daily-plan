@@ -1,4 +1,17 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Common Rule
+1. Rule name:
+- Class name: format class html
+   + Main class: button 
+   + Sub class: button__input
+
+- Script variables: format camel
+
+2. Rule file CSS:
+- Same name with component name
+- Place in folder /public/styles
+
+3. Rule component:
+- 
 
 ## Getting Started
 
@@ -6,10 +19,6 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
