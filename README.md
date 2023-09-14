@@ -11,7 +11,8 @@
 - Place in folder /public/styles
 
 3. Rule component:
-- 
+- Sub components (etc: button, radio button, input, label, table) => place in folder /components/base
+- Container components (etc: home, report, dashboard, ..) => place in folder /components/base
 
 ## Getting Started
 
