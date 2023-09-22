@@ -1,10 +1,11 @@
 import Button from '@mui/material/Button';
-import { TextField } from '@mui/material';
+import { Slider, TextField } from '@mui/material';
 
 export default function Home() {
   return (
     <main>
-      <Button variant="contained">Hello world</Button>
+      <Slider defaultValue={30} />
+      <Slider defaultValue={30} className='text-teal-600' />
     </main >
   )
 }
