@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image';
 import * as React from 'react';
-import { Checkbox, Link, TextField, FormControlLabel } from '@mui/material';
+import { Checkbox, Link, TextField, FormControlLabel, Button } from '@mui/material';
 
 type Props = {}
 
@@ -31,12 +31,12 @@ const Login = (props: Props) => {
                             <TextField id="user" label="User Name" variant="standard" required fullWidth />
                             <TextField id="password" label="Password" variant='standard' type='password' required fullWidth />
                         </div>
-                        <div className='w-full flex justify-between items-center text-sm'>
-                            <FormControlLabel style={{ fontSize: '0.875rem' }} control={<Checkbox size='small' />} label="Remember me" />
+                        <div className='w-full flex justify-between items-center text-sm py-4'>
+                            <FormControlLabel classes={{ label: 'text-sm' }} control={<Checkbox size='small' />} label="Remember me" />
                             <Link href="#" underline="hover">Forgot password?</Link>
                         </div>
-                        <div>
-
+                        <div className='w-full flex justify-between items-center text-sm py-4'>
+                            <Button />
                         </div>
                     </div>
                 </div>
