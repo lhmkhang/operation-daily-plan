@@ -16,8 +16,34 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      colors: {
+        primary: '#306bd1',
+        background_blur: 'rgba(170,209,237,0.91)'
+      },
+      boxShadow: {
+        '3xl': '2px 0px 10px #000'
+      },
+      borderRadius: {
+        '6_1': 'border-radius: 60% / 10%'
+      }
     },
   },
-  plugins: []
+  plugins: [],
+  themes: [
+    {
+      light: {
+        secondary: '#f3f4f6',
+        accent: '#8892b0',
+        background: '#fff',
+      }
+    },
+    {
+      dark: {
+        secondary: '#1f2937',
+        accent: '#4b5563',
+        background: '#111827',
+      }
+    }
+  ]
 }
 export default config
