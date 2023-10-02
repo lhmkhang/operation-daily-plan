@@ -18,13 +18,17 @@ const config: Config = {
       },
       colors: {
         primary: '#306bd1',
+        primary_shade : '#768CB1',
         background_blur: 'rgba(170,209,237,0.91)'
       },
       boxShadow: {
         '3xl': '2px 0px 10px #000'
       },
       borderRadius: {
-        '6_1': 'border-radius: 60% / 10%'
+        '6_1': '50% 10%'
+      },
+      translate: {
+        '0.8': '80%'
       }
     },
   },

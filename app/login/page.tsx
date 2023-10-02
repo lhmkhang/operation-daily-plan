@@ -1,54 +1,72 @@
 'use client'
 import Image from 'next/image';
 import * as React from 'react';
-import { Checkbox, Link, TextField, FormControlLabel, Button } from '@mui/material';
-import style from './login.module.scss';
+import { Checkbox, Link, TextField, FormControlLabel, Button, Divider } from '@mui/material';
+import backgroundImg from '@/public/img/backgroundLogin6.jpg';
+
 type Props = {}
 
 const Login = (props: Props) => {
 
-    const [isLogin, setIsLogin] = React.useState(true);
+    const [type, setType] = React.useState("signIn");
+
 
     return (
-        <div className="w-screen h-screen flex items-center bg-[url('/img/backgroundLogin2.jpg')] bg-cover">
-            <div className="container m-auto h-2/4 w-1/2 px-4 rounded-2xl bg-background_blur">
-                <div className="grid grid-cols-5 h-full">
-                    <div className='col-span-3 flex items-center justify-center'>
+        <div className="w-screen h-screen flex items-center bg-slate-50">
+            <div className="container m-auto rounded-2xl overflow-hidden shadow-2xl shadow-primary">
+                <div className="grid grid-cols-2 lg:grid-cols-6 h-3/6">
+                    <div className='hidden lg:flex col-span-4 items-center justify-center bg-white '>
                         <Image
                             alt='Image Login'
-                            src={'/img/imageLogin.png'}
-                            width={400}
-                            height={400}
-                            priority
-                            style={{ width: '90%', height: '100%', backgroundSize: 'cover' }}
+                            src={backgroundImg}
+                                priority
+                            style={{ width: '100%', height: '100%', backgroundSize: 'contain' }}
                         />
+                        <Divider orientation="vertical" flexItem className='border-2' />
                     </div>
-                    <div className='col-span-2 flex flex-col items-center shadow-3xl overflow-hidden bg-gradient-to-b from-primary via-blue-300 to-primary' >
-                        <div className={`login flex flex-col items-center ${isLogin ? '' : 'hidden'}`}>
-                            <h1 className='text-center h-1/6'>Login</h1>
-                            <TextField id="user" label="User Name" variant="filled" size='small' fullWidth required sx={{ marginTop: '15px', color: 'white' }} />
-                            <TextField id="password" label="Password" variant='filled' type='password' size='small' fullWidth required sx={{ marginTop: '15px' }} />
-                            <div className='w-full flex justify-between items-center text-sm py-4'>
-                                <FormControlLabel classes={{ label: 'text-sm' }} control={<Checkbox size='small' />} label="Remember me" />
-                                <Link href="#" underline="hover">Forgot password?</Link>
-                            </div>
-                            <div className='w-full flex justify-center items-center text-sm py-1'>
-                                <Button variant='contained'>Login</Button>
+                    <div className='col-span-2 bg-white'>
+                        <div className='toggle flex justify-end m-3'>
+                            <Button variant='contained' size='small' className={`rounded-none rounded-l-full shadow-none ${type === 'signUp' ? 'bg-gray-600 hover:bg-gray-600' : 'shadow-lg'}`} onClick={() => setType("signIn")}>Sign In</Button>
+                            <Button variant='contained' size='small' className={`rounded-none rounded-r-full shadow-none ${type === 'signIn' ? 'bg-gray-600 hover:bg-gray-600' : 'shadow-lg'}`} onClick={() => setType("signUp")}>Sign Up</Button>
+                        </div>
+                        <div className='loginLogo h-1/6 w-full flex justify-center items-center m-0'>
+                            <div className='flex flex-row justify-center items-center rounded-xl'>
+                                <Image
+                                    alt='Logo Login'
+                                    src={'/img/Logo_DIGI-TEXX_2021_Blue.jpg'}
+                                    width={300}
+                                    height={70}
+                                    priority
+                                />
                             </div>
                         </div>
-                        <div className={`signUp flex flex-col items-center bg-white w-full rounded-6_1 ${isLogin ? 'translate-y-16' : ''}`}>
-                            <h1 className='text-center h-1/6'>Sign up</h1>
-                            <TextField id="user" label="User Name" variant="filled" size='small' fullWidth required sx={{ marginTop: '15px' }} />
-                            <TextField id="password" label="Password" variant='filled' type='password' size='small' fullWidth required sx={{ marginTop: '15px' }} />
-                            <TextField id="password" label="Confirm Password" variant='standard' type='password' size='small' fullWidth required sx={{ marginTop: '15px' }} />
-                            <div className='w-full flex justify-center items-center text-sm py-3'>
-                                <Button variant='contained'>Sign up</Button>
+                        <div className={`signIn h-3/6 flex flex-col justify-center mx-6 ${type === 'signUp' ? '-translate-y-2 ease-out duration-500' : 'translate-y-2 ease-in duration-500'}`} >
+                            <h1 className='text-primary text-2xl m-0'>Sign In</h1>
+                            <TextField id='userSignIn' label='User Name' variant='standard' size='small' fullWidth required className='my-4' />
+                            <TextField id='passwordSignIn' label='Password' variant='standard' size='small' fullWidth required className='my-4' type='password' />
+                            <div className='w-full flex justify-between items-center text-sm '>
+                                <FormControlLabel control={<Checkbox size='small' />} label="Remember me" classes={{ label: 'text-xs' }} />
+                                <Link href="#" underline="hover" className='text-xs text-black'>Forgot password?</Link>
+                            </div>
+                            <div className='w-full flex flex-col items-center justify-center'>
+                                <Button variant='contained' size='large' className='w-2/5 rounded-full my-4'>Sign In</Button>
+                                <Link onClick={() => setType("signUp")} underline="hover" className='text-xs'>Create an account</Link>
+                            </div>
+                        </div>
+                        <div className={`bg-white signUp h-3/6 flex flex-col justify-center mx-6 ${type === 'signIn' ? 'translate-y-full ease-in duration-500' : '-translate-y-full ease-out duration-500'}`}>
+                            <h1 className='text-primary text-2xl m-0'>Sign Up</h1>
+                            <TextField id='userSignUp' label='User Name' variant='standard' size='small' fullWidth required className='my-4' />
+                            <TextField id='passwordSignUp' label='Password' variant='standard' size='small' fullWidth required className='my-4' type='password' />
+                            <TextField id='confirmPasswordSignUp' label='Confirm Password' variant='standard' size='small' fullWidth required className='my-4' type='password' />
+                            <div className='w-full flex flex-col items-center justify-center'>
+                                <Button variant='contained' size='large' className='w-2/5 rounded-full my-4'>Sign Up</Button>
+                                <Link onClick={() => setType("signIn")} underline="hover" className='text-xs'>Have an account already?</Link>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 
