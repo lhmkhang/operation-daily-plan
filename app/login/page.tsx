@@ -9,8 +9,14 @@ type Props = {}
 
 const Login = (props: Props) => {
     const [type, setType] = React.useState("signIn");
+    const [passwordValid, setPasswordValid] = React.useState(true);
 
     const { user, handleUserChange } = useUserAuth();
+
+    const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const _confirmPassword = e.target.value
+        setPasswordValid(() => _confirmPassword === user.password);
+    }
 
     return (
         <div className="w-screen h-screen flex items-center bg-slate-50">
@@ -58,7 +64,7 @@ const Login = (props: Props) => {
                             <h1 className='text-primary text-2xl m-0'>Sign Up</h1>
                             <TextField id='userSignUp' label='User Name' variant='standard' size='small' fullWidth required name='user' className='my-4' onChange={handleUserChange} />
                             <TextField id='passwordSignUp' label='Password' variant='standard' size='small' fullWidth required name='password' className='my-4' type='password' onChange={handleUserChange} />
-                            <TextField id='confirmPasswordSignUp' label='Confirm Password' variant='standard' size='small' fullWidth required name='temp_password' className='my-4' type='password' />
+                            <TextField id='confirmPasswordSignUp' label='Confirm Password' variant='standard' size='small' fullWidth required name='temp_password' className='my-4' type='password' onChange={handleConfirmPassword} helperText={(!passwordValid) ? "Passwords does not match" : " "} error={!passwordValid} />
                             <div className='w-full flex flex-col items-center justify-center'>
                                 <Button variant='contained' size='large' className='w-2/5 rounded-full my-4'>Sign Up</Button>
                                 <Link onClick={() => setType("signIn")} underline="hover" className='text-xs'>Have an account already?</Link>
