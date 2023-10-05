@@ -1,21 +1,35 @@
 'use client'
 import Image from 'next/image';
+import { redirect } from 'next/navigation'
 import * as React from 'react';
 import { Checkbox, Link, TextField, FormControlLabel, Button, Divider } from '@mui/material';
 import backgroundImg from '@/public/img/backgroundLogin7.jpg';
-import useUserAuth from '@/components/helpers/useUserAuth';
+import { useUserAuth, useAuth } from '@/components/helpers';
 
 type Props = {}
 
 const Login = (props: Props) => {
     const [type, setType] = React.useState("signIn");
-    const [passwordValid, setPasswordValid] = React.useState(true);
+    const [passwordMatch, setPasswordMatch] = React.useState(true);
+    const [loginStatus, setLoginStatus] = React.useState(["", ""]);
 
     const { user, handleUserChange } = useUserAuth();
 
     const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
         const _confirmPassword = e.target.value
-        setPasswordValid(() => _confirmPassword === user.password);
+        setPasswordMatch(() => _confirmPassword === user.password);
+    }
+
+    const handleSignIn = async () => {
+        if (!user.user || !user.password) {
+            setLoginStatus([!user.user ? "" : "empty", !user.password ? "" : "empty"])
+        }
+        let status = await useAuth(user);
+        if (status === 'Success') {
+            redirect("/");
+        } else {
+            setLoginStatus(["fail", "fail"]);
+        }
     }
 
     return (
@@ -49,22 +63,22 @@ const Login = (props: Props) => {
                         </div>
                         <div className={`signIn h-3/6 flex flex-col justify-center mx-6 ${type === 'signUp' ? '-translate-y-2 ease-out opacity-0 duration-500' : 'translate-y-2 ease-in opacity-100 duration-500'}`} >
                             <h1 className='text-primary text-2xl m-0'>Sign In</h1>
-                            <TextField id='userSignIn' label='User Name' variant='standard' size='small' fullWidth required name='user' className='my-4' onChange={handleUserChange} />
-                            <TextField id='passwordSignIn' label='Password' variant='standard' size='small' fullWidth required name='password' className='my-4' type='password' onChange={handleUserChange} />
+                            <TextField id='userSignIn' label='User Name' variant='standard' size='small' fullWidth required name='user' className='my-4' helperText={loginStatus[0] === "fail" ? "Invalid username or password" : ""} error={loginStatus[0] === "fail" || loginStatus[0] === "empty"} onChange={handleUserChange} />
+                            <TextField id='passwordSignIn' label='Password' variant='standard' size='small' fullWidth required name='password' className='my-4' type='password' error={loginStatus[0] === "fail" || loginStatus[0] === "empty"} onChange={handleUserChange} />
                             <div className='w-full flex justify-between items-center text-sm '>
                                 <FormControlLabel control={<Checkbox size='small' />} label="Remember me" classes={{ label: 'text-xs' }} />
                                 <Link href="#" underline="hover" className='text-xs text-black'>Forgot password?</Link>
                             </div>
                             <div className='w-full flex flex-col items-center justify-center'>
-                                <Button variant='contained' size='large' className='w-2/5 rounded-full my-4'>Sign In</Button>
+                                <Button variant='contained' size='large' className='w-2/5 rounded-full my-4' onClick={handleSignIn}>Sign In</Button>
                                 <Link onClick={() => setType("signUp")} underline="hover" className='text-xs'>Create an account</Link>
                             </div>
                         </div>
-                        <div className={`bg-white signUp h-3/6 flex flex-col justify-center mx-6 ${type === 'signIn' ? 'translate-y-2 ease-in opacity-0 duration-500' : '-translate-y-full ease-out opacity-100 duration-500'}`}>
+                        <div className={`signUp bg-white h-3/6 flex flex-col justify-center mx-6 ${type === 'signIn' ? 'translate-y-2 ease-in opacity-0 duration-500' : '-translate-y-full ease-out opacity-100 duration-500'}`}>
                             <h1 className='text-primary text-2xl m-0'>Sign Up</h1>
                             <TextField id='userSignUp' label='User Name' variant='standard' size='small' fullWidth required name='user' className='my-4' onChange={handleUserChange} />
                             <TextField id='passwordSignUp' label='Password' variant='standard' size='small' fullWidth required name='password' className='my-4' type='password' onChange={handleUserChange} />
-                            <TextField id='confirmPasswordSignUp' label='Confirm Password' variant='standard' size='small' fullWidth required name='temp_password' className='my-4' type='password' onChange={handleConfirmPassword} helperText={(!passwordValid) ? "Passwords does not match" : " "} error={!passwordValid} />
+                            <TextField id='confirmPasswordSignUp' label='Confirm Password' variant='standard' size='small' fullWidth required name='temp_password' className='my-4' type='password' onChange={handleConfirmPassword} helperText={(!passwordMatch) ? "Passwords does not match" : " "} error={!passwordMatch} />
                             <div className='w-full flex flex-col items-center justify-center'>
                                 <Button variant='contained' size='large' className='w-2/5 rounded-full my-4'>Sign Up</Button>
                                 <Link onClick={() => setType("signIn")} underline="hover" className='text-xs'>Have an account already?</Link>
