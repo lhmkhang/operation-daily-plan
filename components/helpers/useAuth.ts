@@ -1,22 +1,25 @@
 import axios from 'axios';
 
-type User = {
-    user: string,
+type Props = {
+    username: string,
     password: string
 }
-export default async function useAuth(props: User) {
+
+export default async function useAuth(props: Props) {
     try {
-        const response = await axios.post('http://10.1.23.167:8080/login', {
-            username: props.user,
+        const response = await axios.post('http://10.1.23.167:8090/api/v1/login', {
+            username: props.username,
             password: props.password
         });
-        if (response.status === 400) {
-            return response.statusText;
-        } else {
+        if (response.status === 200) {
+            console.log(response);
+            
             localStorage.setItem('access-token', response.data.token)
             localStorage.setItem('access-time', response.data.receivedTime)
             localStorage.setItem('expire-time', response.data.expiresIn)
             return "Success";
+        } else {
+            return response.data.message;
         }
     } catch (e) {
         console.error(e);

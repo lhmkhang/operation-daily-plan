@@ -1,27 +1,23 @@
 import { useState } from 'react';
 
 interface User {
-  user: string,
+  username: string,
   password: string
 }
 export default function useUserAuth() {
-  const [user, setUser] = useState({
-    user: '',
-    password: ''
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    password: ""
   });
 
   const handleUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({
-      ...user,
+    setUserInfo({
+      ...userInfo,
       [e.target.name]: e.target.value
     });
   }
-
-  console.log(user);
-
-
   return {
-    user,
+    userInfo,
     handleUserChange
   };
 }
