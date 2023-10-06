@@ -1,5 +1,5 @@
 const amqp = require("amqplib");
-const config = require("./config");
+const config = require("./configs/queue.config");
 
 //step 1 : Connect to the rabbitmq server
 //step 2 : Create a new channel on that connection
@@ -27,6 +27,7 @@ class Producer {
       message: message,
       dateTime: new Date(),
     };
+
     await this.channel.publish(
       exchangeName,
       routingKey,

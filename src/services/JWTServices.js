@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken");
 const path = require("path");
-require("dotenv").config({path: path.resolve(__dirname, "../..", ".env")});
+require("dotenv").config({ path: path.resolve(__dirname, "../..", ".env") });
 
 const createToken = (payload) => {
-  console.log(path.resolve(__dirname, "../..", ".env"));
-  const token = jwt.sign(payload , process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: process.env.ACCESS_TOKEN_EXPIRE_TIME });
+  // console.log(path.resolve(__dirname, "../..", ".env"));
+  const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: process.env.ACCESS_TOKEN_EXPIRE_TIME });
   return token;
 };
 
@@ -23,7 +23,7 @@ const handleRefreshToken = (req, res) => {
       return res.sendStatus(403);
 
     const roles = Object.values(foundUser.roles);
-    const accessToken = createToken({ UserInfo: { username: decoded.username, roles: roles} })
+    const accessToken = createToken({ UserInfo: { username: decoded.username, roles: roles } })
     /* const accessToken = jwt.sign(
       {
         UserInfo: {

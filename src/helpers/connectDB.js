@@ -40,26 +40,31 @@ process.on('exit', (code) => {
 const path = require("path");
 const logger = require("./logger");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-dotenv.config({ path: path.resolve(__dirname, "../..", ".env") });
+const dotenv = require("dotenv").config({ path: path.resolve(__dirname, "../..", ".env") });
 
 const loggerInfo = logger.getLogger("infoLogger");
 const loggerError = logger.getLogger("errorLogger");
 
-// Kết nối tới MongoDB sử dụng Mongoose
-const connectDB = () => {
-  mongoose
-    .connect(process.env.DB_CONNECTION_STRING, {
+const MAX_RETRIES = 5; // Số lần thử kết nối lại tối đa
+let retries = 0;
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.DB_CONNECTION_STRING, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    })
-    .then(() => {
-      loggerInfo.info("Connected successfully to databases");
-    })
-    .catch((err) => {
-      loggerError.error("Failed to connect to databases", err);
-      setTimeout(connect, 5000); // Thử kết nối lại sau 5 giây
     });
+    loggerInfo.info("Connected successfully to databases");
+  } catch (err) {
+    loggerError.error("Failed to connect to databases", err);
+    retries += 1;
+    if (retries < MAX_RETRIES) {
+      setTimeout(connectDB, 5000); // Thử kết nối lại sau 5 giây
+    } else {
+      loggerError.error("Max retries reached. Exiting...");
+      process.exit(1);
+    }
+  }
 
   // Xử lý khi chương trình bị tắt
   process.on("exit", (code) => {
@@ -68,23 +73,6 @@ const connectDB = () => {
       process.exit(code);
     });
   });
-
-  async function connect() {
-    mongoose
-      .connect(process.env.DB_CONNECTION_STRING, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      })
-      .then(() => {
-        loggerInfo.info("Connected successfully to databases");
-        // Lưu trữ connection vào biến db
-        //   db = mongoose.connection;
-      })
-      .catch((err) => {
-        loggerError.error("Failed to connect to databases", err);
-        setTimeout(connect, 5000); // Thử kết nối lại sau 5 giây
-      });
-  }
 };
 
 module.exports = connectDB;

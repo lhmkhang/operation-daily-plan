@@ -1,9 +1,9 @@
 const userServices = require("../services/userService");
 
-const handleCreateNewUser = async (req, res) => {
+const handleCreateNewUser = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
-  userServices.createNewUser(username, password, res);
+  userServices.createNewUser(username, password, res, next);
 };
 
 const handleChangePassword = async (req, res) => {
@@ -12,10 +12,10 @@ const handleChangePassword = async (req, res) => {
   userServices.changePassword(username, rePassword, res);
 };
 
-const handleLogin = async (req, res) => {
+const handleLogin = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
-  userServices.userLogin(username, password, req, res);
+  userServices.userLogin(username, password, req, res, next);
 };
 
 const handleLogout = async (req, res) => {

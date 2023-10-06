@@ -34,7 +34,7 @@ let initApiRoutes = (app) => {
 
   // Handle user's actions
   router
-    .post("/create-user", userControllers.handleCreateNewUser)
+    .post("/signup", userControllers.handleCreateNewUser)
     .post("/change-password", verifyJWTToken, userControllers.handleChangePassword)
     .post("/login", userControllers.handleLogin)
     .get("/logout", userControllers.handleLogout)
