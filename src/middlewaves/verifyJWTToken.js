@@ -6,6 +6,11 @@ dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
 function verifyJWTToken(req, res, next) {
   // token from cookie
   const accessToken = req.cookies?.jwt?.accessToken;
+  /* 
+  // lấy token từ authen header
+  const authHeader = req.headers.authorization;
+  const accessToken = authHeader.split(' ')[1]; 
+  */
 
   if (accessToken === null || accessToken === undefined)
     return res.sendStatus(401);

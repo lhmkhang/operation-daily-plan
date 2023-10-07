@@ -8,27 +8,41 @@ const dotenv = require("dotenv").config({ path: path.resolve(__dirname, "..", ".
 const logger = require("./helpers/logger");
 const loggerInfo = logger.getLogger("infoLogger");
 const app = express();
+const connectRedis = require("./helpers/connectRedis");
 
-// Connect to mongoDB
-connectDB();
+(async () => {
+  try {
+    // Connect to mongoDB
+    connectDB();
 
-// Configuration of express server
-serverConfiguration(app);
+    // Configuration of express server
+    const redisStore = await connectRedis();
 
-initApiRoutes(app);
+    serverConfiguration(app, redisStore);
+  } catch (error) {
+    console.error("Không thể khởi tạo RedisStore hoặc cấu hình server:", error);
+  }
 
-// handle request from express
-initWebRoutes(app);
+  initApiRoutes(app);
 
-app.use((err, req, res, next) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || 'error';
+  // handle request from express
+  initWebRoutes(app);
 
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message
+  app.use((err, req, res, next) => {
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || "error";
+
+    res.status(err.statusCode).json({
+      status: err.status,
+      code: err.statusCode,
+      message: err.message,
+    });
   });
-});
+
+  app.listen(process.env.PORT || 8090, () => {
+    loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
+  });
+})();
 
 // test rabbitmq
 /* app.post("/sendLog", async (req, res, next) => {
@@ -36,6 +50,4 @@ app.use((err, req, res, next) => {
   res.send();
 }); */
 
-app.listen(process.env.PORT || 8090, () => {
-  loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
-});
+
