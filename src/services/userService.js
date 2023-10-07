@@ -91,7 +91,11 @@ const userLogin = async (username, password, req, res, next) => {
       { refreshToken: refreshToken }
     );
 
-    req.session.user = { username, roles };
+    req.session.user = {
+      username,
+      roles,
+      "connect.sid": req.cookies["connect.sid"],
+    };
 
     /* res.cookie(
       "jwt",

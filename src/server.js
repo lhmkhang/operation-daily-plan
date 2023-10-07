@@ -19,29 +19,30 @@ const connectRedis = require("./helpers/connectRedis");
     const redisStore = await connectRedis();
 
     serverConfiguration(app, redisStore);
+
+    initApiRoutes(app);
+
+    // handle request from express
+    initWebRoutes(app);
+
+    app.use((err, req, res, next) => {
+      err.statusCode = err.statusCode || 500;
+      err.status = err.status || "error";
+
+      res.status(err.statusCode).json({
+        status: err.status,
+        code: err.statusCode,
+        message: err.message,
+      });
+    });
+
+    app.listen(process.env.PORT || 8090, () => {
+      loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
+    });
   } catch (error) {
     console.error("Không thể khởi tạo RedisStore hoặc cấu hình server:", error);
   }
 
-  initApiRoutes(app);
-
-  // handle request from express
-  initWebRoutes(app);
-
-  app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || "error";
-
-    res.status(err.statusCode).json({
-      status: err.status,
-      code: err.statusCode,
-      message: err.message,
-    });
-  });
-
-  app.listen(process.env.PORT || 8090, () => {
-    loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
-  });
 })();
 
 // test rabbitmq

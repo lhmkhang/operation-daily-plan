@@ -31,9 +31,10 @@ const serverConfiguration = (app, redisStore) => {
   app.use(
     session({
       store: redisStore,
-      secret: "your_secret_key",
+      secret: process.env.SESSION_SECRET_KEY,
       resave: false,
       saveUninitialized: false,
+      cookie: { secure: false, maxAge: Number(process.env.SESSION_LIFE_TIME) },
     })
   );
   app.use(allowCredentials);
@@ -52,6 +53,7 @@ const serverConfiguration = (app, redisStore) => {
   );
   app.set("view engine", "ejs");
   app.set("views", "./src/views");
+
 };
 
 module.exports = serverConfiguration;

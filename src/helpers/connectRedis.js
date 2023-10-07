@@ -21,6 +21,7 @@ async function connectRedis() {
     // Khởi tạo RedisStore
     const redisStore = new RedisStore({
       client: redisClient,
+      ttl: 3600,
     });
 
     return redisStore;

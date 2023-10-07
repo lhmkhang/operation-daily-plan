@@ -35,7 +35,7 @@ let initApiRoutes = (app) => {
   // Handle user's actions
   router
     .post("/signup", userControllers.handleCreateNewUser)
-    .post("/change-password", verifyJWTToken, userControllers.handleChangePassword)
+    .post("/change-password", userControllers.handleChangePassword)
     .post("/login", userControllers.handleLogin)
     .get("/logout", userControllers.handleLogout)
     .get("/refresh-token", JWTControllers.handleRenewToken);
