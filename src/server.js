@@ -21,8 +21,6 @@ const connectRedis = require("./helpers/connectRedis");
     serverConfiguration(app, redisStore);
 
     initApiRoutes(app);
-
-    // handle request from express
     initWebRoutes(app);
 
     app.use((err, req, res, next) => {

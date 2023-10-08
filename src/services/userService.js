@@ -13,25 +13,30 @@ const createNewUser = async (username, password, res, next) => {
   try {
     const existingUser = await UserModel.findOne({ username: username });
 
-    if (!username || !password) {
-      // loggerError.error("Username or password is empty");
-      throw new handleMessage(MESSAGE.AUTH.CREATE_USER.EMPTY_CREDENTIALS, StatusCodes.BAD_REQUEST)
-      // return res.status(400).json({ error: "Username or password is empty" });
-    }
+    // Username or password is empty
+    if (!username || !password)
+      return next(
+        new handleMessage(
+          MESSAGE.AUTH.CREATE_USER.EMPTY_CREDENTIALS,
+          StatusCodes.BAD_REQUEST
+        )
+      );
 
-    if (existingUser) {
-      // loggerError.error("User already exists");
-      throw new handleMessage(MESSAGE.AUTH.CREATE_USER.USER_CONFLICT, StatusCodes.CONFLICT);
-      // return res.status(409).json({ error: "User already exists" });
-    }
+    // User already exists
+    if (existingUser)
+      return next(
+        new handleMessage(
+          MESSAGE.AUTH.CREATE_USER.USER_CONFLICT,
+          StatusCodes.CONFLICT
+        )
+      );
 
+    //Store username and hash password in the dataabase
     const hashUserPassword = bcryptServices.hashPassword(password);
     await UserModel.create({ username, password: hashUserPassword });
 
-    return res.json({ message: "Create user successful!" })
-    // return res.redirect("/change-password");
+    return next(new handleMessage("Create user successful!", 200));
   } catch (error) {
-    // loggerError.error(error);
     next(error);
   }
 };
@@ -66,19 +71,39 @@ const changePassword = async (username, password, res) => {
 
 const userLogin = async (username, password, req, res, next) => {
   try {
-    if (!username || !password) {
-      throw new handleMessage(MESSAGE.AUTH.LOGIN.EMPTY_CREDENTIALS, StatusCodes.BAD_REQUEST);
-    }
+    // Username or password is empty
+    if (!username || !password)
+      return next(
+        new handleMessage(
+          MESSAGE.AUTH.LOGIN.EMPTY_CREDENTIALS,
+          StatusCodes.BAD_REQUEST
+        )
+      );
 
+    // User does not exist in database
     const foundUser = await UserModel.findOne({ username: username });
-    if (!foundUser) throw new handleMessage(MESSAGE.AUTH.LOGIN.USER_NOT_FOUND, StatusCodes.UNAUTHORIZED);
+    if (!foundUser)
+      return next(
+        new handleMessage(
+          MESSAGE.AUTH.LOGIN.USER_NOT_FOUND,
+          StatusCodes.UNAUTHORIZED
+        )
+      );
 
     const match = bcryptServices.comparePassword(password, foundUser.password);
 
-    if (!match) throw new handleMessage(MESSAGE.AUTH.LOGIN.INVALID_CREDENTIALS, StatusCodes.UNAUTHORIZED);
+    // Password is not match in the database
+    if (!match)
+      return next(
+        new handleMessage(
+          MESSAGE.AUTH.LOGIN.INVALID_CREDENTIALS,
+          StatusCodes.UNAUTHORIZED
+        )
+      );
 
     loggerInfo.info("Login successful");
 
+    // Create AT: username + user role, RF: username, store RF in the database
     const roles = foundUser.group;
     const accessToken = JWTService.createToken({
       UserInfo: { username, roles },
@@ -91,28 +116,15 @@ const userLogin = async (username, password, req, res, next) => {
       { refreshToken: refreshToken }
     );
 
+    // store user's session in Redis
     req.session.user = {
       username,
       roles,
       "connect.sid": req.cookies["connect.sid"],
     };
 
-    /* res.cookie(
-      "jwt",
-      JSON.stringify({ accessToken, refreshToken }),
-      {
-        maxAge: Number(process.env.SESSION_LIFE_TIME),
-        httpOnly: true,
-        sameSite: "Strict", // None
-        secure: false, // true
-      }
-    ); */
-
-    // return res.json({ message: "Login successful!" });
     return res.json({ accessToken, refreshToken });
-
   } catch (err) {
-    // loggerError.error(err);
     next(err);
   }
 };
