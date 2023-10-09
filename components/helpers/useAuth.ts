@@ -11,12 +11,13 @@ export default async function useAuth(props: Props) {
             username: props.username,
             password: props.password
         });
+        console.log(response);
+        
         if (response.status === 200) {
             console.log(response);
             
-            localStorage.setItem('access-token', response.data.token)
-            localStorage.setItem('access-time', response.data.receivedTime)
-            localStorage.setItem('expire-time', response.data.expiresIn)
+            localStorage.setItem('access-token', response.data.accessToken)
+            localStorage.setItem('refresh-token', response.data.refreshToken)
             return "Success";
         } else {
             return response.data.message;
