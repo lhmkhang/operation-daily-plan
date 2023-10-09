@@ -1,12 +1,15 @@
 const log4js = require("log4js");
 const path = require("path");
+const isDev = process.env.NODE_ENV === "development";
 
 const config = {
   appenders: {
     console: { type: "console" },
     infoFile: {
-      type: "file",
-      filename: path.resolve(__dirname, "..", "Logs/info.log"),
+      type: "dateFile",
+      filename: path.resolve(__dirname, "..", "Logs/info"),
+      pattern: "yyyy-MM-dd.log",
+      alwaysIncludePattern: true,
       maxLogSize: 10485760, // 10MB
       backups: 3,
       layout: {
@@ -16,9 +19,11 @@ const config = {
       level: "info",
     },
     errorFile: {
-      type: "file",
-      filename: path.resolve(__dirname, "..", "Logs/error.log"),
-      maxLogSize: 10485760, // 10MB
+      type: "dateFile",
+      filename: path.resolve(__dirname, "..", "Logs/error"),
+      pattern: "yyyy-MM-dd.log",
+      alwaysIncludePattern: true,
+      maxLogSize: 1048576, // 10MB
       backups: 3,
       layout: {
         type: "pattern",
@@ -28,9 +33,18 @@ const config = {
     },
   },
   categories: {
-    default: { appenders: ["console"], level: "debug" },
-    infoLogger: { appenders: ["console", "infoFile"], level: "info" },
-    errorLogger: { appenders: ["console", "errorFile"], level: "error" },
+    default: {
+      appenders: isDev ? ["console"] : ["infoFile", "errorFile"],
+      level: "debug",
+    },
+    infoLogger: {
+      appenders: isDev ? ["console"] : ["infoFile"],
+      level: "info",
+    },
+    errorLogger: {
+      appenders: isDev ? ["console"] : ["errorFile"],
+      level: "error",
+    },
   },
 };
 

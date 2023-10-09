@@ -27,6 +27,11 @@ const connectRedis = require("./helpers/connectRedis");
       err.statusCode = err.statusCode || 500;
       err.status = err.status || "error";
 
+      const loggerError = logger.getLogger("errorLogger");
+      loggerError.error(
+        `${req.ip} - ${req.method} ${req.url} ${err.statusCode} - ${err.message}`
+      );
+
       res.status(err.statusCode).json({
         status: err.status,
         code: err.statusCode,
