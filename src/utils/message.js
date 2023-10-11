@@ -8,6 +8,19 @@ module.exports = {
         CREATE_USER: {
             EMPTY_CREDENTIALS: "Username or password is empty!",
             USER_CONFLICT: "User already exist!",
+            CREATE_USER_SUCCESS: "Create user successful!"
+        },
+        VERIFY_TOKEN: {
+            EMPTY_TOKEN: "Token is empty or invalid!",
+            TOKEN_EXPIRED: "Token is expired!"
+        },
+        CHANGE_PASSWORD: {
+            EMPTY_CREDENTIALS: "Username or new password is empty!",
+            USER_NOT_FOUND: "User does not exist!"
+        },
+        LOG_OUT: {
+            LOG_OUT_SUCCESS: "User logout successful!",
+            LOG_OUT_ERROR: "Session does not exist!"
         }
     }
 };

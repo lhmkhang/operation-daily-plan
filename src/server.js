@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const initApiRoutes = require("./routers/apiRouters.js");
+const initUserApiRoutes = require("./routers/userApiRouters.js");
 const initWebRoutes = require("./routers/webRouters.js");
 const serverConfiguration = require("./configs/server.config.js");
 const connectDB = require("./helpers/connectDB.js");
@@ -20,7 +20,7 @@ const connectRedis = require("./helpers/connectRedis");
 
     serverConfiguration(app, redisStore);
 
-    initApiRoutes(app);
+    initUserApiRoutes(app);
     initWebRoutes(app);
 
     app.use((err, req, res, next) => {
@@ -29,7 +29,7 @@ const connectRedis = require("./helpers/connectRedis");
 
       const loggerError = logger.getLogger("errorLogger");
       loggerError.error(
-        `${req.ip} - ${req.method} ${req.url} ${err.statusCode} - ${err.message}`
+        `${req.ip} - ${req.method} ${req.url} ${err.statusCode} - ${err.name}: ${err.message}\n${err.stack}`
       );
 
       res.status(err.statusCode).json({

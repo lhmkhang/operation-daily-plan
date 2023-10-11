@@ -1,44 +1,48 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const path = require("path");
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const handleMessage = require('../utils/HandleMessage');
+const MESSAGE = require("../utils/message");
 dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
 
 function verifyJWTToken(req, res, next) {
   // token from cookie
-  const accessToken = req.cookies?.jwt?.accessToken;
-  /* 
+  // const accessToken = req.cookies?.jwt?.accessToken;
+
   // lấy token từ authen header
   const authHeader = req.headers.authorization;
-  const accessToken = authHeader.split(' ')[1]; 
-  */
+  const accessToken = authHeader.split(' ')[1];
 
-  if (accessToken === null || accessToken === undefined)
-    return res.sendStatus(401);
+
+  if (accessToken === null || accessToken === undefined) return next(new handleMessage(MESSAGE.AUTH.VERIFY_TOKEN.EMPTY_TOKEN, StatusCodes.UNAUTHORIZED));
 
   const decode = jwt.decode(accessToken, process.env.SECRET_KEY);
 
-  if (Date.now() >= decode.exp * 1000) {
-    return res.status(401).json({ error: "Token expired" });
-  }
+  if (Date.now() >= decode.exp * 1000) return next(new handleMessage(MESSAGE.AUTH.VERIFY_TOKEN.TOKEN_EXPIRED, StatusCodes.UNAUTHORIZED));
+
   req.user = decode.UserInfo.username;
   req.role = decode.UserInfo.roles;
   next();
 }
 
 // token from request header
-/* const verifyJWT = (req, res, next) => {
+/* const verifyJWTToken = (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
+
   if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401);
+
   const token = authHeader.split(' ')[1];
+
   jwt.verify(
-      token,
-      process.env.ACCESS_TOKEN_SECRET,
-      (err, decoded) => {
-          if (err) return res.sendStatus(403); //invalid token
-          req.user = decoded.UserInfo.username;
-          req.roles = decoded.UserInfo.roles;
-          next();
-      }
+    token,
+    process.env.ACCESS_TOKEN_SECRET,
+    (err, decoded) => {
+      if (err) return res.sendStatus(403); //invalid token
+      req.user = decoded.UserInfo.username;
+      req.roles = decoded.UserInfo.roles;
+      next();
+    }
   );
 } */
 

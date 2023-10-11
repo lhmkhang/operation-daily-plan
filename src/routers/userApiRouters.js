@@ -14,7 +14,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
 
 const router = express.Router();
-const storage = multer.diskStorage({
+/* const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = "uploads";
     if (!fs.existsSync(uploadDir)) {
@@ -26,18 +26,18 @@ const storage = multer.diskStorage({
     const uniqueFileName = uuidv4() + "-" + file.originalname;
     cb(null, uniqueFileName);
   },
-});
+}); */
 // const upload = multer({ storage: storage });
 
-let initApiRoutes = (app) => {
+let initUserApiRoutes = (app) => {
   // router.get("/navbar-item", pageControllers.getNavbarItem);
 
   // Handle user's actions
   router
     .post("/signup", userControllers.handleCreateNewUser)
     .post("/change-password", userControllers.handleChangePassword)
-    .post("/login", userControllers.handleLogin)
-    .get("/logout", userControllers.handleLogout)
+    .post("/signin", userControllers.handleLogin)
+    .get("/signout", userControllers.handleLogout)
     .get("/refresh-token", JWTControllers.handleRenewToken);
 
   /* router.post(
@@ -57,4 +57,4 @@ let initApiRoutes = (app) => {
   return app.use("/api/v1", router);
 };
 
-module.exports = initApiRoutes;
+module.exports = initUserApiRoutes;

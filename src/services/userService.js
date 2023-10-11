@@ -1,11 +1,10 @@
 const dotenv = require("dotenv").config();
 const logger = require("../helpers/logger");
-const loggerError = logger.getLogger("errorLogger");
 const loggerInfo = logger.getLogger("infoLogger");
 const JWTService = require("./JWTServices");
 const bcryptServices = require("./bcryptServices");
 const { UserModel } = require("../models/userModel");
-const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const handleMessage = require('../utils/HandleMessage');
 const MESSAGE = require("../utils/message");
 
@@ -35,37 +34,9 @@ const createNewUser = async (username, password, res, next) => {
     const hashUserPassword = bcryptServices.hashPassword(password);
     await UserModel.create({ username, password: hashUserPassword });
 
-    return next(new handleMessage("Create user successful!", 200));
+    return res.send({ status: "success", code: StatusCodes.OK, message: MESSAGE.AUTH.CREATE_USER.CREATE_USER_SUCCESS });
   } catch (error) {
     next(error);
-  }
-};
-
-const changePassword = async (username, password, res) => {
-  try {
-    if (!username || !password) {
-      loggerError.error("Username or new password is empty");
-      return res
-        .status(400)
-        .json({ error: "Username or new password is empty" });
-    }
-
-    const existingUser = await UserModel.findOne({ username: username });
-
-    if (!existingUser) {
-      loggerError.error("User does not exist");
-      return res.status(400).json({ error: "User does not exist" });
-    }
-
-    const hashUserPassword = bcryptServices.hashPassword(password);
-
-    await UserModel.findOneAndUpdate(
-      { username: username },
-      { password: hashUserPassword }
-    );
-    return res.redirect("/");
-  } catch (error) {
-    loggerError.error(error);
   }
 };
 
@@ -105,23 +76,14 @@ const userLogin = async (username, password, req, res, next) => {
 
     // Create AT: username + user role, RF: username, store RF in the database
     const roles = foundUser.group;
-    const accessToken = JWTService.createToken({
-      UserInfo: { username, roles },
-    });
+    const userID = foundUser._id;
+    const accessToken = JWTService.createToken({ UserInfo: { userID, username, roles } });
+    const refreshToken = JWTService.createToken({ userID, username });
 
-    const refreshToken = JWTService.createToken({ username });
+    await UserModel.findByIdAndUpdate(userID, { refreshToken: refreshToken });
 
-    await UserModel.findOneAndUpdate(
-      { username: foundUser.username },
-      { refreshToken: refreshToken }
-    );
-
-    // store user's session in Redis
-    req.session.user = {
-      username,
-      roles,
-      "connect.sid": req.cookies["connect.sid"],
-    };
+    // store user's session in Redis with user's ID, username and user's role
+    req.session.user = { userID, username, roles };
 
     return res.json({ accessToken, refreshToken });
   } catch (err) {
@@ -129,37 +91,49 @@ const userLogin = async (username, password, req, res, next) => {
   }
 };
 
-// chưa xử lý logic code đoạn này
-const userLogout = async (req, res) => {
-  const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(204); //No content
-  const refreshToken = cookies.jwt;
+const userLogout = async (req, res, next) => {
 
   try {
-    // Is refreshToken in db?
-    const foundUser = usersDB.users.find(
-      (person) => person.refreshToken === refreshToken
-    );
-    if (!foundUser) {
-      res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
-      return res.sendStatus(204);
-    }
 
-    // Delete refreshToken in db
-    const otherUsers = usersDB.users.filter(
-      (person) => person.refreshToken !== foundUser.refreshToken
-    );
-    const currentUser = { ...foundUser, refreshToken: "" };
-    usersDB.setUsers([...otherUsers, currentUser]);
-    await fsPromises.writeFile(
-      path.join(__dirname, "..", "model", "users.json"),
-      JSON.stringify(usersDB.users)
-    );
+    if (!req.session || !req.session.user) return next(new handleMessage(MESSAGE.AUTH.LOG_OUT.LOG_OUT_ERROR, StatusCodes.FORBIDDEN));
 
-    res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
-    res.sendStatus(204);
+    const userID = req.session.user.userID;
+
+    //Delete refreshToken in database after logout
+    await UserModel.findByIdAndUpdate(userID, { "refreshToken": "" });
+
+    //Delete user'ss session in Redis
+    req.session.destroy();
+
+    //Clear cookie in the client's browser
+    res.clearCookie("connect.sid");
+
+    return res.send({ status: "success", code: StatusCodes.OK, message: MESSAGE.AUTH.LOG_OUT.LOG_OUT_SUCCESS })
   } catch (error) {
-    loggerError.error(error);
+    next(error);
+  }
+};
+
+const changePassword = async (username, password, res, next) => {
+  try {
+    // Username or password is empty
+    if (!username || !password) return next(new handleMessage(MESSAGE.AUTH.CHANGE_PASSWORD.EMPTY_CREDENTIALS, StatusCodes.BAD_REQUEST));
+
+    const existingUser = await UserModel.findOne({ username: username });
+
+    // User does not exist in database
+    if (!existingUser) return next(new handleMessage(MESSAGE.AUTH.CHANGE_PASSWORD.USER_NOT_FOUND, StatusCodes.BAD_REQUEST));
+
+    //Hash user's password
+    const hashUserPassword = bcryptServices.hashPassword(password);
+
+    await UserModel.findOneAndUpdate(
+      { username: username },
+      { password: hashUserPassword }
+    );
+    return next(new handleMessage("Change password successful!", 200));
+  } catch (error) {
+    next(error);
   }
 };
 
