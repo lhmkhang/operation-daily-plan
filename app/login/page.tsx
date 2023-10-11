@@ -31,7 +31,7 @@ const Login = (props: Props) => {
         if (target.name == "confirmPassword") setConfirmPasswordEmpty(!target.value);
     }
 
-    const handleSignIn = async () => {
+    const handleSignIn = async () => {        
         if (!userInfo.username) {
             setUsernameEmpty(true);
         }
