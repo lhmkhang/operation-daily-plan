@@ -4,8 +4,10 @@ const loggerInfo = logger.getLogger("infoLogger");
 const JWTService = require("./JWTServices");
 const bcryptServices = require("./bcryptServices");
 const { UserModel } = require("../models/userModel");
-const { StatusCodes } = require('http-status-codes');
-const handleMessage = require('../utils/HandleMessage');
+const { UserRole } = require("../models/UserRole");
+const { RoleModel } = require("../models/rolesModel");
+const { StatusCodes } = require("http-status-codes");
+const handleMessage = require("../utils/HandleMessage");
 const MESSAGE = require("../utils/message");
 
 const createNewUser = async (username, password, res, next) => {
@@ -34,7 +36,11 @@ const createNewUser = async (username, password, res, next) => {
     const hashUserPassword = bcryptServices.hashPassword(password);
     await UserModel.create({ username, password: hashUserPassword });
 
-    return res.send({ status: "success", code: StatusCodes.OK, message: MESSAGE.AUTH.CREATE_USER.CREATE_USER_SUCCESS });
+    return res.send({
+      status: "success",
+      code: StatusCodes.OK,
+      message: MESSAGE.AUTH.CREATE_USER.CREATE_USER_SUCCESS,
+    });
   } catch (error) {
     next(error);
   }
@@ -75,15 +81,22 @@ const userLogin = async (username, password, req, res, next) => {
     loggerInfo.info("Login successful");
 
     // Create AT: username + user role, RF: username, store RF in the database
-    const roles = foundUser.group;
-    const userID = foundUser._id;
-    const accessToken = JWTService.createToken({ UserInfo: { userID, username, roles } });
-    const refreshToken = JWTService.createToken({ userID, username });
+    const userId = foundUser._id.toString();
+    const userRoleData = await UserRole.findOne({ userId }).populate({
+      path: "roleId",
+      model: "Role",
+    });
+    const roles = userRoleData.roleId.role;
 
-    await UserModel.findByIdAndUpdate(userID, { refreshToken: refreshToken });
+    const accessToken = JWTService.createToken({
+      UserInfo: { userId, username, roles },
+    });
+    const refreshToken = JWTService.createToken({ userId, username });
+
+    await UserModel.findByIdAndUpdate(userId, { refreshToken: refreshToken });
 
     // store user's session in Redis with user's ID, username and user's role
-    req.session.user = { userID, username, roles };
+    req.session.user = { userId, username, roles };
 
     return res.json({ accessToken, refreshToken });
   } catch (err) {

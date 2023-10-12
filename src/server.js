@@ -10,10 +10,22 @@ const loggerInfo = logger.getLogger("infoLogger");
 const app = express();
 const connectRedis = require("./helpers/connectRedis");
 
+// const { UserRole } = require("./models/UserRole");
+// const { RoleModel } = require("./models/rolesModel.js");
+
 (async () => {
   try {
     // Connect to mongoDB
     connectDB();
+
+    /* UserRole.create({
+      userId: "64f2ac2d4ef1494f984f9376",
+      roleId: "6527f6765b66a2d32d690dc7",
+    });
+    await RoleModel.create({
+      role: "ADMIN",
+      description: "Administration role",
+    }); */
 
     // Configuration of express server
     const redisStore = await connectRedis();
@@ -45,7 +57,6 @@ const connectRedis = require("./helpers/connectRedis");
   } catch (error) {
     console.error("Không thể khởi tạo RedisStore hoặc cấu hình server:", error);
   }
-
 })();
 
 // test rabbitmq
