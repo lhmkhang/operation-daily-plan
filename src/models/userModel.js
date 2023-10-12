@@ -7,7 +7,13 @@ const userSchema = new mongoose.Schema(
     group: { type: Array, require: true, default: ["user"] },
     refreshToken: { type: String, default: "" },
   },
-  { versionKey: false }
+  {
+    versionKey: false,
+    timestamps: {
+      createdAt: 'createdDate',
+      updatedAt: 'modifiedDate'
+    }
+  }
 );
 
 const UserModel = mongoose.model("User", userSchema);
