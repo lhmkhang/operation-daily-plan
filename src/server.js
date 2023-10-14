@@ -11,20 +11,16 @@ const app = express();
 const connectRedis = require("./helpers/connectRedis");
 
 // const { UserRole } = require("./models/UserRole");
-// const { RoleModel } = require("./models/rolesModel.js");
 
 (async () => {
   try {
     // Connect to mongoDB
     connectDB();
 
-    /* UserRole.create({
-      userId: "64f2ac2d4ef1494f984f9376",
-      roleId: "6527f6765b66a2d32d690dc7",
-    });
-    await RoleModel.create({
-      role: "ADMIN",
-      description: "Administration role",
+    /* await UserRole.create({
+      role: "VIEWER",
+      description: "role for readonly",
+      userId: ["6528ab0b19944eb926724326"]
     }); */
 
     // Configuration of express server
