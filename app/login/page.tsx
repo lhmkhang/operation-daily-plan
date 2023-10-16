@@ -17,7 +17,7 @@ const Login = (props: Props) => {
     const [usernameEmpty, setUsernameEmpty] = React.useState(false);
     const [passwordEmpty, setPasswordEmpty] = React.useState(false);
     const [confirmPasswordEmpty, setConfirmPasswordEmpty] = React.useState(false);
-
+    
     const { userInfo, handleUserChange } = useUserAuth();
 
     const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,7 @@ const Login = (props: Props) => {
         if (target.name == "confirmPassword") setConfirmPasswordEmpty(!target.value);
     }
 
-    const handleSignIn = async () => {        
+    const handleSignIn = async () => {
         if (!userInfo.username) {
             setUsernameEmpty(true);
         }

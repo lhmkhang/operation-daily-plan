@@ -19,6 +19,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import Image from 'next/image';
+import logoBlue from '@/public/img/logoBlue.png'
+import logoWhite from '@/public/img/logoWhite.png'
 
 const drawerWidth = 240;
 
@@ -104,33 +107,18 @@ export default function MiniDrawer() {
         setOpen(false);
         console.log(open)
     };
-    
+
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={() => setOpen(true)}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && { display: 'none' }),
-                        }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Mini variant drawer
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+        <div className='flex'>
             <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
-                    <IconButton onClick={() => setOpen(false)}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                <DrawerHeader className='justify-center'>
+                    <IconButton className='w-full h-full' onClick={() => open ? setOpen(false) : setOpen(true)}>
+                        <Image
+                            alt='Logo Blue'
+                            src={logoBlue}
+                            priority
+                            style={{ backgroundSize: "cover", width: "100%", height: "70%" }}
+                        />
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
@@ -184,7 +172,7 @@ export default function MiniDrawer() {
                     ))}
                 </List>
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <div className="w-full h-full container">
                 <DrawerHeader />
                 <Typography paragraph>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -213,7 +201,7 @@ export default function MiniDrawer() {
                     eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
                     posuere sollicitudin aliquam ultrices sagittis orci a.
                 </Typography>
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 }
