@@ -21,7 +21,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Image from 'next/image';
 import logoBlue from '@/public/img/logoBlue.png'
-import logoWhite from '@/public/img/logoWhite.png'
+import bannerBlue from '@/public/img/Logo_DIGI-TEXX_2021_Blue.jpg'
 
 const drawerWidth = 240;
 
@@ -110,16 +110,25 @@ export default function MiniDrawer() {
 
     return (
         <div className='flex'>
-            <Drawer variant="permanent" open={open}>
+            <Drawer variant="permanent" open={open} transitionDuration={0.1}>
                 <DrawerHeader className='justify-center'>
-                    <IconButton className='w-full h-full' onClick={() => open ? setOpen(false) : setOpen(true)}>
-                        <Image
-                            alt='Logo Blue'
-                            src={logoBlue}
-                            priority
-                            style={{ backgroundSize: "cover", width: "100%", height: "70%" }}
-                        />
-                    </IconButton>
+                    <div className='flex items-center justify-center w-full h-full' onClick={() => open ? setOpen(false) : setOpen(true)}>
+                        {open ?
+                            <Image
+                                alt='Banner Blue'
+                                src={bannerBlue}
+                                priority
+                                style={{ backgroundSize: "cover", background: 'transparent', width: "100%", height: "35px" }}
+                            />
+                            :
+                            <Image
+                                alt='Logo Blue'
+                                src={logoBlue}
+                                priority
+                                style={{ backgroundSize: "cover", width: "45px", height: "35px" }}
+                            />
+                        }
+                    </div>
                 </DrawerHeader>
                 <Divider />
                 <List>
