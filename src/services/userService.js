@@ -80,14 +80,19 @@ const userLogin = async (username, password, req, res, next) => {
     loggerInfo.info("Login successful");
 
     const userId = foundUser._id.toString();
-    const userRoleData = await UserRoleModel.findOne({ userId: { $in: [userId] } });
+    const userRoleData = await UserRoleModel.findOne({
+      userId: { $in: [userId] },
+    });
     const roles = { [userRoleData.role]: userRoleData.functional };
 
-    console.log(req.session.id);
-    console.log(req.sessionID);
+    console.log("OLD", req.session.id);
 
     // Kiểm tra xem người dùng hiện tại có phải là người dùng đã đăng nhập trước đó hay không
-    if (req.session.user && req.session.user.username !== username && req.cookies["connect.sid"].includes(req.sessionID)) {
+    if (
+      req.session.user &&
+      req.session.user.username !== username &&
+      req.cookies["connect.sid"].includes(req.sessionID)
+    ) {
       // Tái tạo session cho người dùng mới
       req.session.regenerate(async (err) => {
         if (err) {
@@ -96,10 +101,12 @@ const userLogin = async (username, password, req, res, next) => {
 
         // Lưu thông tin người dùng vào session sau khi tái tạo
         await saveUserSession(req, userId, username, roles, res, next);
+        console.log("NEW", req.session.id);
       });
     } else {
       // Lưu thông tin người dùng vào session nếu là cùng một người dùng
       await saveUserSession(req, userId, username, roles, res, next);
+      console.log("NEW", req.session.id);
     }
   } catch (err) {
     next(err);
@@ -124,17 +131,20 @@ const saveUserSession = async (req, userId, username, roles, res, next) => {
   }
 };
 
-
 const userLogout = async (req, res, next) => {
-
   try {
-
-    if (!req.session || !req.session.user) return next(new handleMessage(MESSAGE.AUTH.LOG_OUT.LOG_OUT_ERROR, StatusCodes.FORBIDDEN));
+    if (!req.session || !req.session.user)
+      return next(
+        new handleMessage(
+          MESSAGE.AUTH.LOG_OUT.LOG_OUT_ERROR,
+          StatusCodes.FORBIDDEN
+        )
+      );
 
     const userID = req.session.user.userID;
 
     //Delete refreshToken in database after logout
-    await UserModel.findByIdAndUpdate(userID, { "refreshToken": "" });
+    await UserModel.findByIdAndUpdate(userID, { refreshToken: "" });
 
     //Delete user'ss session in Redis
     req.session.destroy();
@@ -142,21 +152,47 @@ const userLogout = async (req, res, next) => {
     //Clear cookie in the client's browser
     res.clearCookie("connect.sid");
 
-    return res.send({ status: "success", code: StatusCodes.OK, message: MESSAGE.AUTH.LOG_OUT.LOG_OUT_SUCCESS })
+    return res.send({
+      status: "success",
+      code: StatusCodes.OK,
+      message: MESSAGE.AUTH.LOG_OUT.LOG_OUT_SUCCESS,
+    });
   } catch (error) {
     next(error);
   }
 };
 
-const changePassword = async (username, password, res, next) => {
+const changePassword = async (username, password, req, res, next) => {
   try {
+    const userInToken = req.user;
+    const userInRequestBody = req.body.username;
+
+    if (userInToken !== userInRequestBody)
+      return next(
+        new handleMessage(
+          MESSAGE.AUTH.CHANGE_PASSWORD.UNAUTHORIZED,
+          StatusCodes.UNAUTHORIZED
+        )
+      );
     // Username or password is empty
-    if (!username || !password) return next(new handleMessage(MESSAGE.AUTH.CHANGE_PASSWORD.EMPTY_CREDENTIALS, StatusCodes.BAD_REQUEST));
+    if (!username || !password)
+      return next(
+        new handleMessage(
+          MESSAGE.AUTH.CHANGE_PASSWORD.EMPTY_CREDENTIALS,
+          StatusCodes.BAD_REQUEST
+        )
+      );
 
     const existingUser = await UserModel.findOne({ username: username });
 
     // User does not exist in database
-    if (!existingUser) return next(new handleMessage(MESSAGE.AUTH.CHANGE_PASSWORD.USER_NOT_FOUND, StatusCodes.BAD_REQUEST));
+    if (!existingUser)
+      return next(
+        new handleMessage(
+          MESSAGE.AUTH.CHANGE_PASSWORD.USER_NOT_FOUND,
+          StatusCodes.BAD_REQUEST
+        )
+      );
 
     //Hash user's password
     const hashUserPassword = bcryptServices.hashPassword(password);

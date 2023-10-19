@@ -8,8 +8,8 @@ const handleCreateNewUser = async (req, res, next) => {
 
 const handleChangePassword = async (req, res, next) => {
   const username = req.body.username;
-  const rePassword = req.body.newPassword;
-  userServices.changePassword(username, rePassword, res, next);
+  const rePassword = req.body.password;
+  userServices.changePassword(username, rePassword, req, res, next);
 };
 
 const handleLogin = async (req, res, next) => {

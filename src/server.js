@@ -10,17 +10,17 @@ const loggerInfo = logger.getLogger("infoLogger");
 const app = express();
 const connectRedis = require("./helpers/connectRedis");
 
-// const { UserRole } = require("./models/UserRole");
+// const { UserRoleModel } = require("./models/UserRoleModel");
 
 (async () => {
   try {
     // Connect to mongoDB
     connectDB();
 
-    /* await UserRole.create({
-      role: "VIEWER",
-      description: "role for readonly",
-      userId: ["6528ab0b19944eb926724326"]
+    /* await UserRoleModel.create({
+      role: "ADMIN",
+      description: "role for administrator",
+      userId: ["64f2ac2d4ef1494f984f9376"],
     }); */
 
     // Configuration of express server

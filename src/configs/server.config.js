@@ -54,6 +54,10 @@ const serverConfiguration = (app, redisStore) => {
       { stream: morganStream }
     )
   );
+  app.use(
+    "/public",
+    express.static("C:/Users/Khang/Desktop/back-end/src/public")
+  );
   app.set("view engine", "ejs");
   app.set("views", "./src/views");
 
