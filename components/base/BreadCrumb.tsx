@@ -16,7 +16,7 @@ const BreadCrumb = (props: Props) => {
         <Breadcrumbs aria-label="breadcrumb">
             {
                 props.items.map((breadcrumb, idx) =>
-                    <Link underline="hover" color={idx === props.items.length - 1 ? "primary" : "inherit"} href={breadcrumb.href}>
+                    <Link key={breadcrumb.name} underline="hover" color={idx === props.items.length - 1 ? "primary" : "inherit"} href={breadcrumb.href}>
                         {breadcrumb.name}
                     </Link>
                 )
