@@ -17,8 +17,9 @@ const UserRoleSchema = new mongoose.Schema(
       required: true,
     }],
     functional: {
-      type: mongoose.Schema.Types.Map,
-      default: {}
+      type: Object,
+      default: {},
+      required: true
     }
 
   },
@@ -28,8 +29,10 @@ const UserRoleSchema = new mongoose.Schema(
       createdAt: "createdDate",
       updatedAt: "modifiedDate",
     },
+    minimize: false
   }
 );
 
 const UserRoleModel = mongoose.model("User_Role", UserRoleSchema);
+
 module.exports = { UserRoleModel };

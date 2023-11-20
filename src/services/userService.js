@@ -85,47 +85,16 @@ const userLogin = async (username, password, req, res, next) => {
     });
     const roles = { [userRoleData.role]: userRoleData.functional };
 
-    console.log("OLD", req.session.id);
-
-    // Kiểm tra xem người dùng hiện tại có phải là người dùng đã đăng nhập trước đó hay không
-    if (
-      req.session.user &&
-      req.session.user.username !== username &&
-      req.cookies["connect.sid"].includes(req.sessionID)
-    ) {
-      // Tái tạo session cho người dùng mới
-      req.session.regenerate(async (err) => {
-        if (err) {
-          return next(err);
-        }
-
-        // Lưu thông tin người dùng vào session sau khi tái tạo
-        await saveUserSession(req, userId, username, roles, res, next);
-        console.log("NEW", req.session.id);
-      });
-    } else {
-      // Lưu thông tin người dùng vào session nếu là cùng một người dùng
-      await saveUserSession(req, userId, username, roles, res, next);
-      console.log("NEW", req.session.id);
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-
-const saveUserSession = async (req, userId, username, roles, res, next) => {
-  try {
-    req.session.user = { userId, username, roles };
-
     // Create AT: username + user role + Id, RF: username, store RF in the database
     const accessToken = JWTService.createToken({
       UserInfo: { userId, username, roles },
     });
+
     const refreshToken = JWTService.createToken({ userId, username });
-
     await UserModel.findByIdAndUpdate(userId, { refreshToken: refreshToken });
-
     return res.json({ accessToken, refreshToken });
+
+
   } catch (err) {
     next(err);
   }

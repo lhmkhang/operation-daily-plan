@@ -6,14 +6,17 @@ function submitLoginForm(e) {
   const password = document.querySelector("#exampleInputPassword1").value;
 
   axios
-    .post("http://localhost:8080/api/v1/signin", {
+    .post("http://10.1.23.167:8090/api/v1/signin", {
       username: username,
       password: password,
-    })
+
+    }, { withCredentials: true })
     .then((response) => {
       // Lưu token vào localStorage
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
+
+      console.log(response);
 
       // Chuyển hướng người dùng hoặc thực hiện hành động khác sau khi đăng nhập thành công
     })
@@ -35,13 +38,14 @@ function submitLogoutForm(e) {
 
   axios
     .post(
-      "http://localhost:8080/api/v1/change-password",
+      "http://10.1.23.167:8090/api/v1/change-password",
       {
         username: username,
         password: password,
       },
       {
         headers: { authorization: `Bearer ${token}` },
+        withCredentials: true
       }
     )
     .then((response) => {
