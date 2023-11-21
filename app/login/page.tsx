@@ -1,14 +1,19 @@
 'use client'
 import Image from 'next/image';
 import * as React from 'react';
+import { useContext } from 'react';
 import { Checkbox, Link, TextField, FormControlLabel, Button } from '@mui/material';
-import backgroundImg from '@/public/img/backgroundLogin7.jpg';
+import backgroundImg from '/public/img/backgroundLogin7.jpg';
 import { useUserAuth, useAuth, useSignUp } from '@/components/helpers';
 import { useRouter } from 'next/navigation';
+import { AuthContext } from '@/components/helpers/AuthenContext';
 
 type Props = {}
 
 const Login = (props: Props) => {
+    const { login } = useContext(AuthContext);
+
+
     const router = useRouter();
     const [type, setType] = React.useState("signIn");
     const [passwordMatch, setPasswordMatch] = React.useState(true);
@@ -17,7 +22,7 @@ const Login = (props: Props) => {
     const [usernameEmpty, setUsernameEmpty] = React.useState(false);
     const [passwordEmpty, setPasswordEmpty] = React.useState(false);
     const [confirmPasswordEmpty, setConfirmPasswordEmpty] = React.useState(false);
-    
+
     const { userInfo, handleUserChange } = useUserAuth();
 
     const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,11 +44,21 @@ const Login = (props: Props) => {
             setPasswordEmpty(true);
         }
         if (userInfo.username && userInfo.password) {
+
+            // console.log("userInfo: ", userInfo);
+
+            login(userInfo);
+            // console.log("login:", login);
+
+
             let status = await useAuth(userInfo);
+            // console.log(status);
+
             if (status === 'Success') {
-                router.push("/");
+                router.push("/lucky-wheel");
             } else {
                 setSignInStatus("fail");
+                // router.push("/");
             }
         }
     }
@@ -87,6 +102,7 @@ const Login = (props: Props) => {
                 <div className="grid grid-cols-2 lg:grid-cols-6 h-3/6">
                     <div className='hidden lg:block col-span-4 bg-white relative'>
                         <Image
+
                             alt='Image Login'
                             src={backgroundImg}
                             priority
