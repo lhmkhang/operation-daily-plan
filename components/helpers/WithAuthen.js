@@ -8,8 +8,6 @@ const withAuth = (WrappedComponent) => {
         const { user } = useContext(AuthContext);
         const router = useRouter();
 
-        console.log("USER: ", user);
-
         useEffect(() => {
             // Kiểm tra xem router đã sẵn sàng chưa
             if (router.isReady) {

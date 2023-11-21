@@ -16,7 +16,6 @@ const Wheel = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState("");
 
-
     /* const getRandomColor = () => {
         const letters = '0123456789ABCDEF';
         let color = '#';
@@ -66,9 +65,11 @@ const Wheel = () => {
         setTimeout(async () => {
             setIsSpinning(false);
             try {
-                const token = localStorage.getItem('access-token');
+                const token = sessionStorage.getItem('access-token');
                 const response = await axios.post('http://10.1.26.196:8090/api/v1/check-reward', {
-                    prizeName: selectedPrize.name, prize: selectedPrize.name, headers: {
+                    prizeName: selectedPrize.name, prize: selectedPrize.name
+                }, {
+                    headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
@@ -92,7 +93,7 @@ const Wheel = () => {
 
     const fetchPrizes = async () => {
         try {
-            const token = localStorage.getItem('access-token');
+            const token = sessionStorage.getItem('access-token');
             const response = await axios.get('http://10.1.26.196:8090/api/v1/get-reward', {
                 headers: {
                     'Content-Type': 'application/json',

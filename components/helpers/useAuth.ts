@@ -16,8 +16,8 @@ export default async function useAuth(props: Props) {
         if (response.status === 200) {
             console.log(response);
 
-            localStorage.setItem('access-token', response.data.accessToken)
-            localStorage.setItem('refresh-token', response.data.refreshToken)
+            sessionStorage.setItem('access-token', response.data.accessToken)
+            sessionStorage.setItem('refresh-token', response.data.refreshToken)
             return "Success";
         } else {
             return response.data.message;
