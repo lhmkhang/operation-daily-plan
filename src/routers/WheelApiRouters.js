@@ -12,8 +12,8 @@ const router = express.Router();
 
 let initWheelApiRoutes = (app) => {
   router
-    .post("/check-reward", wheelControllers.checkPrizeQuantity)
-    .get("/get-reward", wheelControllers.getListPrize)
+    .post("/check-reward", verifyJWTToken, wheelControllers.checkPrizeQuantity)
+    .get("/get-reward", verifyJWTToken, wheelControllers.getListPrize)
 
   return app.use("/api/v1", router);
 };
