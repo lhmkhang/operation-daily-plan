@@ -47,7 +47,7 @@ const Login = (props: Props) => {
 
             // console.log("userInfo: ", userInfo);
 
-            login(userInfo);
+            login(userInfo.username);
             // console.log("login:", login);
 
 
