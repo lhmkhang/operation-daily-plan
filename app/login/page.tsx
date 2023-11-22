@@ -4,9 +4,9 @@ import * as React from 'react';
 import { useContext } from 'react';
 import { Checkbox, Link, TextField, FormControlLabel, Button } from '@mui/material';
 import backgroundImg from '/public/img/backgroundLogin7.jpg';
-import useAuth from '@/components/helpers/UseAuth'
+import UseAuth from '@/components/helpers/UseAuth'
 import useUserAuth from '@/components/helpers/UseUserAuth';
-import useSignUp from '@/components/helpers/UseSignUp';
+import UseSignUp from '@/components/helpers/UseSignUp';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/components/helpers/AuthenContext';
 
@@ -53,7 +53,7 @@ const Login = (props: Props) => {
             // console.log("login:", login);
 
 
-            let status = await useAuth(userInfo);
+            let status = await UseAuth(userInfo);
             // console.log(status);
 
             if (status === 'Success') {
@@ -67,7 +67,7 @@ const Login = (props: Props) => {
 
     const handleSignUp = async () => {
         if (userInfo.username && userInfo.password) {
-            let status = await useSignUp(userInfo);
+            let status = await UseSignUp(userInfo);
             if (status === 'Success') {
                 setType("signIn");
                 setSignUpStatus("signIn")

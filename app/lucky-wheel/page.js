@@ -10,6 +10,8 @@ import { AuthContext } from "@/components/helpers/AuthenContext";
 const Wheel = () => {
     const { user } = useContext(AuthContext);
 
+    console.log("current user:", user);
+
     const [isSpinning, setIsSpinning] = useState(false);
     const [currentDegree, setCurrentDegree] = useState(0);
     const [colors, setColors] = useState([

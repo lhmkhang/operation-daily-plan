@@ -3,22 +3,21 @@ import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../helpers/AuthenContext';
 import { useRouter } from 'next/navigation';
 
-const withAuth = (WrappedComponent) => {
-    return (props) => {
+function withAuth(WrappedComponent) {
+    function WithAuthComponent(props) {
         const { user } = useContext(AuthContext);
         const router = useRouter();
 
         useEffect(() => {
-            // Kiểm tra xem router đã sẵn sàng chưa
-            if (router.isReady) {
-                if (!user) {
-                    router.push('/login'); // Redirect nếu chưa đăng nhập
-                }
+            if (router.isReady && !user) {
+                router.push('/login');
             }
         }, [user, router]);
 
         return user ? <WrappedComponent {...props} /> : null;
-    };
-};
+    }
+
+    return WithAuthComponent;
+}
 
 export default withAuth;
