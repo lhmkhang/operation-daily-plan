@@ -7,7 +7,7 @@ type Props = {
 
 export default async function useSignUp(props: Props) {
     try {
-        const response = await axios.post('http://localhost:8090/api/v1/signup', {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/signup`, {
             username: props.username,
             password: props.password
         });
