@@ -31,9 +31,13 @@ const createNewUser = async (username, password, res, next) => {
         )
       );
 
-    //Store username and hash password in the dataabase
+    //Store username and hash password in the database
     const hashUserPassword = bcryptServices.hashPassword(password);
-    await UserModel.create({ username, password: hashUserPassword });
+    const newUser = await UserModel.create({ username, password: hashUserPassword });
+
+    //Push default user role is VIEWER
+    const userId = newUser._id;
+    await UserRoleModel.findOneAndUpdate({ role: "VIEWER" }, { $push: { userId } });
 
     return res.send({
       status: "success",
