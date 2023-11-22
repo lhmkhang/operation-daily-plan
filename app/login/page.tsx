@@ -4,7 +4,9 @@ import * as React from 'react';
 import { useContext } from 'react';
 import { Checkbox, Link, TextField, FormControlLabel, Button } from '@mui/material';
 import backgroundImg from '/public/img/backgroundLogin7.jpg';
-import { useUserAuth, useAuth, useSignUp } from '@/components/helpers';
+import useAuth from '@/components/helpers/UseAuth'
+import useUserAuth from '@/components/helpers/UseUserAuth';
+import useSignUp from '@/components/helpers/UseSignUp';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/components/helpers/AuthenContext';
 

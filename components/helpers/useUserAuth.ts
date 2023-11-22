@@ -4,7 +4,7 @@ interface User {
   username: string,
   password: string
 }
-export default function useUserAuth() {
+export default function UseUserAuth() {
   const [userInfo, setUserInfo] = useState({
     username: "",
     password: ""

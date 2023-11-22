@@ -85,7 +85,7 @@ const Wheel = () => {
                 const response = await axios.post(
                     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/check-reward`,
                     {
-                        user: JSON.parse(user),
+                        user: user,
                         prizeName: selectedPrize.name,
                         prize: selectedPrize.name,
                     },
