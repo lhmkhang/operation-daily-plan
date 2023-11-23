@@ -9,56 +9,81 @@ const dotenv = require("dotenv").config({ path: path.resolve(__dirname, "..", ".
 const logger = require("./helpers/logger");
 const loggerInfo = logger.getLogger("infoLogger");
 const app = express();
-// const connectRedis = require("./helpers/connectRedis");
 // const { UserRoleModel } = require("./models/UserRoleModel");
-
 
 // Connect to mongoDB
 connectDB();
 
-/* const newUserRol = new UserRoleModel({
-  role: "ADMIN",
-  description: "role for administrator",
-  userId: ["651f8e2fc73a4ba3e94aad29"],
-});
+if (process.env.NODE_ENV === 'production') {
+  const next = require('next');
+  const nextApp = next({ dev, dir: process.env.PATH_FOLDER_FE });
+  const handleNextRequests = nextApp.getRequestHandler();
 
-await newUserRol.save();
-console.log(newUserRol); */
+  nextApp.prepare().then(() => {
 
-// Configuration of express server
-// const redisStore = await connectRedis();
+    // Configuration of express server
+    serverConfiguration(app);
 
-serverConfiguration(app);
+    initWheelApiRoutes(app);
+    initUserApiRoutes(app);
 
-initWheelApiRoutes(app);
-initUserApiRoutes(app);
-initWebRoutes(app);
+    app.use((err, req, res, next) => {
+      err.statusCode = err.statusCode || 500;
+      err.status = err.status || "error";
 
-app.use((err, req, res, next) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || "error";
+      const loggerError = logger.getLogger("errorLogger");
+      loggerError.error(
+        `${req.ip} - ${req.method} ${req.url} ${err.statusCode} - ${err.name}: ${err.message}\n${err.stack}`
+      );
 
-  const loggerError = logger.getLogger("errorLogger");
-  loggerError.error(
-    `${req.ip} - ${req.method} ${req.url} ${err.statusCode} - ${err.name}: ${err.message}\n${err.stack}`
-  );
+      res.status(err.statusCode).json({
+        status: err.status,
+        code: err.statusCode,
+        message: err.message,
+      });
+    });
 
-  res.status(err.statusCode).json({
-    status: err.status,
-    code: err.statusCode,
-    message: err.message,
+    app.get('*', (req, res) => {
+      return handleNextRequests(req, res);
+    });
+
+    app.listen(process.env.PORT || 8090, () => {
+      loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
+    });
+
+  })
+} else {
+  // Configuration of express server
+  serverConfiguration(app);
+
+  initWheelApiRoutes(app);
+  initUserApiRoutes(app);
+  initWebRoutes(app);
+
+  app.use((err, req, res, next) => {
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || "error";
+
+    const loggerError = logger.getLogger("errorLogger");
+    loggerError.error(
+      `${req.ip} - ${req.method} ${req.url} ${err.statusCode} - ${err.name}: ${err.message}\n${err.stack}`
+    );
+
+    res.status(err.statusCode).json({
+      status: err.status,
+      code: err.statusCode,
+      message: err.message,
+    });
   });
-});
 
-app.listen(process.env.PORT || 8090, () => {
-  loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
-});
-
-
-// test rabbitmq
-/* app.post("/sendLog", async (req, res, next) => {
-  await producer.publishMessage(req.body.logType, req.body.message);
-  res.send();
-}); */
+  app.listen(process.env.PORT || 8090, () => {
+    loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
+  });
 
 
+  // test rabbitmq
+  /* app.post("/sendLog", async (req, res, next) => {
+    await producer.publishMessage(req.body.logType, req.body.message);
+    res.send();
+  }); */
+}

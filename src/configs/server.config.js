@@ -30,8 +30,8 @@ const morganStream = {
 
 const serverConfiguration = (app, redisStore) => {
   app.use(compression());
-  app.use(allowCredentials);
   app.use(cors(corsOptions));
+  app.use(allowCredentials);
   app.use(express.static("./src/public"));
   /* app.use(cookieParser());
   app.use(

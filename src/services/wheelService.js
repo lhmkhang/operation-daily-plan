@@ -7,17 +7,11 @@ const handleMessage = require("../utils/HandleMessage");
 const MESSAGE = require("../utils/message");
 const Prize = require("../models/PrizeModel");
 const RewardInfo = require("../models/RewarkInfoModel");
-
+const TurnWheel = require("../models/TurnWheelModel");
 
 const quantityChecker = async (req, res, next) => {
   try {
     const prizeName = req.body.prizeName;
-
-    // console.log(prizeName);
-
-    const data = await Prize.findOne({ name: prizeName });
-
-    // console.log(data);
 
     // Tìm và cập nhật số lượng phần thưởng
     const result = await Prize.findOneAndUpdate(
@@ -25,7 +19,6 @@ const quantityChecker = async (req, res, next) => {
       { $inc: { quantity: -1 } }, // Hành động: giảm số lượng đi 1
       { new: true } // Trả về document sau khi cập nhật
     );
-
 
     if (result) {
 
@@ -35,16 +28,14 @@ const quantityChecker = async (req, res, next) => {
         location,
         prize } = req.body
 
-
-      const rewardInfo = await RewardInfo.create({ user, fullName, lineManager, location, prize });
-
+      await RewardInfo.create({ user, fullName, lineManager, location, prize });
+      await TurnWheel.findOneAndUpdate({ username: user }, { $inc: { quantity: -1 } })
       res.json({ message: 'Chúc mừng! Bạn đã trúng phần thưởng.', status: "success" });
     } else {
       res.json({ message: 'Rất tiếc, phần thưởng này đã hết.' });
     }
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ message: 'Có lỗi xảy ra trong quá trình xử lý.' });
+    next(error);
   }
 
   /* try {
@@ -106,10 +97,21 @@ const getPrizes = async (req, res, next) => {
     const result = await (await Prize.find({})).map(i => { return { name: i.name, quantity: i.quantity } });
     return res.json({ data: result, status: 200 });
   } catch (error) {
-    console.log(error);
+    next(error);
+  }
+}
+
+const getTurn = async (req, res, next) => {
+  const userName = req.body.username;
+  try {
+    const data = await TurnWheel.findOne({ username: userName });
+
+    return res.json({ username: userName, quantity: data.quantity });
+  } catch (error) {
+    next(error);
   }
 }
 
 module.exports = {
-  quantityChecker, getPrizes
+  quantityChecker, getPrizes, getTurn
 };

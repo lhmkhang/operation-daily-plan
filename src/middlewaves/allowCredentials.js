@@ -16,7 +16,10 @@ const credentials = (req, res, next) => {
         res.setHeader("X-XSS-Protection", "1; mode=block");
         res.setHeader("Referrer-Policy", "no-referrer");
         res.setHeader("Feature-Policy", "vibrate 'none'; geolocation 'none'");
-        // res.setHeader("Access-Control-Allow-Origin", '*')
+        res.setHeader("Access-Control-Allow-Origin", origin);
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
     }
     next();
 }
