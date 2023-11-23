@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
 
         // console.log("USER: ", user);
-        sessionStorage.setItem('access-token-bk', JSON.stringify(userData));
+        sessionStorage.setItem('access-token-bk', userData);
     };
 
     // Hàm để đăng xuất

@@ -9,9 +9,7 @@ import { AuthContext } from "@/components/helpers/AuthenContext";
 
 const Wheel = () => {
     const { user } = useContext(AuthContext);
-
-    console.log("current user:", user);
-
+    const [totalTurn, setTotalTurn] = useState();
     const [isSpinning, setIsSpinning] = useState(false);
     const [currentDegree, setCurrentDegree] = useState(0);
     const [colors, setColors] = useState([
@@ -41,6 +39,8 @@ const Wheel = () => {
     useEffect(() => {
         fetchPrizes();
     }, []);
+
+    console.log(totalTurn);
 
     /* useEffect(() => {
           const generatedColors = prizes.map(() => getRandomColor());
@@ -130,6 +130,20 @@ const Wheel = () => {
                 }
             );
             setPrizes(response.data.data);
+
+            const responseTurn = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-turn`,
+                {
+                    username: user
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setTotalTurn(responseTurn.data.quantity);
         } catch (error) {
             console.error("Lỗi khi lấy dữ liệu phần thưởng:", error);
         }
@@ -231,7 +245,7 @@ const Wheel = () => {
                     {/* Mũi tên cố định hướng lên góc 3 giờ */}
                     <polygon points={`150,70 140,110 160,100`} fill="green" />
                 </svg>
-                <button onClick={spin} className="spin-button" disabled={isSpinning}>
+                <button onClick={spin} className="spin-button" disabled={isSpinning || totalTurn === 0} title={totalTurn === 0 ? "Bạn không còn lượt quay nào" : "Bắt đầu quay"}>
                     Start
                 </button>
             </div>
