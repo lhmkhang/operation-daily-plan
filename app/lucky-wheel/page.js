@@ -9,6 +9,9 @@ import { AuthContext } from "@/components/helpers/AuthenContext";
 
 const Wheel = () => {
     const { user } = useContext(AuthContext);
+
+    // console.log("user:", user);
+
     const [totalTurn, setTotalTurn] = useState();
     const [isMounted, setIsMounted] = useState(false);
     const [isSpinning, setIsSpinning] = useState(false);
@@ -41,8 +44,6 @@ const Wheel = () => {
         setIsMounted(true);
         fetchPrizes();
     }, []);
-
-    console.log(totalTurn);
 
     /* useEffect(() => {
           const generatedColors = prizes.map(() => getRandomColor());
@@ -85,18 +86,19 @@ const Wheel = () => {
         setTimeout(async () => {
             setIsSpinning(false);
             try {
-                const token = sessionStorage.getItem("access-token");
+                const accessToken = JSON.parse(sessionStorage.getItem("token")).accessToken;
+
                 const response = await axios.post(
                     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/check-reward`,
                     {
-                        user: user,
+                        user: JSON.parse(user).username,
                         prizeName: selectedPrize.name,
                         prize: selectedPrize.name,
                     },
                     {
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`,
+                            Authorization: `Bearer ${accessToken}`,
                         },
                     }
                 );
@@ -119,15 +121,17 @@ const Wheel = () => {
         }, 5000);
     };
 
+    // console.log("userContext:", JSON.parse(user));
+
     const fetchPrizes = async () => {
         try {
-            const token = sessionStorage.getItem("access-token");
+            const accessToken = JSON.parse(sessionStorage.getItem("token")).accessToken;
             const response = await axios.get(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-reward`,
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${accessToken}`,
                     },
                 }
             );
@@ -136,12 +140,12 @@ const Wheel = () => {
             const responseTurn = await axios.post(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-turn`,
                 {
-                    username: user
+                    username: JSON.parse(user).username
                 },
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${accessToken}`,
                     },
                 }
             );

@@ -13,9 +13,7 @@ export default async function UseAuth(props: Props) {
         });
 
         if (response.status === 200) {
-            sessionStorage.setItem('access-token', response.data.accessToken)
-            sessionStorage.setItem('refresh-token', response.data.refreshToken)
-            return "Success";
+            return response.data;
         } else {
             return response.data.message;
         }

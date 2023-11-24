@@ -48,15 +48,12 @@ const Login = (props: Props) => {
         if (userInfo.username && userInfo.password) {
 
             // console.log("userInfo: ", userInfo);
-
-            login(userInfo.username);
+            let status = await UseAuth(userInfo);
             // console.log("login:", login);
 
-
-            let status = await UseAuth(userInfo);
-            // console.log(status);
-
-            if (status === 'Success') {
+            if (status) {
+                const updateStatus = { ...status, username: userInfo.username };
+                login(updateStatus);
                 router.push("/lucky-wheel");
             } else {
                 setSignInStatus("fail");
@@ -68,7 +65,7 @@ const Login = (props: Props) => {
     const handleSignUp = async () => {
         if (userInfo.username && userInfo.password) {
             let status = await UseSignUp(userInfo);
-            if (status === 'Success') {
+            if (status) {
                 setType("signIn");
                 setSignUpStatus("signIn")
             } else {
