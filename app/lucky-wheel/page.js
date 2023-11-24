@@ -10,6 +10,7 @@ import { AuthContext } from "@/components/helpers/AuthenContext";
 const Wheel = () => {
     const { user } = useContext(AuthContext);
     const [totalTurn, setTotalTurn] = useState();
+    const [isMounted, setIsMounted] = useState(false);
     const [isSpinning, setIsSpinning] = useState(false);
     const [currentDegree, setCurrentDegree] = useState(0);
     const [colors, setColors] = useState([
@@ -37,6 +38,7 @@ const Wheel = () => {
       }; */
 
     useEffect(() => {
+        setIsMounted(true);
         fetchPrizes();
     }, []);
 
@@ -181,6 +183,10 @@ const Wheel = () => {
         const rotateAngle = arcAngle * index + arcAngle / 2;
         return -rotateAngle;
     };
+
+    if (!isMounted) {
+        return null; // Render nothing on the server
+    }
 
     return (
         <div className="main-container">

@@ -29,6 +29,9 @@ const nextConfig = {
         remotePatterns: [],
         // when true, every image will be unoptimized
         unoptimized: false,
+    },
+    experimental: {
+        optimizeCss: false, // Tắt tối ưu hóa CSS
     }
 }
 

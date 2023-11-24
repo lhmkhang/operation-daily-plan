@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 
 function withAuth(WrappedComponent) {
     function WithAuthComponent(props) {
-        const { user } = useContext(AuthContext);
         const router = useRouter();
-
+        const { user } = useContext(AuthContext);
+        // console.log(user);
         useEffect(() => {
-            if (router.isReady && !user) {
+            if (typeof user === 'undefined' || user === null) {
                 router.push('/login');
             }
         }, [user, router]);

@@ -18,7 +18,7 @@ const config: Config = {
       },
       colors: {
         primary: '#306bd1',
-        primary_shade : '#768CB1',
+        primary_shade: '#768CB1',
         background_blur: 'rgba(170,209,237,0.91)'
       },
       boxShadow: {

@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
     height: 100vh;
     /* width: 100vh; */
     box-sizing: border-box;
+    background: url("../public/img/traditionalVietnameseTet.png") repeat center center / cover;
 }

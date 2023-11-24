@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import * as React from 'react';
 import { useContext } from 'react';
-import { Checkbox, Link, TextField, FormControlLabel, Button } from '@mui/material';
+import { Checkbox, Link, TextField, FormControlLabel, Button, CssBaseline } from '@mui/material';
 import backgroundImg from '/public/img/backgroundLogin7.jpg';
 import UseAuth from '@/components/helpers/UseAuth'
 import useUserAuth from '@/components/helpers/UseUserAuth';
@@ -178,7 +178,7 @@ const Login = (props: Props) => {
                                 <Link
                                     href="#"
                                     underline="hover"
-                                    className='text-xs text-black'>
+                                    className='text-xs text-black cursor-pointer'>
                                     Forgot password?
                                 </Link>
                             </div>
@@ -193,7 +193,7 @@ const Login = (props: Props) => {
                                 <Link
                                     onClick={() => setType("signUp")}
                                     underline="hover"
-                                    className='text-xs'>
+                                    className='text-xs cursor-pointer'>
                                     Create an account
                                 </Link>
                             </div>
@@ -252,7 +252,7 @@ const Login = (props: Props) => {
                                 <Link
                                     onClick={() => setType("signIn")}
                                     underline="hover"
-                                    className='text-xs'>
+                                    className='text-xs cursor-pointer'>
                                     Have an account already?
                                 </Link>
                             </div>

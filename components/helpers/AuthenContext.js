@@ -5,7 +5,12 @@ import React, { createContext, useState, useEffect } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return sessionStorage.getItem('access-token-bk');
+        }
+        return null
+    });
 
     useEffect(() => {
         const storedUser = sessionStorage.getItem('access-token-bk');
