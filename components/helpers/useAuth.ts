@@ -19,6 +19,5 @@ export default async function UseAuth(props: Props) {
         }
     } catch (e) {
         console.error(e);
-        return "Fail";
     }
 }

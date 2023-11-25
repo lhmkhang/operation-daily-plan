@@ -15,23 +15,26 @@ function withAuth(WrappedComponent) {
             let isTokenValid = false;
 
             try {
-                if (user) {
-                    accessToken = JSON.parse(user).accessToken;
+              if (!user) {
+                router.push("/login");
+              } else {
+                accessToken = JSON.parse(user).accessToken;
+                const decodedToken = jwtDecode(accessToken);
+                const currentTime = Date.now() / 1000;
+
+                if (decodedToken.exp > currentTime) {
+                  isTokenValid = true;
                 }
+
+                if (!accessToken || !isTokenValid) {
+                  router.push("/login");
+                }
+              }
             } catch (error) {
-                console.error('Error parsing user:', error);
+              console.error("Error parsing user:", error);
             }
 
-            const decodedToken = jwtDecode(accessToken);
-            const currentTime = Date.now() / 1000;
-
-            if (decodedToken.exp > currentTime) {
-                isTokenValid = true;
-            }
-
-            if (!accessToken || !isTokenValid) {
-                router.push('/login');
-            }
+            
         }, [user, router]);
 
         return user ? <WrappedComponent {...props} /> : null;
