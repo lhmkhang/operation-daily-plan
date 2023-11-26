@@ -94,10 +94,12 @@ const userLogin = async (username, password, req, res, next) => {
       UserInfo: { userId, username, roles },
     });
 
-    const refreshToken = JWTService.createToken({ userId, username });
+    const refreshToken = JWTService.createRefreshToken({
+      UserInfo: { userId, username, roles },
+    });
+
     await UserModel.findByIdAndUpdate(userId, { refreshToken: refreshToken });
     return res.json({ accessToken, refreshToken });
-
 
   } catch (err) {
     next(err);

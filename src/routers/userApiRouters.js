@@ -1,11 +1,7 @@
 const express = require("express");
-const fs = require("fs");
 const path = require("path");
 const userControllers = require("../controllers/userControllers");
 const JWTControllers = require("../controllers/JWTControllers.js");
-// const uploadController = require("../controllers/uploadController");
-const pageControllers = require("../controllers/pageControllers.js");
-// const timeAllowUpload = require("../middlewaves/timeAllowUpload.js");
 const verifyJWTToken = require("../middlewaves/verifyJWTToken.js");
 const verifyRoles = require("../middlewaves/verifyRoles.js");
 const multer = require("multer");
@@ -42,7 +38,7 @@ let initUserApiRoutes = (app) => {
     )
     .post("/signin", userControllers.handleLogin)
     .get("/signout", verifyJWTToken, userControllers.handleLogout)
-    .get("/refresh-token", JWTControllers.handleRenewToken);
+    .post("/refresh-token", JWTControllers.handleRenewToken);
 
   /* router.post(
     "/upload-volume",
