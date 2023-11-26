@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect, useContext } from "react";
 import "./Wheel.css";
-import axios from "axios";
+// import axios from "axios";
+import axios from "@/components/helpers/axiosHelper";
 // import { toast } from 'react-toastify';
 import Modal from "./Modal";
 import withAuth from "../../components/helpers/WithAuthen";
@@ -9,9 +10,6 @@ import { AuthContext } from "@/components/helpers/AuthenContext";
 
 const Wheel = () => {
     const { user } = useContext(AuthContext);
-
-    // console.log("user:", user);
-
     const [totalTurn, setTotalTurn] = useState();
     const [isMounted, setIsMounted] = useState(false);
     const [isSpinning, setIsSpinning] = useState(false);
@@ -43,7 +41,7 @@ const Wheel = () => {
     useEffect(() => {
         setIsMounted(true);
         fetchPrizes();
-    }, []);
+    }, [user]);
 
     /* useEffect(() => {
           const generatedColors = prizes.map(() => getRandomColor());
@@ -86,7 +84,7 @@ const Wheel = () => {
         setTimeout(async () => {
             setIsSpinning(false);
             try {
-                const accessToken = JSON.parse(sessionStorage.getItem("token")).accessToken;
+                // const accessToken = JSON.parse(sessionStorage.getItem("token")).accessToken;
 
                 const response = await axios.post(
                     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/check-reward`,
@@ -98,7 +96,7 @@ const Wheel = () => {
                     {
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${accessToken}`,
+                            Authorization: `Bearer ${JSON.parse(user).accessToken}`,
                         },
                     }
                 );
@@ -125,13 +123,13 @@ const Wheel = () => {
 
     const fetchPrizes = async () => {
         try {
-            const accessToken = JSON.parse(sessionStorage.getItem("token")).accessToken;
+            // const accessToken = JSON.parse(sessionStorage.getItem("token")).accessToken;
             const response = await axios.get(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-reward`,
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${accessToken}`,
+                        Authorization: `Bearer ${JSON.parse(user).accessToken}`,
                     },
                 }
             );
@@ -145,7 +143,7 @@ const Wheel = () => {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${accessToken}`,
+                        Authorization: `Bearer ${JSON.parse(user).accessToken}`,
                     },
                 }
             );
