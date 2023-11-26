@@ -1,0 +1,22 @@
+.btn_switch_left {
+    border-top-left-radius: 9999px !important;
+    border-bottom-left-radius: 9999px !important;
+    box-shadow: none;
+}
+
+.btn_switch_right {
+    border-top-right-radius: 9999px !important;
+    border-bottom-right-radius: 9999px !important;
+    box-shadow: none;
+
+}
+
+.btn_switch_right.btn_inactive:hover,
+.btn_switch_left.btn_inactive:hover {
+    /*box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);*/
+    background-color: rgb(75 85 99) !important;
+}
+
+.btn_inactive {
+    background-color: rgb(75 85 99) !important;
+}

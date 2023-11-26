@@ -9,6 +9,7 @@ import useUserAuth from '@/components/helpers/UseUserAuth';
 import UseSignUp from '@/components/helpers/UseSignUp';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/components/helpers/AuthenContext';
+import style from '../../styles/Login.module.css'
 
 type Props = {}
 
@@ -114,14 +115,14 @@ const Login = (props: Props) => {
                             <Button
                                 variant='contained'
                                 size='small'
-                                className={`rounded-none rounded-l-full shadow-none ${type === 'signUp' ? 'bg-gray-600 hover:bg-gray-600' : 'shadow-lg'}`}
+                                className={`${style.btn_switch_left} ${type === 'signUp' ? style.btn_inactive : ""}`}
                                 onClick={() => setType("signIn")}>
                                 Sign In
                             </Button>
                             <Button
                                 variant='contained'
                                 size='small'
-                                className={`rounded-none rounded-r-full shadow-none ${type === 'signIn' ? 'bg-gray-600 hover:bg-gray-600' : 'shadow-lg'}`}
+                                className={`${style.btn_switch_right} ${type === 'signIn' ? style.btn_inactive : ""}`}
                                 onClick={() => setType("signUp")}>
                                 Sign Up
                             </Button>
