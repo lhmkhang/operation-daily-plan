@@ -9,6 +9,7 @@ const dotenv = require("dotenv").config({ path: path.resolve(__dirname, "..", ".
 const logger = require("./helpers/logger");
 const loggerInfo = logger.getLogger("infoLogger");
 const app = express();
+const verifyJWTToken = require("./middlewaves/verifyJWTToken.js");
 // const { UserRoleModel } = require("./models/UserRoleModel");
 
 // Connect to mongoDB
@@ -17,7 +18,7 @@ connectDB();
 if (process.env.NODE_ENV === 'production') {
   const next = require('next');
   const dev = process.env.NODE_ENV !== 'production';
-  const nextApp = next({ dev, dir: process.env.PATH_FOLDER_FE });
+  const nextApp = next({ dev: dev, dir: process.env.PATH_FOLDER_FE });
   const handleNextRequests = nextApp.getRequestHandler();
 
   nextApp.prepare().then(() => {
@@ -42,6 +43,42 @@ if (process.env.NODE_ENV === 'production') {
         code: err.statusCode,
         message: err.message,
       });
+    });
+
+    app.get('/okr-report', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/ProjectDesignReport.html')
+    });
+
+    app.get('/MaximizeEfficiencyPage.html', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/MaximizeEfficiencyPage.html')
+    });
+
+    app.get('/CustomerSatisfactionPage.html', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/CustomerSatisfactionPage.html')
+    });
+
+    app.get('/ProjectDesignReport.html', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/ProjectDesignReport.html')
+    });
+
+    app.get('/IncidentPage.html', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/IncidentPage.html')
+    });
+
+    app.get('/ManualTaskPage.html', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/ManualTaskPage.html')
+    });
+
+    app.get('/ImprovementIdeasPage.html', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/ImprovementIdeasPage.html')
+    });
+
+    app.get('/PersonalDevelopmentPage.html', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/PersonalDevelopmentPage.html')
+    });
+
+    app.get('/Calculation.html', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/Calculation.html')
     });
 
     app.get('*', (req, res) => {
