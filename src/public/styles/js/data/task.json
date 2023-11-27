@@ -1,0 +1,106 @@
+{
+    "Task": [
+        {
+            "Quarter": "2nd",
+            "Data": [
+                {
+                    "Team": "OPS1",
+                    "ProjectName": "Online project (PSM, parashift, spectos...)",
+                    "Description": "Check duplicate invoice, it impacts to the billing process/auto import to centralize the report billing",
+                    "Status": "Manual"
+                },
+                {
+                    "Team": "Admin/OPS1",
+                    "ProjectName": "Daily Plan",
+                    "Description": "Proceed on the microsoft excel",
+                    "Status": "Manual"
+                },
+                {
+                    "Team": "Admin",
+                    "ProjectName": "Process request to create the project on PIM",
+                    "Description": "Create the bitrix workflow for receive the request",
+                    "Status": "Manual"
+                },
+                {
+                    "Team": "OPS2",
+                    "ProjectName": "0807_220704_099_Audit_B",
+                    "Description": "Control user's performance and project's time by workflow DGS3",
+                    "Status": "Automation"
+                },
+                {
+                    "Team": "OPS2",
+                    "ProjectName": "Function Task/batch priority",
+                    "Description": "Priority the tasks to complete whole batch to ensure the delivery time, user no need monitor to assign/unassign task",
+                    "Status": "Automation"
+                },
+                {
+                    "Team": "QA",
+                    "ProjectName": "Web report for the quality report of project",
+                    "Description": "Create web app, QA can get the report by themselves",
+                    "Status": "Automation"
+                },
+                {
+                    "Team": "OPS1",
+                    "ProjectName": [
+                        "0533_200903_002_505764",
+                        "0472_200420_002_505704",
+                        "0701_210706_002_505830"
+                    ],
+                    "Description": "Auto generate the billing report from the workflow",
+                    "Status": "Automation"
+                }
+            ]
+        },
+        {
+            "Quarter": "3rd",
+            "Data": [
+                {
+                    "Team": "OPS1",
+                    "ProjectName": "Online project (PSM, parashift, spectos...)",
+                    "Description": "Check duplicate invoice, it impacts to the billing process/auto import to centralize the report billing",
+                    "Status": "Manual"
+                },
+                {
+                    "Team": "Admin/OPS1",
+                    "ProjectName": "Daily Plan",
+                    "Description": "Proceed on the microsoft excel",
+                    "Status": "Manual"
+                },
+                {
+                    "Team": "Admin",
+                    "ProjectName": "Process request to create the project on PIM",
+                    "Description": "Create the bitrix workflow for receive the request",
+                    "Status": "Manual"
+                },
+                {
+                    "Team": "OPS2",
+                    "ProjectName": "0807_220704_099_Audit_B",
+                    "Description": "Control user's performance and project's time by workflow DGS3",
+                    "Status": "Automation"
+                },
+                {
+                    "Team": "OPS2",
+                    "ProjectName": "Function Task/batch priority",
+                    "Description": "Priority the tasks to complete whole batch to ensure the delivery time, user no need monitor to assign/unassign task",
+                    "Status": "Automation"
+                },
+                {
+                    "Team": "QA",
+                    "ProjectName": "Web report for the quality report of project",
+                    "Description": "Create web app, QA can get the report by themselves",
+                    "Status": "Automation"
+                },
+                {
+                    "Team": "OPS1",
+                    "ProjectName": [
+                        "0533_200903_002_505764",
+                        "0472_200420_002_505704",
+                        "0701_210706_002_505830"
+                    ],
+                    "Description": "Auto generate the billing report from the workflow",
+                    "Status": "Automation"
+                }
+            ]
+        }
+    ]
+}

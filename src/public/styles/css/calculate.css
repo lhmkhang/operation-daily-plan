@@ -1,0 +1,93 @@
+
+.txtAreaCfg {
+    width: 80%;
+    border-radius: 10px;
+}
+
+.txtCfg {
+    width: 80%;
+}
+
+.btnCfg {
+    width: 15%;
+    border: none;
+    background-color: rgb(121, 182, 238);
+    color: white;
+}
+
+.coverBox {
+    outline: auto;
+    outline-width: 10px;
+    outline-color: blue;
+    border-radius: 5px;
+}
+.coverInput {
+    height: 100px;
+    background-color: #fff6ff;
+}
+
+.coverTitle {
+    width: 50%;
+    outline: auto;
+    outline-width: 10px;
+    outline-color: blue;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-top: 15px;
+}
+
+.coverTxt {
+    margin-left: 20px;
+    outline: auto;
+    outline-width: 10px;
+    outline-color: blue;
+    border-radius: 5px;
+}
+
+.spacingBox {
+    margin-top: 10px;
+}
+
+.spacingAuto {
+    margin: auto;
+    padding: 40px;
+}
+
+.spacingElement {
+    margin: auto;
+    padding-top: 20px;
+}
+
+.spanCfg {
+    height: 100px;
+    width: 100%;
+}
+
+.header {
+    background-color: rgba(54, 162, 235, 1);
+    color: white;
+}
+
+.card-1 {
+    background-color: red;
+}
+
+.card-2 {
+    background-color: yellow;
+}
+
+.card-3 {
+    background-color: gray;
+}
+
+.card-4 {
+    background-color: orange;
+}
+
+.card-5 {
+    background-color: pink;
+}
+
+.hiddenDiv {
+    display: none;
+}

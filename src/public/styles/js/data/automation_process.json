@@ -1,0 +1,31 @@
+{
+    "Automation_Process": [
+        {
+            "Quarter": "2nd",
+            "Data": [
+                {
+                    "Team": "OPS1",
+                    "Project_Name": "013_140128_SAGA_504606",
+                    "PIC": "ttthao",
+                    "Description": "Apply OMR and compare data between machine and human task to ensure the quality"
+                },
+                {
+                    "Team": "OPS3",
+                    "Project_Name": "Monitor and auto alert (096, 0738, 0805)",
+                    "PIC": "ntnhue",
+                    "Description": "Auto alert when the instance stuck at the service/human task over the threshold"
+                },
+                {
+                    "Team": "OPS3",
+                    "Project_Name": "096_190619_124_MVL_eClaim",
+                    "PIC": "ntnhue",
+                    "Description": "Apply auto bypass verify step (expected 10% application reach to 100% quality target)"
+                }
+            ]
+        },
+        {
+            "Quarter" : "3rd",
+            "Data": []
+        }
+    ]
+}

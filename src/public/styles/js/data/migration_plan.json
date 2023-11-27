@@ -1,0 +1,92 @@
+{
+    "Migration_Plan": [
+        {
+            "Quarter": "Q2",
+            "Project_List": [
+                {
+                    "Project Code": "0230",
+                    "Project Name": "042_170518_002_505304",
+                    "Project Managers": "Phạm Mạnh Nam,Lê Hoàng Minh Khang,Trương Kim Thắng,Đỗ Như Nghĩa,Trần Thạch Thảo,Nguyễn Thị Điệp,Nguyễn Thị Phương Anh,Ung Văn Tùng",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0231",
+                    "Project Name": "043_170518_002_505305",
+                    "Project Managers": "Phạm Mạnh Nam,Lê Hoàng Minh Khang,Trương Kim Thắng,Đỗ Như Nghĩa,Trần Thạch Thảo,Nguyễn Thị Điệp,Nguyễn Thị Phương Anh,Ung Văn Tùng",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0232",
+                    "Project Name": "044_170518_002_505306",
+                    "Project Managers": "Phạm Mạnh Nam,Lê Hoàng Minh Khang,Trương Kim Thắng,Đỗ Như Nghĩa,Trần Thạch Thảo,Nguyễn Thị Điệp,Nguyễn Thị Phương Anh,Ung Văn Tùng",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0365",
+                    "Project Name": "013_140128_SAGA_504606",
+                    "Project Managers": "Nguyễn Thị Điệp,Trần Thạch Thảo,Trương Kim Thắng,Lê Hoàng Minh Khang,Nguyễn Thị Phương Anh,pvlinh_1",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0059",
+                    "Project Name": "049_150504_Saga_504952",
+                    "Project Managers": "Phạm Mạnh Nam,Lê Hoàng Minh Khang,Trương Kim Thắng,Đỗ Như Nghĩa,Trần Thạch Thảo,Nguyễn Thị Điệp,Nguyễn Thị Phương Anh,Ung Văn Tùng",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0135",
+                    "Project Name": "102_190702_002_505654",
+                    "Project Managers": "Nguyễn Thị Điệp,Trần Thạch Thảo,Trương Kim Thắng,Lê Hoàng Minh Khang,Nguyễn Thị Phương Anh,Nguyễn Hoài Bảo,Phạm Thị Hồng Thủy,Trần Hoàng Anh",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0002",
+                    "Project Name": "029_060607_SAGA_503117",
+                    "Project Managers": "Nguyễn Thị Điệp,Trần Thạch Thảo,Nguyễn Thị Phương Anh,Phạm Thị Hồng Thủy,Lê Hoàng Minh Khang,Trương Kim Thắng,Trần Thị Ánh Tuyết,Nguyễn Hoài Bảo",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0872",
+                    "Project Name": "0872_230222_002_HSR_Italia",
+                    "Project Managers": "Phạm Mạnh Nam,Trần Thạch Thảo,Nguyễn Thị Điệp,Lê Hoàng Minh Khang,Trương Kim Thắng",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0397",
+                    "Project Name": "054_120530_SAGA_503549",
+                    "Project Managers": "Nguyễn Thị Điệp,Trần Thạch Thảo,Trương Kim Thắng,Lê Hoàng Minh Khang,Nguyễn Thị Phương Anh,Trần Thị Ánh Tuyết",
+                    "Group": "OPS1"
+                }
+            ]
+        },
+        {
+            "Quarter": "Q3",
+            "Project_List": [
+                {
+                    "Project Code": "0228",
+                    "Project Name": "122_161117_002_505213",
+                    "Project Managers": "Nguyễn Thị Điệp,Trần Thạch Thảo,Trương Kim Thắng,Lê Hoàng Minh Khang,Nguyễn Thị Phương Anh,Nguyễn Hoài Bảo",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0571",
+                    "Project Name": "0571_201214_002_MRP_KD_216001",
+                    "Project Managers": "Trần Thạch Thảo,Nguyễn Thị Phương Anh,Nguyễn Thị Điệp,Lê Hoàng Minh Khang,Trương Kim Thắng,lbphung,pvlinh_1,Nguyễn Hoài Bảo,Phạm Thị Hồng Thủy",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0436",
+                    "Project Name": "082_180621_065_Wenatex",
+                    "Project Managers": "pvlinh_1,Trần Thạch Thảo,Nguyễn Thị Điệp,Lê Hoàng Minh Khang,Trương Kim Thắng,Nguyễn Thị Phương Anh",
+                    "Group": "OPS1"
+                },
+                {
+                    "Project Code": "0745",
+                    "Project Name": "0745_211123_002_MRP_KD_Others",
+                    "Project Managers": "Nguyễn Thị Phương Anh,Trần Thạch Thảo,Nguyễn Thị Điệp,Nguyễn Tuấn Vũ,Lê Trọng Minh,lnsang_1,Phạm Thị Hồng Thủy,Nguyễn Hoài Bảo,Trương Kim Thắng,Lê Hoàng Minh Khang,Đỗ Như Nghĩa,Trần Hoàng Anh",
+                    "Group": "OPS1"
+                }
+            ]
+        }
+    ]
+}

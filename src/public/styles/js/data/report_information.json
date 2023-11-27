@@ -1,0 +1,176 @@
+{
+  "Maximize_Efficiency": {
+    "Automation_Process": [
+      {
+        "Quarter": "2nd",
+        "Expect": 3,
+        "Actual": 3
+      },
+      {
+        "Quarter": "3rd",
+        "Expect": 3,
+        "Actual": 0
+      }
+    ],
+    "Project_Migration": [
+      {
+        "ID": "Q2",
+        "Quarter": "2nd",
+        "Expect": 14,
+        "Actual": 9
+      },
+      {
+        "ID": "Q3",
+        "Quarter": "3rd",
+        "Expect": 21,
+        "Actual": 4
+      }
+    ]
+  },
+  "Customer_Satisfaction": {
+    "Negative" : {
+      "Caption": "KR1:Provide services with WOW factors by reducing negative feedback to 20% compare to 2022",
+      "Expect_Per" : 20,
+      "Data": [
+        {
+          "Quarter": "2nd",
+          "Value_2022" : 100,
+          "Actual" : 60,
+          "Target" : 80
+        },
+        {
+          "Quarter": "3rd",
+          "Value_2022": 155,
+          "Actual": 72,
+          "Target": 124
+        }
+      ]
+    },
+    "Positive" : {
+      "Caption": "KR1:Provide services with WOW factors by increase positive feedback 10% compare to 2022",
+      "Expect_Per" : 10,
+      "Data": [
+        {
+          "Quarter": "2nd",
+          "Value_2022" : 26,
+          "Actual" : 35,
+          "Target" : 29
+        },
+        {
+          "Quarter": "3rd",
+          "Value_2022": 35.4,
+          "Actual": 56,
+          "Target": 39
+        }
+      ]
+    }
+  },
+  "Internal_Process_Improvement": {
+    "Project_Design": {
+      "Name": "Project Design Report",
+      "Caption": "KR1: The rate of projects designed by OPS increased 20% compared to 2022 ",
+      "Target_Per": 80,
+      "Data": [
+        {
+          "Quarter": "2nd",
+          "New_Project": 49,
+          "New_DGS3": 32,
+          "Notes": "Rate in 2022 is 67%, up to 80% base on total offline project of 2023"
+        },
+        {
+          "Quarter": "3rd",
+          "New_Project": 61,
+          "New_DGS3": 47,
+          "Notes": ""
+        }
+      ]
+    },
+    "Incident": {
+      "Name": "Incident Report",
+      "Incident_Bounce": {
+        "Name": "Incident Bounce Report",
+        "Caption": "KR2: Reduce incident bounce rate (90% of incident requests are adequate)",
+        "Target_Per" : 90,
+        "Data": [
+          {
+            "Quarter": "2nd",
+            "Total_Incident": 5,
+            "Total_Incident_Unbounce": 0
+          },
+          {
+            "Quarter": "3rd",
+            "Total_Incident": 110,
+            "Total_Incident_Unbounce": 0
+          }
+        ]
+      },
+      "Incident_Number": {
+        "Name": "Incident Number Report",
+        "Caption": "KR3: Reduce the number of incidents",
+        "Total_2022": 893,
+        "Target": 714.4,
+        "Data": [
+          {
+            "Quarter": "2nd",
+            "Actual": 50
+          },
+          {
+            "Quarter": "3rd",
+            "Actual": 110
+          }
+        ]
+      }
+    },
+    "Task_Manual": {
+      "Name": "Task Manual Report",
+      "Caption": "KR4: Minimize the manual task of management team (reduce 30% compared to 2022)",
+      "Target_Per": 20,
+      "Data": [
+        {
+          "Quarter": "2nd",
+          "Target": 5,
+          "Total" : 7,
+          "Actual": 3
+        },
+        {
+          "Quarter": "3rd",
+          "Target": 5,
+          "Total" : 7,
+          "Actual": 3
+        }
+      ]
+    },
+    "Improvement_Ideas": {
+      "Name": "Improvement Ideas Report",
+      "Caption": "KR5: Evaluate and implement at least 3 improvement ideas proposed by OPS teams (Project, Admin team)",
+      "Target": 3,
+      "Data": [
+        {
+          "Quarter": "2nd",
+          "Data": [
+            {
+              "Team": "OPS1",
+              "ProjectName": "012_140128_SAGA_504684",
+              "Description": "Apply process check duplicate value into the workflow, user no need to check directly in the output"
+            },
+            {
+              "Team": "OPS2",
+              "ProjectName": "0909_230612_293_LuxembourgCensus2023",
+              "Description": "Apply auto classify into the process workflow"
+            }
+          ]
+        },
+        {
+          "Quarter": "3rd",
+          "Data": [
+            {
+              "Team": "Admin",
+              "ProjectName": "Lucky draw",
+              "Description": "event for TET holiday"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

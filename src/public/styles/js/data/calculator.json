@@ -1,0 +1,21 @@
+{
+  "Calculator": {
+    "Maximize_Efficiency": {
+      "Automation" : "A/E",
+      "Migration" : "A/E"
+    },
+    "Customer_Satisfaction" : {
+      "Negative": "(1+(A-E)/A)",
+      "Positive" : "A/E"
+    },
+    "Internal_Process_Improvement" : {
+      "Project_Design": "A/E",
+      "Incident": {
+        "Incident_Bounce" : "A/E",
+        "Incident_Number" : "T/A"
+      },
+      "Task_Manual": "A/E",
+      "Improvement_Ideas": "A/E"
+    }
+  }
+}
