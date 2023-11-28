@@ -31,9 +31,11 @@
     border: 1px solid var(--input-border);
     background: var(--input-background);
     transition: border .3s ease;
+
     &::placeholder {
         color: var(--input-placeholder);
     }
+
     &:focus {
         outline: none;
         border-color: var(--input-border-focus);
@@ -44,23 +46,29 @@
     position: relative;
     display: flex;
     width: 100%;
-    & > span,
+
+    &>span,
     .form-field {
         white-space: nowrap;
         display: block;
+
         &:not(:first-child):not(:last-child) {
             border-radius: 0;
         }
+
         &:first-child {
             border-radius: 6px 0 0 6px;
         }
+
         &:last-child {
             border-radius: 0 6px 6px 0;
         }
+
         &:not(:first-child) {
             margin-left: -1px;
         }
     }
+
     .form-field {
         position: relative;
         z-index: 1;
@@ -69,7 +77,8 @@
         margin-top: 0;
         margin-bottom: 0;
     }
-    & > span {
+
+    &>span {
         text-align: center;
         padding: 8px 12px;
         font-size: 14px;
@@ -79,8 +88,9 @@
         border: 1px solid var(--group-border);
         transition: background .3s ease, border .3s ease, color .3s ease;
     }
+
     &:focus-within {
-        & > span {
+        &>span {
             color: var(--group-color-focus);
             background: var(--group-background-focus);
             border-color: var(--group-border-focus);
@@ -95,13 +105,14 @@ html {
 
 * {
     box-sizing: inherit;
+
     &:before,
     &:after {
         box-sizing: inherit;
     }
 }
 
-// Center
+/* Center */
 body {
     min-height: 100vh;
     font-family: 'Mukta Malar', Arial;
@@ -110,8 +121,10 @@ body {
     align-items: center;
     flex-direction: column;
     background: #F5F9FF;
+
     .form-group {
         max-width: 360px;
+
         &:not(:last-child) {
             margin-bottom: 32px;
         }

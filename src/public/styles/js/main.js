@@ -1121,7 +1121,7 @@ const loadChart = function () {
             $.each(json.Internal_Process_Improvement.Improvement_Ideas.Data, function (i, f) {
                 var target = json.Internal_Process_Improvement.Improvement_Ideas.Target;
                 total_ideas += f.Data.length;
-                labelName.push(f.Name);
+                labelName.push(`End of ${f.Quarter} Quarter`);
                 expectData.push(target);
                 actualData.push(total_ideas);
                 idList.push(f.Quarter);
