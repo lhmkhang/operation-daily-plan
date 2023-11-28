@@ -426,6 +426,8 @@ const loadChart = function () {
                         ]
                     },
                     options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
                         scales: {
                             xAxes: [
                                 {
@@ -663,6 +665,8 @@ const loadChart = function () {
                         ]
                     },
                     options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
                         scales: {
                             xAxes: [
                                 {
@@ -762,6 +766,8 @@ const loadChart = function () {
                         ]
                     },
                     options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
                         scales: {
                             yAxes: [{
                                 ticks: {
@@ -858,6 +864,8 @@ const loadChart = function () {
                         ]
                     },
                     options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
                         scales: {
                             xAxes: [
                                 {
@@ -960,6 +968,8 @@ const loadChart = function () {
                         ]
                     },
                     options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
                         scales: {
                             xAxes: [
                                 {
@@ -1059,6 +1069,8 @@ const loadChart = function () {
                         ]
                     },
                     options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
                         scales: {
                             yAxes: [{
                                 ticks: {
@@ -1155,6 +1167,8 @@ const loadChart = function () {
                         ]
                     },
                     options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
                         scales: {
                             yAxes: [{
                                 ticks: {

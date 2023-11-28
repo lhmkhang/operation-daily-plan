@@ -46,19 +46,19 @@ if (process.env.NODE_ENV === 'production') {
     });
 
     app.get('/okr-report', (req, res) => {
-      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/ProjectDesignReport.html')
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/MaximizeEfficiencyPage.html')
     });
 
-    app.get('/MaximizeEfficiencyPage.html', (req, res) => {
-      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/MaximizeEfficiencyPage.html')
+    app.get('/ProjectDesignReport.html', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/ProjectDesignReport.html')
     });
 
     app.get('/CustomerSatisfactionPage.html', (req, res) => {
       res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/CustomerSatisfactionPage.html')
     });
 
-    app.get('/ProjectDesignReport.html', (req, res) => {
-      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/ProjectDesignReport.html')
+    app.get('/MaximizeEfficiencyPage.html', (req, res) => {
+      res.sendFile(__dirname + '/Report_Web_Html/Report_Web/Report_Web/MaximizeEfficiencyPage.html')
     });
 
     app.get('/IncidentPage.html', (req, res) => {
