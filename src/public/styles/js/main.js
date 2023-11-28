@@ -407,8 +407,8 @@ const loadChart = function () {
                         datasets: [
                             {
                                 label: "Expect",
-                                backgroundColor: "red",
-                                borderColor: "rgba(54, 162, 235, 1)",
+                                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                                // borderColor: "rgba(54, 162, 235, 1)",
                                 borderWidth: 1,
                                 data: expectData,
                                 barPercentage: 0.8,
@@ -416,8 +416,8 @@ const loadChart = function () {
                             },
                             {
                                 label: "Actual",
-                                backgroundColor: "blue",
-                                borderColor: "rgba(255, 159, 64, 1)",
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                // borderColor: "rgba(255, 159, 64, 1)",
                                 borderWidth: 1,
                                 data: actualData,
                                 barPercentage: 0.8,
@@ -508,8 +508,8 @@ const loadChart = function () {
                         datasets: [
                             {
                                 label: "Expect",
-                                backgroundColor: "red",
-                                borderColor: "rgba(54, 162, 235, 1)",
+                                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                                // borderColor: "rgba(54, 162, 235, 1)",
                                 borderWidth: 1,
                                 data: expectData,
                                 barPercentage: 0.8,
@@ -517,8 +517,8 @@ const loadChart = function () {
                             },
                             {
                                 label: "Actual",
-                                backgroundColor: "blue",
-                                borderColor: "rgba(255, 159, 64, 1)",
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                // borderColor: "rgba(255, 159, 64, 1)",
                                 borderWidth: 1,
                                 data: actualData,
                                 barPercentage: 0.8,
@@ -635,8 +635,8 @@ const loadChart = function () {
                         datasets: [
                             {
                                 label: "Expect",
-                                backgroundColor: "red",
-                                borderColor: "rgba(54, 162, 235, 1)",
+                                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                                // borderColor: "rgba(54, 162, 235, 1)",
                                 borderWidth: 1,
                                 data: expectData,
                                 barPercentage: 0.8,
@@ -644,8 +644,8 @@ const loadChart = function () {
                             },
                             {
                                 label: "End Q2",
-                                backgroundColor: "blue",
-                                borderColor: "rgba(255, 159, 64, 1)",
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                // borderColor: "rgba(255, 159, 64, 1)",
                                 borderWidth: 1,
                                 data: actualData_Q2,
                                 barPercentage: 0.8,
@@ -653,8 +653,8 @@ const loadChart = function () {
                             },
                             {
                                 label: "End Q3",
-                                backgroundColor: "green",
-                                borderColor: "rgba(255, 255, 64, 1)",
+                                backgroundColor: "rgba(153, 102, 255, 0.2)",
+                                // borderColor: "rgba(255, 255, 64, 1)",
                                 borderWidth: 1,
                                 data: actualData_Q3,
                                 barPercentage: 0.8,
@@ -743,8 +743,8 @@ const loadChart = function () {
                         datasets: [
                             {
                                 label: "Expect",
-                                backgroundColor: "red",
-                                borderColor: "rgba(54, 162, 235, 1)",
+                                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                                // borderColor: "rgba(54, 162, 235, 1)",
                                 borderWidth: 1,
                                 data: expectData,
                                 barPercentage: 0.8,
@@ -752,8 +752,8 @@ const loadChart = function () {
                             },
                             {
                                 label: "Actual",
-                                backgroundColor: "blue",
-                                borderColor: "rgba(255, 159, 64, 1)",
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                // borderColor: "rgba(255, 159, 64, 1)",
                                 borderWidth: 1,
                                 data: actualData,
                                 barPercentage: 0.8,
@@ -839,8 +839,8 @@ const loadChart = function () {
                         datasets: [
                             {
                                 label: "Target",
-                                backgroundColor: "red",
-                                borderColor: "rgba(54, 162, 235, 1)",
+                                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                                // borderColor: "rgba(54, 162, 235, 1)",
                                 borderWidth: 1,
                                 data: expectData,
                                 barPercentage: 0.8,
@@ -848,8 +848,8 @@ const loadChart = function () {
                             },
                             {
                                 label: "Actual",
-                                backgroundColor: "blue",
-                                borderColor: "rgba(255, 159, 64, 1)",
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                // borderColor: "rgba(255, 159, 64, 1)",
                                 borderWidth: 1,
                                 data: actualData,
                                 barPercentage: 0.8,
@@ -941,8 +941,8 @@ const loadChart = function () {
                         datasets: [
                             {
                                 label: "Target",
-                                backgroundColor: "red",
-                                borderColor: "rgba(54, 162, 235, 1)",
+                                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                                // borderColor: "rgba(54, 162, 235, 1)",
                                 borderWidth: 1,
                                 data: expectData,
                                 barPercentage: 0.8,
@@ -950,8 +950,8 @@ const loadChart = function () {
                             },
                             {
                                 label: "Actual",
-                                backgroundColor: "blue",
-                                borderColor: "rgba(255, 159, 64, 1)",
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                // borderColor: "rgba(255, 159, 64, 1)",
                                 borderWidth: 1,
                                 data: actualData,
                                 barPercentage: 0.8,
@@ -1040,8 +1040,8 @@ const loadChart = function () {
                         datasets: [
                             {
                                 label: "Target",
-                                backgroundColor: "red",
-                                borderColor: "rgba(54, 162, 235, 1)",
+                                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                                // borderColor: "rgba(54, 162, 235, 1)",
                                 borderWidth: 1,
                                 data: expectData,
                                 barPercentage: 0.8,
@@ -1049,8 +1049,8 @@ const loadChart = function () {
                             },
                             {
                                 label: "Actual",
-                                backgroundColor: "blue",
-                                borderColor: "rgba(255, 159, 64, 1)",
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                // borderColor: "rgba(255, 159, 64, 1)",
                                 borderWidth: 1,
                                 data: actualData,
                                 barPercentage: 0.8,
@@ -1136,8 +1136,8 @@ const loadChart = function () {
                         datasets: [
                             {
                                 label: "Expect",
-                                backgroundColor: "red",
-                                borderColor: "rgba(54, 162, 235, 1)",
+                                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                                // borderColor: "rgba(54, 162, 235, 1)",
                                 borderWidth: 1,
                                 data: expectData,
                                 barPercentage: 0.8,
@@ -1145,8 +1145,8 @@ const loadChart = function () {
                             },
                             {
                                 label: "Actual",
-                                backgroundColor: "blue",
-                                borderColor: "rgba(255, 159, 64, 1)",
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                // borderColor: "rgba(255, 159, 64, 1)",
                                 borderWidth: 1,
                                 data: actualData,
                                 barPercentage: 0.8,
