@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "@/components/helpers/axiosHelper";
 
 type Props = {
     username: string,
@@ -12,12 +12,9 @@ export default async function UseSignUp(props: Props) {
             password: props.password
         });
         if (response.status === 200) {
-            return "Success";
-        } else {
-            return response.data.message;
+            return response.data;
         }
     } catch (e) {
         console.error(e);
-        return "Fail";
     }
 }

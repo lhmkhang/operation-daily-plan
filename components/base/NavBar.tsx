@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { Component, ReactHTMLElement } from 'react'
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Drawer as MuiDrawer } from '@mui/material'
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Icon, Drawer as MuiDrawer } from '@mui/material'
+import BarChartIcon from '@mui/icons-material/BarChart';
+import AttractionsIcon from '@mui/icons-material/Attractions';
 import Image from 'next/image';
 import logoBlue from '@/public/img/logoBlue.png'
 
@@ -15,6 +15,19 @@ type NavbarItem = {
 type Props = {
     navbarItems?: NavbarItem[]
 }
+
+const listNavItems = [
+    {
+        itemName: "Report",
+        itemIcon: "bar_chart",
+        itemComponent: "report"
+    },
+    {
+        itemName: "Lucky Wheel",
+        itemIcon: "attractions",
+        itemComponent: "lucky_wheel"
+    }
+]
 
 const drawerWidth = 240;
 
@@ -67,6 +80,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const NavBar = (props: Props) => {
     const [open, setOpen] = React.useState(false);
+    const [activeComponent, setActiveComponent] = React.useState("");
+
+    const handleClick = (value: string) => {
+        setActiveComponent(value);
+    }
 
     return (
         <Drawer variant="permanent" open={open}>
@@ -83,14 +101,15 @@ const NavBar = (props: Props) => {
             </DrawerHeader>
             <Divider />
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                {listNavItems.map((obj, index) => (
+                    <ListItem key={obj.itemName} disablePadding className='block' onClick={() => handleClick(obj.itemName)}>
                         <ListItemButton
                             sx={{
                                 minHeight: 48,
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }}
+                            className=''
                         >
                             <ListItemIcon
                                 sx={{
@@ -99,9 +118,9 @@ const NavBar = (props: Props) => {
                                     justifyContent: 'center',
                                 }}
                             >
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                <Icon>{obj.itemIcon}</Icon>
                             </ListItemIcon>
-                            <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                            <ListItemText primary={obj.itemName} sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
                 ))}

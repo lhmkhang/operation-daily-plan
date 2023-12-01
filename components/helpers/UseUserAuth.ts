@@ -17,6 +17,7 @@ export default function UseUserAuth() {
     });
   }
   return {
+    setUserInfo,
     userInfo,
     handleUserChange
   };

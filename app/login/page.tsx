@@ -1,7 +1,6 @@
 'use client'
 import Image from 'next/image';
 import * as React from 'react';
-import { useContext } from 'react';
 import { Checkbox, Link, TextField, FormControlLabel, Button, CssBaseline } from '@mui/material';
 import backgroundImg from '/public/img/backgroundLogin7.jpg';
 import UseAuth from '@/components/helpers/UseAuth'
@@ -14,8 +13,7 @@ import style from '../../styles/Login.module.css'
 type Props = {}
 
 const Login = (props: Props) => {
-    const { login } = useContext(AuthContext);
-
+    const { login } = React.useContext(AuthContext);
 
     const router = useRouter();
     const [type, setType] = React.useState("signIn");
@@ -24,12 +22,14 @@ const Login = (props: Props) => {
     const [signUpStatus, setSignUpStatus] = React.useState("");
     const [usernameEmpty, setUsernameEmpty] = React.useState(false);
     const [passwordEmpty, setPasswordEmpty] = React.useState(false);
+    const [confirmPasswordSignUpText, setConfirmPasswordSignUpText] = React.useState("");
     const [confirmPasswordEmpty, setConfirmPasswordEmpty] = React.useState(false);
 
-    const { userInfo, handleUserChange } = useUserAuth();
+    const { setUserInfo, userInfo, handleUserChange } = useUserAuth();
 
     const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
         const _confirmPassword = e.target.value
+        setConfirmPasswordSignUpText(_confirmPassword);
         setPasswordMatch(() => _confirmPassword === userInfo.password);
     }
 
@@ -68,7 +68,9 @@ const Login = (props: Props) => {
             let status = await UseSignUp(userInfo);
             if (status) {
                 setType("signIn");
-                setSignUpStatus("signIn")
+                setUserInfo({ username: "", password: "" });
+                setConfirmPasswordSignUpText("");
+                setSignUpStatus("signIn");
             } else {
                 setSignUpStatus("fail");
             }
@@ -102,7 +104,6 @@ const Login = (props: Props) => {
                 <div className="grid grid-cols-2 lg:grid-cols-6 h-3/6">
                     <div className='hidden lg:block col-span-4 bg-white relative'>
                         <Image
-
                             alt='Image Login'
                             src={backgroundImg}
                             priority
@@ -148,7 +149,7 @@ const Login = (props: Props) => {
                                 fullWidth
                                 required
                                 name='username'
-                                helperText={usernameEmpty ? "Username cannot be empty" : signInStatus === "fail" ? "Username or Password is not correct!" : " "}
+                                helperText={usernameEmpty ? "Username cannot be empty!" : signInStatus === "fail" ? "Username or Password is not correct!" : " "}
                                 error={usernameEmpty || signInStatus === 'fail'}
                                 onChange={handleUserChange}
                                 onBlur={handleBlur}
@@ -162,7 +163,7 @@ const Login = (props: Props) => {
                                 required
                                 name='password'
                                 type='password'
-                                helperText={passwordEmpty ? "Password cannot be empty" : " "}
+                                helperText={passwordEmpty ? "Password cannot be empty!" : " "}
                                 error={passwordEmpty}
                                 onChange={handleUserChange}
                                 onBlur={handleBlur}
@@ -206,10 +207,11 @@ const Login = (props: Props) => {
                                 fullWidth
                                 required
                                 name='username'
-                                helperText={usernameEmpty ? "Username cannot be empty" : signUpStatus === "fail" ? "Username already taken!" : " "}
+                                helperText={usernameEmpty ? "Username cannot be empty" : signUpStatus === "fail" ? "User already taken!" : " "}
                                 error={usernameEmpty || signUpStatus === 'fail'}
                                 onChange={handleUserChange}
                                 onBlur={handleBlur}
+                                value={userInfo.username}
                             />
                             <TextField
                                 id='passwordSignUp'
@@ -224,6 +226,7 @@ const Login = (props: Props) => {
                                 error={passwordEmpty}
                                 onChange={handleUserChange}
                                 onBlur={handleBlur}
+                                value={userInfo.password}
                             />
                             <TextField
                                 id='confirmPasswordSignUp'
@@ -238,6 +241,7 @@ const Login = (props: Props) => {
                                 onChange={handleConfirmPassword}
                                 error={confirmPasswordEmpty || !passwordMatch}
                                 onBlur={handleBlur}
+                                value={confirmPasswordSignUpText}
                             />
                             <div className='w-full flex flex-col items-center justify-center'>
                                 <Button

@@ -1,4 +1,9 @@
 /* Wheel.css */
+
+body {
+    background: url("../public/img/traditionalVietnameseTet.png") repeat center center / cover;
+}
+
 .main-container {
     height: 100%;
     display: flex;
