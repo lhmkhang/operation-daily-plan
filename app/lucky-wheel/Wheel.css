@@ -64,3 +64,18 @@ button {
 /* .wheel.spinning {
     animation: spinAnimation 5s ease-out forwards;
 } */
+
+@media only screen and (max-width: 600px) {
+    .main-container {
+        width: auto;
+    }
+
+    .wheel {
+        width: 250px;
+        height: 250px;
+    }
+
+    .arrow {
+        width: 160px;
+    }
+}
