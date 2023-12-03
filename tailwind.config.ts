@@ -17,8 +17,13 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      width: {
+        '45/50': '90%'
+      },
       colors: {
+        gray_default: 'rgba(0, 0, 0, 0.54)',
         primary: '#306bd1',
+        primary_blur: '#659af0',
         primary_shade: '#768CB1',
         background_blur: 'rgba(170,209,237,0.91)'
       },

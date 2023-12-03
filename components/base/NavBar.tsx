@@ -1,8 +1,7 @@
 import React, { Component, ReactHTMLElement } from 'react'
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Icon, Drawer as MuiDrawer } from '@mui/material'
-import BarChartIcon from '@mui/icons-material/BarChart';
-import AttractionsIcon from '@mui/icons-material/Attractions';
+import Icons from '@/components/base/Icons'
 import Image from 'next/image';
 import logoBlue from '@/public/img/logoBlue.png'
 
@@ -13,18 +12,19 @@ type NavbarItem = {
 }
 
 type Props = {
-    navbarItems?: NavbarItem[]
+    navbarItems?: NavbarItem[],
+    selectedComponent: (key: string) => void
 }
 
 const listNavItems = [
     {
         itemName: "Report",
-        itemIcon: "bar_chart",
+        itemIcon: "BarChart",
         itemComponent: "report"
     },
     {
         itemName: "Lucky Wheel",
-        itemIcon: "attractions",
+        itemIcon: "Attractions",
         itemComponent: "lucky_wheel"
     }
 ]
@@ -82,8 +82,9 @@ const NavBar = (props: Props) => {
     const [open, setOpen] = React.useState(false);
     const [activeComponent, setActiveComponent] = React.useState("");
 
-    const handleClick = (value: string) => {
-        setActiveComponent(value);
+    const handleClick = (name: string) => {
+        setActiveComponent(name);
+        props.selectedComponent(name);
     }
 
     return (
@@ -100,16 +101,32 @@ const NavBar = (props: Props) => {
                 </div>
             </DrawerHeader>
             <Divider />
-            <List>
+            <List
+                className='flex flex-col items-center'>
                 {listNavItems.map((obj, index) => (
-                    <ListItem key={obj.itemName} disablePadding className='block' onClick={() => handleClick(obj.itemName)}>
+                    <ListItem
+                        key={obj.itemName}
+                        disablePadding
+                        className={`block w-45/50 my-0.5 rounded ${activeComponent == obj.itemComponent ? "bg-primary_blur" : ""}`}
+                        onClick={() => handleClick(obj.itemComponent)}
+                    >
                         <ListItemButton
                             sx={{
                                 minHeight: 48,
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
+                                position: 'relative',
+                                '&::before': {
+                                    position: 'absolute',
+                                    content: '""',
+                                    display: 'block',
+                                    height: '100%',
+                                    width: '0.25rem',
+                                    right: '-12px',
+                                    borderRadius: '.375rem 0 0 .375rem'
+                                }
                             }}
-                            className=''
+                            className={`${activeComponent == obj.itemComponent || open ? "before:bg-primary" : "before:content-none"}`}
                         >
                             <ListItemIcon
                                 sx={{
@@ -117,15 +134,25 @@ const NavBar = (props: Props) => {
                                     mr: open ? 3 : 'auto',
                                     justifyContent: 'center',
                                 }}
+                                className={`${activeComponent == obj.itemComponent ? "text-white" : ""}`}
                             >
-                                <Icon>{obj.itemIcon}</Icon>
+                                <Icons iconName={obj.itemIcon} />
                             </ListItemIcon>
-                            <ListItemText primary={obj.itemName} sx={{ opacity: open ? 1 : 0 }} />
+                            <ListItemText
+                                primary={obj.itemName}
+                                sx={{ opacity: open ? 1 : 0, }}
+                                primaryTypographyProps={{
+                                    sx: {
+                                        color: `${activeComponent == obj.itemName ? "white" : "rgba(0, 0, 0, 0.54)"}`,
+                                        fontWeight: 600
+                                    }
+                                }}
+                            />
                         </ListItemButton>
                     </ListItem>
                 ))}
             </List>
-        </Drawer>
+        </Drawer >
     )
 }
 

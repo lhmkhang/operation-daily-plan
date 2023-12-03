@@ -1,13 +1,13 @@
 import { Breadcrumbs, Link } from '@mui/material'
 import React from 'react'
 
-interface BreadcrumObject {
+export interface BreadcrumbObject {
     name: string;
     href: string;
 }
 
 type Props = {
-    items: BreadcrumObject[]
+    items: BreadcrumbObject[]
 }
 
 const BreadCrumb = (props: Props) => {
