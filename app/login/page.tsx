@@ -55,7 +55,7 @@ const Login = (props: Props) => {
             if (status) {
                 const updateStatus = { ...status, username: userInfo.username };
                 login(updateStatus);
-                router.push("/lucky-wheel");
+                router.push("/");
             } else {
                 setSignInStatus("fail");
                 // router.push("/");

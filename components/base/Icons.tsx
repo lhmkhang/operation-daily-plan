@@ -7,7 +7,6 @@ type IconProps = {
 }
 
 const IconComponent = (props: IconProps) => {
-    
     const IconName = props.iconName as IconNames;
     const Icon = Icons[IconName];
     return <Icon />
