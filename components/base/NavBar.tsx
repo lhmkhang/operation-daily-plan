@@ -1,6 +1,6 @@
-import React, { Component, ReactHTMLElement } from 'react'
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Drawer as MuiDrawer, Collapse } from '@mui/material'
+import React from 'react'
+import { styled, Theme, CSSObject } from '@mui/material/styles';
+import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Drawer as MuiDrawer } from '@mui/material'
 import Icons from '@/components/base/Icons'
 import Image from 'next/image';
 import logoBlue from '@/public/img/logoBlue.png'
@@ -174,25 +174,6 @@ const NavBar = (props: Props) => {
         }
         return result;
     }
-
-    {/* {listNavItems.map((obj, index) => {
-                    if (!obj.subItems || obj.subItems?.length === 0) {
-                        return (
-                            
-                        )
-                    } else {
-                        return (
-                            <Collapse in={open} timeout="auto" unmountOnExit>
-                                <List className='flex flex-col items-center'>
-                                    {obj.subItems?.map((subObj, subIndex) => {
-                                        return (
-                                        )
-                                    })}
-                                </List>
-                            </Collapse>
-                        )
-                    }
-                })} */}
 
     return (
         <Drawer variant="permanent" open={open}>

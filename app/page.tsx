@@ -1,13 +1,14 @@
 'use client'
 import * as React from 'react';
-import { BreadCrumb, NavBar, Report } from '@/components';
+import { NavBar, Report, Header } from '@/components';
 import LuckyWheel from '@/components/base/LuckyWheel'
 import { BreadcrumbObject } from '@/components/base/BreadCrumb';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import { Box, Typography } from '@mui/material';
+import { useTheme, } from '@mui/material/styles';
+import { Box } from '@mui/material';
+import withAuth from "../components/helpers/WithAuthen";
+import { AuthContext } from "@/components/helpers/AuthenContext";
 
-
-export default function MiniDrawer() {
+function App() {
     const theme = useTheme();
     const [arrBreadcrumb, setArrBreadcrumb] = React.useState<BreadcrumbObject[]>([{ name: 'Report', component: 'report' }]);
     const [selectedComponent, setSelectedComponent] = React.useState<string>('');
@@ -27,8 +28,7 @@ export default function MiniDrawer() {
         <Box sx={{ display: 'flex' }}>
             <NavBar selectedComponent={setSelectedComponent} />
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <div className='flex items-center justify-between'>
-                </div>
+                <Header />
                 <div className='container'>
                     {renderComponent()}
                 </div>
@@ -36,3 +36,5 @@ export default function MiniDrawer() {
         </Box>
     );
 }
+
+export default withAuth(App)

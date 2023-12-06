@@ -1,8 +1,5 @@
 /* Wheel.css */
 
-body {
-    background: url("../../public/img/traditionalVietnameseTet.png") repeat center center / cover;
-}
 
 .main-container {
     height: 100%;
@@ -11,6 +8,7 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
+    background: url("../../public/img/traditionalVietnameseTet.png") repeat center center / cover;
 }
 
 .wheel-container {
