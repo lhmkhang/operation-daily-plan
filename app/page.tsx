@@ -13,7 +13,7 @@ function App() {
     const [arrBreadcrumb, setArrBreadcrumb] = React.useState<BreadcrumbObject[]>([{ name: 'Report', component: 'report' }]);
     const [selectedComponent, setSelectedComponent] = React.useState<string>('');
 
-    const renderComponent = () => {
+    /* const renderComponent = () => {
         switch (selectedComponent) {
             case "report":
                 return <Report />
@@ -22,7 +22,7 @@ function App() {
             default:
                 return <p>"Chưa có component nào được chọn"</p>
         }
-    }
+    } */
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -30,7 +30,6 @@ function App() {
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <Header />
                 <div className='container'>
-                    {renderComponent()}
                 </div>
             </Box>
         </Box>

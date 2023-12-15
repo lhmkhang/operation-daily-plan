@@ -12,14 +12,14 @@ function withAuth(WrappedComponent) {
         const [isLoading, setIsLoading] = useState(true);
         const [isNavigating, setIsNavigating] = useState(false);
 
-        console.log("URL: ", usePathname());
+        // console.log("URL: ", usePathname());
 
         useEffect(() => {
             let accessToken;
             let refreshToken;
             let username;
 
-            console.log(`User in WithAuthen HOC: ${user}`);
+            // console.log(`User in WithAuthen HOC: ${user}`);
 
             const checkTokenAndRefresh = async () => {
                 try {

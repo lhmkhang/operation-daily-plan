@@ -1,25 +1,91 @@
 'use client'
-import React, { useState, useEffect } from 'react';
-import LazyLoad from 'react-lazy-load';
+import "@fontsource/dancing-script";
+import "@fontsource/lemonada";
+import Link from 'next/link';
+import { useEffect, useState, useContext, useRef, useMemo } from 'react';
+import './spin.css';
+import winnerList from './data/winner.json';
+// import prize from './data/prize.json';
+import "bootstrap/dist/css/bootstrap.min.css";
+import withAuth from "../../components/helpers/WithAuthen";
+import axios from '../../components/helpers/axiosHelper';
+import { AuthContext } from "@/components/helpers/AuthenContext";
 
-const UserSelector = () => {
-    const users = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "140", "141", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178", "179", "180", "181", "182", "183", "184", "185", "186", "187", "188", "189", "190", "191", "192", "193", "194", "195", "196", "197", "198", "199", "200", "201", "202", "203", "204", "205", "206", "207", "208", "209", "210", "211", "212", "213", "214", "215", "216", "217", "218", "219", "220", "221", "222", "223", "224", "225", "226", "227", "228", "229", "230", "231", "232", "233", "234", "235", "236", "237", "238", "239", "240", "241", "242", "243", "244", "245", "246", "247", "248", "249", "250", "251", "252", "253", "254", "255", "256", "257", "258", "259", "260", "261", "262", "263", "264", "265", "266", "267", "268", "269", "270", "271", "272", "273", "274", "275", "276", "277", "278", "279", "280", "281", "282", "283", "284", "285", "286", "287", "288", "289", "290", "291", "292", "293", "294", "295", "296", "297", "298", "299", "300", "301", "302", "303", "304", "305", "306", "307", "308", "309", "310", "311", "312", "313", "314", "315", "316", "317", "318", "319", "320", "321", "322", "323", "324", "325", "326", "327", "328", "329", "330", "331", "332", "333", "334", "335", "336", "337", "338", "339", "340", "341", "342", "343", "344", "345", "346", "347", "348", "349", "350", "351", "352", "353", "354", "355", "356", "357", "358", "359", "360", "361", "362", "363", "364", "365", "366", "367", "368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397", "398", "399", "400", "401", "402", "403", "404", "405", "406", "407", "408", "409", "410", "411", "412", "413", "414", "415", "416", "417", "418", "419", "420", "421", "422", "423", "424", "425", "426", "427", "428", "429", "430", "431", "432", "433", "434", "435", "436", "437", "438", "439", "440", "441", "442", "443", "444", "445", "446", "447", "448", "449", "450", "451", "452", "453", "454", "455", "456", "457", "458", "459", "460", "461", "462", "463", "464", "465", "466", "467", "468", "469", "470", "471", "472", "473", "474", "475", "476", "477", "478", "479", "480", "481", "482", "483", "484", "485", "486", "487", "488", "489", "490", "491", "492", "493", "494", "495", "496", "497", "498", "499", "500", "501", "502", "503", "504", "505", "506", "507", "508", "509", "510", "511", "512", "513", "514", "515", "516", "517", "518", "519", "520", "521", "522", "523", "524", "525", "526", "527", "528", "529", "530", "531", "532", "533", "534", "535", "536", "537", "538", "539", "540", "541", "542", "543", "544", "545", "546", "547", "548", "549", "550", "551", "552", "553", "554", "555", "556", "557", "558", "559", "560", "561", "562", "563", "564", "565", "566", "567", "568", "569", "570", "571", "572", "573", "574", "575", "576", "577", "578", "579", "580", "581", "582", "583", "584", "585", "586", "587", "588", "589", "590", "591", "592", "593", "594", "595", "596", "597", "598", "599", "600", "601", "602", "603", "604", "605", "606", "607", "608", "609", "610", "611", "612", "613", "614", "615", "616", "617", "618", "619", "620", "621", "622", "623", "624", "625", "626", "627", "628", "629", "630", "631", "632", "633", "634", "635", "636", "637", "638", "639", "640", "641", "642", "643", "644", "645", "646", "647", "648", "649", "650", "651", "652", "653", "654", "655", "656", "657", "658", "659", "660", "661", "662", "663", "664", "665", "666", "667", "668", "669", "670", "671", "672", "673", "674", "675", "676", "677", "678", "679", "680", "681", "682", "683", "684", "685", "686", "687", "688", "689", "690", "691", "692", "693", "694", "695", "696", "697", "698", "699", "700", "701", "702", "703", "704", "705", "706", "707", "708", "709", "710", "711", "712", "713", "714", "715", "716", "717", "718", "719", "720", "721", "722", "723", "724", "725", "726", "727", "728", "729", "730", "731", "732", "733", "734", "735", "736", "737", "738", "739", "740", "741", "742", "743", "744", "745", "746", "747", "748", "749", "750", "751", "752", "753", "754", "755", "756", "757", "758", "759", "760", "761", "762", "763", "764", "765", "766", "767", "768", "769", "770", "771", "772", "773", "774", "775", "776", "777", "778", "779", "780", "781", "782", "783", "784", "785", "786", "787", "788", "789", "790", "791", "792", "793", "794", "795", "796", "797", "798", "799", "800"];
-    const [availableUsers, setAvailableUsers] = useState([...users]);
+const Main = () => {
+    // const [username, setUsername] = useState("username");
+    const [availableUsers, setAvailableUsers] = useState([]);
+
+    useEffect(() => {
+        const fetchUserList = async () => {
+            try {
+                const response = await axios.get(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-users`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${JSON.parse(user).accessToken}`,
+                        },
+                    }
+                );
+                setAvailableUsers(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchUserList();
+    }, []);
+
     const [displayedUsers, setDisplayedUsers] = useState([]);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    const [seletedUser, setSeletedUser] = useState("");
-    const [timer, setTimer] = useState(null);
+    // const [seletedUser, setSeletedUser] = useState("");
+    // const [timer, setTimer] = useState(null)
+    const [displayIndex, setDisplayIndex] = useState(-1);
+    const [toggleLever, setToggleLever] = useState(false);
+    const [showCongrationPopup, setCongrationPopup] = useState(false);
+    const [showHistoryPopup, setHistoryPopup] = useState(false);
+    const [showUnpickPopup, setUnpickPopup] = useState(false);
+    const [winnerUsername, setWinnerUsername] = useState("");
+    const [selectPrize, setPrizeButton] = useState(0);
+    // var wList = winnerList.Data;
+    const [displayedHistory, setDisplayedHistory] = useState([]);
+
+    const { user } = useContext(AuthContext);
+    const [prize, setData] = useState({});
 
     const displayUser = (userName) => {
         setDisplayedUsers(previousUsers => [{ name: userName, key: Math.random(), top: 0 }, ...previousUsers]);
     };
 
+    useEffect(() => {
+        fetchData();
+    }, [user]);
+
+    let fetchData = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-reward`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${JSON.parse(user).accessToken}`,
+                    },
+                }
+            );
+            setData(response.data.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const timerRef = useRef(null);
+
     const startRotation = () => {
+        setDisplayIndex(-1);
         setDisplayedUsers([]);
         setIsButtonDisabled(true);
         let elapsedTime = 0;
         const rotationTime = 5000;
-        let updateTime = 200;
+        let updateTime = 130;
 
         const animate = () => {
             elapsedTime += updateTime;
@@ -36,55 +102,291 @@ const UserSelector = () => {
             if (elapsedTime >= rotationTime) {
                 setIsButtonDisabled(false);
                 let selectedUser = availableUsers.splice(randomIndex, 1)[0];
+                setWinnerUsername(selectedUser);
                 setAvailableUsers([...availableUsers]);
-                console.log("availableUsers: ", availableUsers);
-                console.log("Selected user: " + selectedUser);
+                setDisplayIndex(0);
+                // console.log("availableUsers: ", availableUsers);
+                // console.log("Selected user: " + selectedUser);
                 return;
             }
 
             updateTime = updateTime + (rotationTime - elapsedTime) / rotationTime;
-            const newTimer = setTimeout(animate, updateTime);
-            setTimer(newTimer);
+            timerRef.current = setTimeout(animate, updateTime);
+            // setTimer(newTimer);
         };
 
-        const newTimer = setTimeout(animate, updateTime);
-        setTimer(newTimer);
+        timerRef.current = setTimeout(animate, updateTime);
+        // setTimer(newTimer);
     };
 
-    useEffect(() => {
+    /* useEffect(() => {
         const interval = setInterval(() => {
+            console.log("displayedUsers: ", displayedUsers);
             setDisplayedUsers((prevUsers) => [...prevUsers]);
         }, 5000);
 
 
         return () => {
             clearInterval(interval);
-            if (timer) {
-                clearTimeout(timer);
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
             }
         };
-    }, [timer]);
+    }, []); */
+
+    const activeLever = () => {
+        setToggleLever(!toggleLever);
+
+        setTimeout(() => {
+            setToggleLever(false);
+        }, 5000);
+    };
+
+    const handleAnimationEnd = () => {
+        setCongrationPopup(true);
+    };
+
+    const toggleClassLever = toggleLever ? 'leverSpin' : '';
+
+    const handleHistoryOpen = () => {
+        setHistoryPopup(true);
+    }
+
+    const handleUnpickShow = () => {
+        setUnpickPopup(true);
+    }
+
+    const getDataPrize = (_prize) => {
+        let pList = prize;
+        for (let index = 0; index < pList.length; index++) {
+            if (pList[index].prize === _prize) {
+                return pList[index];
+            }
+        }
+    }
+
+    // eslint-disable-next-line react/display-name
+    const setDataButtonPrize = useMemo(() => {
+        // eslint-disable-next-line react/display-name
+        return (button_id) => {
+
+            let prizeItem = button_id === 1 ? getDataPrize(`500.000 vnđ`) : button_id === 2 ? getDataPrize(`300.000 vnđ`) : button_id === 3 ? getDataPrize(`200.000 vnđ`) : getDataPrize(`100.000 vnđ`);
+
+            if (!prizeItem) return null;
+
+            let isDisable = prizeItem.quantity > 0 ? 1 : 0;
+            return (
+                <button className={getButtonClass(button_id, isDisable)} onClick={isDisable === 0 ? null : () => { setPrizeButton(button_id) }}>
+                    <h1>{prizeItem.prize}</h1>
+                    <p>{isDisable === 0 ? " Đã hết lần quay " : "Còn lại " + `${prizeItem.quantity}` + " lần"}</p>
+                </button>
+            );
+        }
+    }, [selectPrize, prize]);
+
+    const getButtonClass = (button_id, normal_class) => {
+        if (selectPrize === button_id) {
+            if (button_id === 2 || button_id === 4) {
+                return 'btn-prize-selected btnCfg-margin'
+            } else {
+                return 'btn-prize-selected'
+            }
+        } else {
+            if (normal_class === 1) {
+                if (button_id === 2 || button_id === 4) {
+                    return 'btn-prize btnCfg-margin'
+                } else {
+                    return 'btn-prize'
+                }
+            } else if (normal_class === 0) {
+                if (button_id === 2 || button_id === 4) {
+                    return 'btn-prize-disable btnCfg-margin'
+                } else {
+                    return 'btn-prize-disable'
+                }
+            }
+        }
+    }
+
+    const loadDataTable = () => {
+        if (displayedHistory.length < 1) {
+            return (
+                <div>
+                    <h1></h1>
+                </div>
+            )
+        } else {
+            return displayedHistory.map((value, index) => {
+                return (
+                    <tr key={index}>
+                        <th scope="row">{index < 9 ? "0" + (index + 1) : (index + 1)}</th>
+                        <td>{value.username}</td>
+                        <td>{value.name}</td>
+                        <td>{value.manager}</td>
+                        <td>{value.prize.name + " " + value.prize.prize}</td>
+                    </tr>
+                )
+            })
+        }
+    }
+
+    const handleRewardStore = async () => {
+        const fetchDataReward = async () => {
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/check-reward`,
+                {
+                    user: JSON.parse(user).username,
+                    winnerUsername: winnerUsername,
+                    selectPrize: selectPrize
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${JSON.parse(user).accessToken}`,
+                    },
+                }
+            );
+        }
+        fetchDataReward();
+        fetchData();
+    }
+
+    // console.log("winnerUsername:", winnerUsername);
+    // console.log("selectPrize:", selectPrize);
+
+    const handleRewardInfo = async () => {
+        const fetchRewardInfo = async () => {
+            try {
+                const response = await axios.get(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/reward-info`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${JSON.parse(user).accessToken}`,
+                        },
+                    }
+                );
+                setDisplayedHistory(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchRewardInfo();
+    }
 
     return (
-        <div>
-            <button onClick={startRotation} disabled={isButtonDisabled}>Start</button>
-            <div id="userDisplay" style={{ display: 'block', position: 'relative', height: '100px', backgroundColor: "red", transition: 'top 0.5s linear'}}>
-                {displayedUsers.map((user, index) => (
-                    <div
-                        key={user.key}
-                        style={{
-                            position: 'absolute',
-                            top: index * 20 + 'px',
-                            textAlign: 'center',
-                            transform: `translateY(${index * 10}%)`,
-                            transition: 'top 0.5s linear',
-                        }}>
-                        {user.name}
+        <main className='bgCfg'>
+            <div className='flex full-control'>
+                {showCongrationPopup && (
+                    <div className="popup-congra">
+                        <div>
+                            <div className="congrats-div">
+                                <h2>Chúc mừng người may mắn{'\u00a0'}</h2><br />
+                                <h1>{winnerUsername}</h1><br />
+                                <button onClick={() => { setCongrationPopup(false); setPrizeButton(0); handleRewardStore() }} className='btn-congra'>Xác nhận</button>
+                            </div>
+                            <div className="congrats-firework"></div>
+                        </div>
                     </div>
-                ))}
-            </div>
-        </div >
-    );
-};
+                )}
+                {showHistoryPopup && (
+                    <div className="popup-board">
+                        <div className="popup-history" >
+                            <div className='div-history'>
+                                <div className="popup-history-header">
+                                </div>
+                                <div className='div-table-history'>
+                                    <table className="table table-hover table-responsive table-history">
+                                        <thead>
+                                            <tr className="table-warning">
+                                                <th scope="col">STT</th>
+                                                <th scope="col">Username</th>
+                                                <th scope="col">Họ tên</th>
+                                                <th scope="col">Quản lý</th>
+                                                <th scope="col">Giải thưởng</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="table-info">
+                                            {loadDataTable()}
+                                        </tbody >
+                                    </table >
+                                </div>
+                                <div className="div-btn-history">
+                                    <button onClick={() => { setHistoryPopup(false); }} className='btnClose btn-history'>Xác nhận</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {showUnpickPopup && (
+                    <div className="popup-board" onClick={() => { setUnpickPopup(false); }}>
+                        <div className="popup-unpick">
+                            <div className="div-unpick">
+                                <p className="btnCloseUnpick">Click để đóng</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
-export default UserSelector; 
+                <div className='left-control'>
+                    <div className='infoCfg'>
+                    </div>
+                    <div className="div-button-left">
+                        {setDataButtonPrize(1)}
+                        {setDataButtonPrize(2)}
+                    </div>
+                </div>
+                <div className='center-control'>
+                    <div id='slot-machine'>
+                        <div id='slot-body'>
+                            <div id='slot-block'></div>
+                            <div id='slot-frame'>
+                                <div style={{ animationName: `${displayIndex == 0 ? "spinresult" : ""} `, }} className='spin-div' onAnimationEnd={handleAnimationEnd}>
+                                    {displayedUsers.map((user, index) => {
+                                        return (
+                                            <div
+                                                key={user.key}
+                                                className='spin-element'
+                                                style={{
+                                                    top: index * 8 + 'vh',
+                                                    transform: `translateY(${index * 10}%)`,
+                                                }}>
+                                                <div className='spin-object'>{user.name}</div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <div id='slot-glaze-bottom'></div>
+                            <div id='slot-trigger' onClick={selectPrize === 0 ? () => { handleUnpickShow(); } : () => { startRotation(); activeLever(); }}>
+                                <div className={`arm ${toggleClassLever}`}>
+                                    <div className={`knob`}></div>
+                                </div>
+                                <div className='ring1'>
+                                    <div className='shadow'></div>
+                                </div>
+                                <div className='ring2'>
+                                    <div className='shadow'></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id='div-history'>
+                        <button className='history-button' onClick={() => { handleHistoryOpen(); handleRewardInfo(); }}>XEM KẾT QUẢ</button>
+                    </div>
+                </div>
+                <div className='right-control'>
+                    <div className='infoCfg'>
+                    </div>
+                    <div className="div-button-right">
+                        {setDataButtonPrize(3)}
+                        {setDataButtonPrize(4)}
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    );
+}
+
+export default withAuth(Main);

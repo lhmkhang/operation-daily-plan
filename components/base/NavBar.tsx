@@ -4,6 +4,7 @@ import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Dr
 import Icons from '@/components/base/Icons'
 import Image from 'next/image';
 import logoBlue from '@/public/img/logoBlue.png'
+import { useRouter } from 'next/navigation';
 
 type NavbarSubItem = {
     itemName: string,
@@ -34,7 +35,7 @@ const listNavItems = [
     {
         itemName: "Lucky Money",
         itemIcon: "Attractions",
-        itemComponent: "lucky_wheel",
+        itemComponent: "lucky_money",
         itemType: "single"
     },
     {
@@ -108,7 +109,6 @@ const NavBar = (props: Props) => {
     }
 
     const handleClick = (name: string, type?: string) => {
-        setActiveComponent(name);
         props.selectedComponent(name);
         if (type !== "single") {
             let subState = openSub.includes("open") ? name + "_close" : name + "_open";
