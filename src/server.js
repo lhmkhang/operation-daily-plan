@@ -10,6 +10,7 @@ const logger = require("./helpers/logger");
 const loggerInfo = logger.getLogger("infoLogger");
 const app = express();
 const verifyJWTToken = require("./middlewaves/verifyJWTToken.js");
+const initAuthorizationRoutes = require("./routers/authorization.js");
 // const { UserRoleModel } = require("./models/UserRoleModel");
 
 // Connect to mongoDB
@@ -28,6 +29,7 @@ if (process.env.NODE_ENV === 'production') {
 
     initWheelApiRoutes(app);
     initUserApiRoutes(app);
+    initAuthorizationRoutes(app);
 
     app.use((err, req, res, next) => {
       err.statusCode = err.statusCode || 500;
@@ -97,6 +99,7 @@ if (process.env.NODE_ENV === 'production') {
   initWheelApiRoutes(app);
   initUserApiRoutes(app);
   initWebRoutes(app);
+  initAuthorizationRoutes(app);
 
   app.use((err, req, res, next) => {
     err.statusCode = err.statusCode || 500;

@@ -12,4 +12,12 @@ const getTotalTurn = async (req, res, next) => {
   wheelServices.getTurn(req, res, next);
 }
 
-module.exports = { checkPrizeQuantity, getListPrize, getTotalTurn };
+const getListUser = async (req, res, next) => {
+  wheelServices.getUsers(req, res, next);
+}
+
+const getListRewardInfo = async (req, res, next) => {
+  wheelServices.getListRewards(req, res, next);
+}
+
+module.exports = { checkPrizeQuantity, getListPrize, getTotalTurn, getListUser, getListRewardInfo };

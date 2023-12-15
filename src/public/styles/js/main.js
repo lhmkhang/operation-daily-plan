@@ -665,8 +665,6 @@ const loadChart = function () {
                         ]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
                         scales: {
                             xAxes: [
                                 {

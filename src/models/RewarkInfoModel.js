@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 
 const rewardInfoSchema = new mongoose.Schema({
-    user: String,
+    player: String,
+    userName: String,
     fullName: String,
     lineManager: String,
+    group: String,
+    teamName: String,
     location: String,
     prize: String
 }, {

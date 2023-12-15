@@ -15,7 +15,8 @@ let initWheelApiRoutes = (app) => {
     .post("/check-reward", verifyJWTToken, wheelControllers.checkPrizeQuantity)
     .get("/get-reward", verifyJWTToken, wheelControllers.getListPrize)
     .post("/get-turn", verifyJWTToken, wheelControllers.getTotalTurn)
-
+    .get("/get-users", verifyJWTToken, wheelControllers.getListUser)
+    .get("/reward-info", verifyJWTToken, wheelControllers.getListRewardInfo)
   return app.use("/api/v1", router);
 };
 
