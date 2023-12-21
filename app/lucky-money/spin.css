@@ -135,7 +135,7 @@ body {
 }
 
 #content {
-    padding: 20px;
+    padding: 2vh;
 }
 
 
@@ -196,8 +196,8 @@ body {
     height: 113%;
     left: 0;
     position: absolute;
-    top: -18px;
-    width: 225px;
+    top: -1.8vh;
+    width: 22.5vh;
     z-index: 4;
 }
 
@@ -369,7 +369,6 @@ body {
 .spin-div {
     text-align: center;
     position: relative;
-    margin-left: 7.5vh;
     margin-top: -21vh;
     animation-fill-mode: both;
     animation-duration: 5s;
@@ -401,7 +400,7 @@ body {
 .spin-object {
     position: relative;
     text-align: center;
-    width: 50vh;
+    width: 65vh;
     font-family: "Dancing Script";
     font-size: 3.9vh;
     font-style: italic;
@@ -476,7 +475,7 @@ body {
     border: .25em solid var(--glow-color);
     padding: 1em 3em;
     color: var(--glow-color);
-    font-size: 15px;
+    font-size: 1.5vh;
     font-weight: bold;
     background-color: var(--btn-color);
     border-radius: 1em;
@@ -545,13 +544,28 @@ body {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
-    ;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     opacity: 0;
     animation: fadeIn 0.5s ease forwards;
+    z-index: 3;
+}
+
+.popup-disable {
+    position: absolute;
+    text-align: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0;
+    /* animation: fadeIn 0.5s ease forwards; */
     z-index: 3;
 }
 
@@ -604,8 +618,8 @@ body {
 
 .popup-history {
     position: absolute;
-    top: 5vh;
-    left: 61vh;
+    /* top: 5vh; */
+    /* left: 61vh; */
     width: 40%;
     height: 92%;
     background: rgba(0, 0, 0, 0.5);
@@ -642,6 +656,11 @@ body {
 th {
     position: sticky;
     top: 0;
+    font-size: 1.5vh;
+}
+
+td {
+    font-size: 1.5vh;
 }
 
 .popup-history-header {
@@ -659,6 +678,7 @@ th {
 
 .btn-history {
     width: 30vh;
+    font-size: 1.5vh;
 }
 
 .submit-button {
@@ -688,10 +708,10 @@ th {
 }
 
 .btn-prize {
-    border-radius: 5px;
-    border: 5px solid rgb(242, 255, 0);
+    border-radius: 1vh;
+    border: 1vh solid rgb(242, 255, 0);
     cursor: pointer;
-    filter: drop-shadow(0px 0px 10px rgb(255, 255, 255));
+    filter: drop-shadow(0 0 1vh rgb(255, 255, 255));
     /* animation: flickering 2s linear infinite both; */
     text-transform: uppercase;
     background-image: url('./style/image/btn-bg-2.jpg');
@@ -700,15 +720,16 @@ th {
     color: rgb(255, 255, 255);
     font-weight: 700;
     transition: 0.6s;
-    box-shadow: 0px 0px 60px #1f4c65;
+    box-shadow: 0 0 5vh #1f4c65;
     -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.4));
     height: 10vh;
     width: 25vh;
+    overflow: hidden;
 }
 
 .btn-prize p {
+    font-size: 2vh;
     color: red;
-    font-size: 1.4vh;
 }
 
 @keyframes flickering {
@@ -755,7 +776,7 @@ th {
     font-size: 3vh;
     font-family: Arial, Helvetica, sans-serif;
     color: rgb(0, 255, 21);
-    -webkit-text-stroke: rgb(0, 179, 255) 0.2vh;
+    -webkit-text-stroke: rgb(0, 179, 255) 0.1vw;
 }
 
 .btn-prize:hover {
@@ -763,10 +784,10 @@ th {
 }
 
 .btn-prize-selected {
-    border-radius: 10px;
-    border: 8px solid rgb(255, 0, 0);
+    border-radius: 1vh;
+    border: 1vh solid rgb(255, 0, 0);
     cursor: pointer;
-    filter: drop-shadow(0px 0px 10px rgb(255, 145, 0));
+    filter: drop-shadow(0 0 3vh rgb(255, 145, 0));
     /* animation: flickering 2s linear infinite both; */
     text-transform: uppercase;
     background-image: url('./style/image/btn-bg-3.jpg');
@@ -776,17 +797,24 @@ th {
     font-weight: 700;
     transition: 0.6s;
     transform: scale(1.2);
-    box-shadow: 0px 0px 60px #1f4c65;
+    box-shadow: 0 0 5vh #1f4c65;
     -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.4));
     height: 10vh;
     width: 25vh;
+    overflow: hidden;
 }
 
 .btn-prize-selected h1 {
     font-size: 3vh;
     font-family: Arial, Helvetica, sans-serif;
     color: rgb(0, 145, 255);
-    -webkit-text-stroke: rgb(255, 251, 0) 0.2vh;
+    -webkit-text-stroke: rgb(255, 251, 0) 0.1vw;
+}
+
+.btn-prize-selected p {
+    font-size: 2vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(229, 255, 0);
 }
 
 .btn-prize-selected:hover {
@@ -795,9 +823,9 @@ th {
 
 .btn-prize-disable {
     border-radius: 1vh;
-    border: 5px solid rgba(255, 156, 232, 0.5);
+    border: 1vh solid rgba(255, 156, 232, 0.5);
     cursor: not-allowed;
-    filter: drop-shadow(0px 0px 10px rgb(0, 0, 0));
+    filter: drop-shadow(0 0 3vh rgb(0, 0, 0));
     /* animation: flickering 2s linear infinite both; */
     text-transform: uppercase;
     background-image: url('./style/image/btn-bg-4.png');
@@ -806,7 +834,7 @@ th {
     color: rgba(0, 255, 157, 0.548);
     font-weight: 700;
     transition: 0.6s;
-    box-shadow: 0px 0px 60px #1f4c65;
+    box-shadow: 0 0 5vh #1f4c65;
     -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.4));
     height: 10vh;
     width: 25vh;
@@ -816,7 +844,11 @@ th {
     font-size: 3vh;
     font-family: Arial, Helvetica, sans-serif;
     color: rgba(0, 0, 0, 0.7);
-    -webkit-text-stroke: rgba(90, 255, 96, 0.507) 0.2vh;
+    -webkit-text-stroke: rgba(90, 255, 96, 0.507) 0.1vw;
+}
+
+.btn-prize-disable p {
+    font-size: 2vh;
 }
 
 .btn-prize-disable:hover {
@@ -825,8 +857,8 @@ th {
 
 .popup-unpick {
     position: absolute;
-    top: 15vh;
-    left: 70vh;
+    /* top: 15vh; */
+    /* left: 70vh; */
     width: 70vh;
     height: 70vh;
     background: rgba(0, 0, 0, 0);
@@ -890,8 +922,8 @@ th {
     background-repeat: no-repeat;
     background-size: cover;
     position: absolute;
-    top: 9vh;
-    left: 62vh;
+    /* top: 9vh; */
+    /* left: 62vh; */
     width: 80vh;
     height: 80vh;
     z-index: 3;
@@ -908,7 +940,6 @@ th {
     width: 100%;
     color: red;
     -webkit-text-stroke: rgba(255, 175, 99, 0.9) 0.1vh;
-    margin-top: 25vh;
     font-size: 5vh;
 }
 
@@ -924,11 +955,13 @@ th {
     margin-top: 2vh;
     color: rgb(0, 174, 255);
     -webkit-text-stroke: rgba(233, 250, 0, 0.9) 0.1vh;
+    padding-bottom: 17vh;
 }
 
 .congrats-firework {
     background-image: url("./style/image/bg-firework-1920x1080.gif");
     background-size: cover;
+    opacity: 80%;
     width: 100%;
     height: 100%;
     left: 0vh;
@@ -952,6 +985,7 @@ th {
     font-weight: 500;
     color: #fff;
     z-index: 2;
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .btn-congra::after {

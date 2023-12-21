@@ -1,11 +1,8 @@
 'use client'
 import "@fontsource/dancing-script";
 import "@fontsource/lemonada";
-import Link from 'next/link';
 import { useEffect, useState, useContext, useRef, useMemo } from 'react';
 import './spin.css';
-import winnerList from './data/winner.json';
-// import prize from './data/prize.json';
 import "bootstrap/dist/css/bootstrap.min.css";
 import withAuth from "../../components/helpers/WithAuthen";
 import axios from '../../components/helpers/axiosHelper';
@@ -46,6 +43,7 @@ const Main = () => {
     const [showUnpickPopup, setUnpickPopup] = useState(false);
     const [winnerUsername, setWinnerUsername] = useState("");
     const [selectPrize, setPrizeButton] = useState(0);
+    const [spinStatus, setSpinStatus] = useState(false);
     // var wList = winnerList.Data;
     const [displayedHistory, setDisplayedHistory] = useState([]);
 
@@ -59,6 +57,7 @@ const Main = () => {
     useEffect(() => {
         fetchData();
     }, [user]);
+
 
     let fetchData = async () => {
         try {
@@ -79,10 +78,21 @@ const Main = () => {
 
     const timerRef = useRef(null);
 
+    const updateSpinStatus = (status) => {
+        setSpinStatus(status);
+    };
+
+    useEffect(() => {
+        if (spinStatus) {
+            startRotation();
+            activeLever();
+
+        }
+    }, [spinStatus])
+
     const startRotation = () => {
         setDisplayIndex(-1);
         setDisplayedUsers([]);
-        setIsButtonDisabled(true);
         let elapsedTime = 0;
         const rotationTime = 5000;
         let updateTime = 130;
@@ -124,8 +134,8 @@ const Main = () => {
             console.log("displayedUsers: ", displayedUsers);
             setDisplayedUsers((prevUsers) => [...prevUsers]);
         }, 5000);
-
-
+ 
+ 
         return () => {
             clearInterval(interval);
             if (timerRef.current) {
@@ -149,7 +159,19 @@ const Main = () => {
     const toggleClassLever = toggleLever ? 'leverSpin' : '';
 
     const handleHistoryOpen = () => {
-        setHistoryPopup(true);
+        if (spinStatus !== true) {
+            setHistoryPopup(true);
+        }
+    }
+
+    const handleBtnPrizeClick = (button_id) => {
+        setPrizeButton(button_id)
+    }
+
+    const handleBtnCongrationClick = () => {
+        setCongrationPopup(false);
+        handleRewardStore();
+        updateSpinStatus(false);
     }
 
     const handleUnpickShow = () => {
@@ -172,11 +194,15 @@ const Main = () => {
 
             let prizeItem = button_id === 1 ? getDataPrize(`500.000 vnđ`) : button_id === 2 ? getDataPrize(`300.000 vnđ`) : button_id === 3 ? getDataPrize(`200.000 vnđ`) : getDataPrize(`100.000 vnđ`);
 
+            if (selectPrize === button_id) {
+                prizeItem.quantity > 0 ? null : setPrizeButton(0);
+            }
+
             if (!prizeItem) return null;
 
             let isDisable = prizeItem.quantity > 0 ? 1 : 0;
             return (
-                <button className={getButtonClass(button_id, isDisable)} onClick={isDisable === 0 ? null : () => { setPrizeButton(button_id) }}>
+                <button className={getButtonClass(button_id, isDisable)} onClick={isDisable === 0 ? null : () => { handleBtnPrizeClick(button_id) }}>
                     <h1>{prizeItem.prize}</h1>
                     <p>{isDisable === 0 ? " Đã hết lần quay " : "Còn lại " + `${prizeItem.quantity}` + " lần"}</p>
                 </button>
@@ -219,7 +245,7 @@ const Main = () => {
             return displayedHistory.map((value, index) => {
                 return (
                     <tr key={index}>
-                        <th scope="row">{index < 9 ? "0" + (index + 1) : (index + 1)}</th>
+                        <td scope="row">{index < 9 ? "0" + (index + 1) : (index + 1)}</td>
                         <td>{value.username}</td>
                         <td>{value.name}</td>
                         <td>{value.manager}</td>
@@ -277,16 +303,19 @@ const Main = () => {
     return (
         <main className='bgCfg'>
             <div className='flex full-control'>
+                {spinStatus && (
+                    <div className="popup-disable">
+                    </div>
+                )}
                 {showCongrationPopup && (
                     <div className="popup-congra">
-                        <div>
-                            <div className="congrats-div">
-                                <h2>Chúc mừng người may mắn{'\u00a0'}</h2><br />
-                                <h1>{winnerUsername}</h1><br />
-                                <button onClick={() => { setCongrationPopup(false); setPrizeButton(0); handleRewardStore() }} className='btn-congra'>Xác nhận</button>
-                            </div>
-                            <div className="congrats-firework"></div>
+                        <div className="congrats-div">
+                            <h2>Chúc mừng người may mắn{'\u00a0'}</h2><br />
+                            <h1>{winnerUsername.split("-")[0].trim()}</h1>
+                            <h1>{winnerUsername.split("-")[1].trim()}</h1><br />
+                            <button onClick={() => { handleBtnCongrationClick() }} className='btn-congra'>Xác nhận</button>
                         </div>
+                        <div className="congrats-firework"></div>
                     </div>
                 )}
                 {showHistoryPopup && (
@@ -322,7 +351,7 @@ const Main = () => {
                     <div className="popup-board" onClick={() => { setUnpickPopup(false); }}>
                         <div className="popup-unpick">
                             <div className="div-unpick">
-                                <p className="btnCloseUnpick">Click để đóng</p>
+                                {/* <p className="btnCloseUnpick">Click để đóng</p> */}
                             </div>
                         </div>
                     </div>
@@ -358,7 +387,7 @@ const Main = () => {
                                 </div>
                             </div>
                             <div id='slot-glaze-bottom'></div>
-                            <div id='slot-trigger' onClick={selectPrize === 0 ? () => { handleUnpickShow(); } : () => { startRotation(); activeLever(); }}>
+                            <div id='slot-trigger' onClick={selectPrize === 0 ? () => { handleUnpickShow(); } : () => { setSpinStatus(true) }}>
                                 <div className={`arm ${toggleClassLever}`}>
                                     <div className={`knob`}></div>
                                 </div>
