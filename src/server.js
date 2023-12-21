@@ -19,7 +19,7 @@ connectDB();
 if (process.env.NODE_ENV === 'production') {
   const next = require('next');
   const dev = process.env.NODE_ENV !== 'production';
-  const nextApp = next({ dev: dev, dir: process.env.PATH_FOLDER_FE });
+  const nextApp = next({ dev: dev, dir: process.env.PATH_FOLDER_FE, port: process.env.PORT });
   const handleNextRequests = nextApp.getRequestHandler();
 
   nextApp.prepare().then(() => {
