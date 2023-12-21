@@ -55,7 +55,7 @@ const Login = (props: Props) => {
             if (status) {
                 const updateStatus = { ...status, username: userInfo.username };
                 login(updateStatus);
-                router.push("/lucky_money");
+                router.push("/lucky-money");
             } else {
                 setSignInStatus("fail");
                 // router.push("/");
