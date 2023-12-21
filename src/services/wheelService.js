@@ -120,8 +120,21 @@ const getTurn = async (req, res, next) => {
 
 const getUsers = async (req, res, next) => {
   try {
-    const result = await luckyMoneyUser.find({}, { "Username": 1, "Fullname": 1, "_id": 0 });
-    const transformedData = result.map(item => `${item.Username} - ${item.Fullname}`);
+
+    const rewardedUsers = await RewardInfo.find({}, { userName: 1, _id: 0 });
+    const rewardedUserNames = rewardedUsers.map(user => user.userName);
+
+    const users = await luckyMoneyUser.find({
+      Username: { $nin: rewardedUserNames }
+    }, {
+      Username: 1,
+      Fullname: 1,
+      _id: 0
+    });
+
+    // const result = await luckyMoneyUser.find({}, { "Username": 1, "Fullname": 1, "_id": 0 });
+
+    const transformedData = users.map(item => `${item.Username} - ${item.Fullname}`);
     return res.json({ data: transformedData, status: 200 })
   } catch (error) {
     next(error);
