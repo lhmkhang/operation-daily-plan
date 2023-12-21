@@ -124,7 +124,7 @@ const Login = (props: Props) => {
                                 variant='contained'
                                 size='small'
                                 className={`${style.btn_switch_right} ${type === 'signIn' ? style.btn_inactive : ""}`}
-                                onClick={() => setType("signUp")}>
+                                /* onClick={() => setType("signUp")} */>
                                 Sign Up
                             </Button>
                         </div>
@@ -190,7 +190,7 @@ const Login = (props: Props) => {
                                     Sign In
                                 </Button>
                                 <Link
-                                    onClick={() => setType("signUp")}
+                                    /* onClick={() => setType("signUp")} */
                                     underline="hover"
                                     className='text-xs cursor-pointer'>
                                     Create an account
