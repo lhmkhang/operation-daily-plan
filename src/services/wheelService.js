@@ -98,10 +98,79 @@ const quantityChecker = async (req, res, next) => {
   } */
 };
 
+const quantityCheckerV2 = async (req, res, next) => {
+  try {
+    const { teamName, selectPrize, winnerUsername, user } = req.body;
+    const prizeName = selectPrize === 1 ? '500.000 vnđ' : selectPrize === 2 ? '300.000 vnđ' : selectPrize === 3 ? '200.000 vnđ' : '100.000 vnđ'
+
+    /* // Tìm và cập nhật số lượng phần thưởng
+    const result = await Prize.findOneAndUpdate(
+      { prize: prizeName, quantity: { $gt: 0 } }, // Điều kiện: phần thưởng còn số lượng
+      { $inc: { quantity: -1 } }, // Hành động: giảm số lượng đi 1
+      { new: true } // Trả về document sau khi cập nhật
+    ); */
+
+    if (!teamName || !selectPrize || !winnerUsername || user) {
+
+    }
+
+    const result = await Prize.findOneAndUpdate(
+      {
+        team_name: teamName,
+        prizes: {
+          $elemMatch: { prize: prizeName, quantity: { $gt: 0 } }
+        }
+      },
+      {
+        $inc: { "prizes.$.quantity": -1 }
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (result) {
+      if (user === req.user) {
+        const userSplit = winnerUsername.split(' - ')[0];
+        const userInfo = await luckyMoneyUser.findOne({ Username: userSplit })
+
+        if (!userInfo) {
+          return next(new handleMessage('user not found!', StatusCodes.NOT_FOUND));
+        }
+
+        await RewardInfo.create({ player: user, userName: userInfo.Username, fullName: userInfo.Fullname, lineManager: userInfo.LeaderFullName, group: userInfo.Group, teamName: userInfo.TeamName, location: userInfo.Location, prize: prizeName });
+        // await TurnWheel.findOneAndUpdate({ username: user }, { $inc: { quantity: -1 } })
+        return res.json({ message: 'Chúc mừng! Bạn đã trúng phần thưởng.', status: "success" });
+      } else {
+        return res.json({ message: 'Username không hợp lệ', status: "fail" });
+      }
+    } else {
+      return res.json({ message: 'Rất tiếc, phần thưởng này đã hết.' });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getPrizes = async (req, res, next) => {
   try {
     const result = await (await Prize.find({})).map(i => { return { name: i.name, quantity: i.quantity, prize: i.prize } });
     return res.json({ data: result, status: 200 });
+  } catch (error) {
+    next(error);
+  }
+}
+
+const getPrizesV2 = async (req, res, next) => {
+  const { teamName } = req.body;
+  try {
+    const result = await Prize.findOne({ team_name: teamName })
+    const transformData = result.prizes.map(item => {
+      return {
+        name: item.name, quantity: item.quantity, prize: item.prize
+      }
+    })
+    return res.json({ data: transformData, status: 200 });
   } catch (error) {
     next(error);
   }
@@ -141,8 +210,34 @@ const getUsers = async (req, res, next) => {
   }
 }
 
+const getUsersV2 = async (req, res, next) => {
+  const { teamName } = req.body;
+
+  try {
+    const rewardedUsers = await RewardInfo.find({ teamName }, { userName: 1, _id: 0 });
+    const rewardedUserNames = rewardedUsers.map(user => user.userName);
+
+    const users = await luckyMoneyUser.find({
+      TeamName: teamName,
+      Username: { $nin: rewardedUserNames }
+    }, {
+      Username: 1,
+      Fullname: 1,
+      _id: 0
+    });
+
+    // const result = await luckyMoneyUser.find({}, { "Username": 1, "Fullname": 1, "_id": 0 });
+
+    const transformedData = users.map(item => `${item.Username} - ${item.Fullname}`);
+
+    return res.json({ data: transformedData, status: 200 })
+  } catch (error) {
+    next(error);
+  }
+}
+
 const getListRewards = async (req, res, next) => {
-  const { user } = req.body;
+  // const { user } = req.body;
   try {
     const data = await RewardInfo.find({});
     const result = data.map(i => {
@@ -159,6 +254,17 @@ const getListRewards = async (req, res, next) => {
   }
 }
 
+const getTeam = async (req, res, next) => {
+  try {
+    const dataUser = await luckyMoneyUser.find({}, { TeamName: 1, _id: 0 });
+    const uniqueData = Array.from(new Map(dataUser.map(item => [item['TeamName'], item])).values());
+    const teamNames = uniqueData.map(item => item.TeamName);
+    res.json({ data: teamNames, status: 200 })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
-  quantityChecker, getPrizes, getTurn, getUsers, getListRewards
+  quantityChecker, getPrizes, getTurn, getUsers, getListRewards, quantityCheckerV2, getPrizesV2, getUsersV2, getTeam
 };
