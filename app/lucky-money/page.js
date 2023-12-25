@@ -7,10 +7,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import withAuth from "../../components/helpers/WithAuthen";
 import axios from '../../components/helpers/axiosHelper';
 import { AuthContext } from "@/components/helpers/AuthenContext";
+import { useSelector } from "react-redux";
 
 const Main = () => {
     // const [username, setUsername] = useState("username");
     const [availableUsers, setAvailableUsers] = useState([]);
+    const { username, accessToken, refeshToken } = useSelector(state => state.auth.userInfo)
+
+    // console.log(username);
 
     useEffect(() => {
         const fetchUserList = async () => {
@@ -20,7 +24,7 @@ const Main = () => {
                     {
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${JSON.parse(user).accessToken}`,
+                            Authorization: `Bearer ${accessToken}`,
                         },
                     }
                 );
@@ -47,7 +51,7 @@ const Main = () => {
     // var wList = winnerList.Data;
     const [displayedHistory, setDisplayedHistory] = useState([]);
 
-    const { user } = useContext(AuthContext);
+    // const { user } = useContext(AuthContext);
     const [prize, setData] = useState({});
 
     const displayUser = (userName) => {
@@ -56,7 +60,7 @@ const Main = () => {
 
     useEffect(() => {
         fetchData();
-    }, [user]);
+    }, []);
 
 
     let fetchData = async () => {
@@ -66,7 +70,7 @@ const Main = () => {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${JSON.parse(user).accessToken}`,
+                        Authorization: `Bearer ${accessToken}`,
                     },
                 }
             );
@@ -261,14 +265,14 @@ const Main = () => {
             const response = await axios.post(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/check-reward`,
                 {
-                    user: JSON.parse(user).username,
+                    user: username,
                     winnerUsername: winnerUsername,
                     selectPrize: selectPrize
                 },
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${JSON.parse(user).accessToken}`,
+                        Authorization: `Bearer ${accessToken}`,
                     },
                 }
             );
@@ -288,7 +292,7 @@ const Main = () => {
                     {
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${JSON.parse(user).accessToken}`,
+                            Authorization: `Bearer ${accessToken}`,
                         },
                     }
                 );

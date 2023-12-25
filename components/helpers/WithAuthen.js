@@ -3,15 +3,19 @@ import React, { useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "../helpers/AuthenContext";
 import { useRouter, usePathname } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { updateAccessToken } from '../../redux/action/authActions'
 import axios from "axios";
 
 function withAuth(WrappedComponent) {
+
     function WithAuthComponent(props) {
         const router = useRouter();
-        const { user, setUser } = useContext(AuthContext);
+        // const { user, setUser } = useContext(AuthContext);
         const [isLoading, setIsLoading] = useState(true);
         const [isNavigating, setIsNavigating] = useState(false);
-
+        const userInfo = useSelector(state => state.auth)
+        const dispath = useDispatch();
         // console.log("URL: ", usePathname());
 
         useEffect(() => {
@@ -23,13 +27,18 @@ function withAuth(WrappedComponent) {
 
             const checkTokenAndRefresh = async () => {
                 try {
-                    if (!user) {
+                    if (!userInfo) {
                         setIsNavigating(true);
                         router.push("/login");
                     } else {
-                        accessToken = JSON.parse(user).accessToken;
-                        refreshToken = JSON.parse(user).refreshToken;
-                        username = JSON.parse(user).username;
+                        // accessToken = JSON.parse(user).accessToken;
+                        // refreshToken = JSON.parse(user).refreshToken;
+                        // username = JSON.parse(user).username;
+
+                        accessToken = userInfo.userInfo.accessToken;
+                        refreshToken = userInfo.userInfo.refreshToken;
+                        username = userInfo.userInfo.username;
+
                         const decodedToken = jwtDecode(accessToken);
                         const currentTime = Date.now() / 1000;
 
@@ -41,10 +50,13 @@ function withAuth(WrappedComponent) {
                             );
 
                             const newAccessToken = response.data.newAccessToken;
-                            let tokenData = JSON.parse(sessionStorage.getItem("token"));
-                            tokenData.accessToken = newAccessToken;
-                            setUser(JSON.stringify(tokenData)); // Cập nhật context
-                            sessionStorage.setItem("token", JSON.stringify(tokenData));
+
+                            dispath(updateAccessToken(newAccessToken));
+
+                            // let tokenData = JSON.parse(sessionStorage.getItem("token"));
+                            // tokenData.accessToken = newAccessToken;
+                            // setUser(JSON.stringify(tokenData)); // Cập nhật context
+                            // sessionStorage.setItem("token", JSON.stringify(tokenData));
                             setIsLoading(false);
                         } else {
                             setIsLoading(false);
@@ -59,7 +71,7 @@ function withAuth(WrappedComponent) {
             };
 
             checkTokenAndRefresh();
-        }, [user, router, setUser]);
+        }, [userInfo, router, /* setUser */]);
 
         if (isNavigating) {
             return null;
@@ -71,7 +83,6 @@ function withAuth(WrappedComponent) {
 
         return <WrappedComponent {...props} />;
     }
-
     return WithAuthComponent;
 }
 

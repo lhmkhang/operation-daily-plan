@@ -14,7 +14,7 @@ import { setAuthInfo } from '../../redux/action/authActions'
 import { useContext } from 'react';
 
 const Login = () => {
-    const { login } = useContext(AuthContext);
+    // const { login } = useContext(AuthContext);
 
     const router = useRouter();
     const [type, setType] = React.useState("signIn");
@@ -59,12 +59,11 @@ const Login = () => {
             if (status) {
                 const updateStatus = { ...status, username: userInfo.username };
 
-                console.log(updateStatus);
-
-                login(updateStatus);
+                // login(updateStatus);
                 dispatch(setAuthInfo({
                     accessToken: updateStatus.accessToken,
-                    refreshToken: updateStatus.refreshToken
+                    refreshToken: updateStatus.refreshToken,
+                    username: updateStatus.username
                 }))
                 router.push("/lucky-money");
             } else {

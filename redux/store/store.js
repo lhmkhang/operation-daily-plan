@@ -1,12 +1,19 @@
 // store.js
 import { configureStore } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist';
-import storageSession from 'redux-persist/lib/storage/session';
+import {
+    persistReducer, persistStore, FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage/session';
 import rootReducer from '../reducer/rootReducer'; // Đảm bảo đường dẫn đúng
 
 const persistConfig = {
     key: 'root',
-    storage: storageSession,
+    storage: storage,
     whitelist: ['auth']
 };
 
@@ -14,6 +21,13 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
     reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+            }
+        })
+
 });
 
 export const persistor = persistStore(store);

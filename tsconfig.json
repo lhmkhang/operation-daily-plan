@@ -36,7 +36,8 @@
     "app/lucky_money/page.js",
     "app/layout.js",
     "components/helpers/UseAuth.js",
-    "app/login/page.js"
+    "app/login/page.js",
+    "app/page.js"
   ],
   "exclude": [
     "node_modules"
