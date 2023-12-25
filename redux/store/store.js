@@ -1,7 +1,8 @@
+// store.js
 import { configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
-import authReducer from './reducers/authSlice';
+import rootReducer from '../reducer/rootReducer'; // Đảm bảo đường dẫn đúng
 
 const persistConfig = {
     key: 'root',
@@ -9,9 +10,7 @@ const persistConfig = {
     whitelist: ['auth']
 };
 
-const persistedReducer = persistReducer(persistConfig, {
-    auth: authReducer
-});
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
     reducer: persistedReducer,

@@ -1,11 +1,6 @@
 import axios from 'axios';
 
-type Props = {
-    username: string,
-    password: string
-}
-
-export default async function UseAuth(props: Props) {
+export default async function UseAuth(props) {
     try {
         const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/signin`, {
             username: props.username,

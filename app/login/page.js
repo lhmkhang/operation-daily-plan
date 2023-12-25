@@ -2,18 +2,19 @@
 import Image from 'next/image';
 import * as React from 'react';
 import { Checkbox, Link, TextField, FormControlLabel, Button, CssBaseline } from '@mui/material';
-import backgroundImg from '/public/img/backgroundLogin7.jpg';
+import backgroundImg from '@/public/img/backgroundLogin7.jpg';
 import UseAuth from '@/components/helpers/UseAuth'
 import useUserAuth from '@/components/helpers/UseUserAuth';
 import UseSignUp from '@/components/helpers/UseSignUp';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/components/helpers/AuthenContext';
 import style from '../../styles/Login.module.css'
+import { useSelector, useDispatch } from 'react-redux';
+import { setAuthInfo } from '../../redux/action/authActions'
+import { useContext } from 'react';
 
-type Props = {}
-
-const Login = (props: Props) => {
-    const { login } = React.useContext(AuthContext);
+const Login = () => {
+    const { login } = useContext(AuthContext);
 
     const router = useRouter();
     const [type, setType] = React.useState("signIn");
@@ -25,15 +26,18 @@ const Login = (props: Props) => {
     const [confirmPasswordSignUpText, setConfirmPasswordSignUpText] = React.useState("");
     const [confirmPasswordEmpty, setConfirmPasswordEmpty] = React.useState(false);
 
+    //handle login from redus
+    const dispatch = useDispatch();
+
     const { setUserInfo, userInfo, handleUserChange } = useUserAuth();
 
-    const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleConfirmPassword = (e) => {
         const _confirmPassword = e.target.value
         setConfirmPasswordSignUpText(_confirmPassword);
         setPasswordMatch(() => _confirmPassword === userInfo.password);
     }
 
-    const handleBlur = ({ target }: React.FocusEvent<HTMLInputElement>) => {
+    const handleBlur = ({ target }) => {
         if (target.name == "username") setUsernameEmpty(!target.value);
         if (target.name == "password") setPasswordEmpty(!target.value);
         if (target.name == "confirmPassword") setConfirmPasswordEmpty(!target.value);
@@ -54,7 +58,14 @@ const Login = (props: Props) => {
 
             if (status) {
                 const updateStatus = { ...status, username: userInfo.username };
+
+                console.log(updateStatus);
+
                 login(updateStatus);
+                dispatch(setAuthInfo({
+                    accessToken: updateStatus.accessToken,
+                    refreshToken: updateStatus.refreshToken
+                }))
                 router.push("/lucky-money");
             } else {
                 setSignInStatus("fail");
@@ -77,7 +88,7 @@ const Login = (props: Props) => {
         }
     }
 
-    const handleKeyPress = (e: KeyboardEvent) => {
+    const handleKeyPress = (e) => {
         if (e.key === "Enter" && type === "signUp") {
             handleSignUp();
         } else if (e.key === "Enter" && type === "signIn") {

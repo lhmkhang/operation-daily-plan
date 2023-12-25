@@ -38,7 +38,6 @@ function App() {
                 return <p>"Chưa có component nào được chọn"</p>
         }
     } */
-
     /* return (
         <Box sx={{ display: 'flex' }}>
             <NavBar selectedComponent={setSelectedComponent} />
