@@ -450,9 +450,8 @@ body {
 }
 
 #div-history {
-    width: 50vh;
+    width: 30%;
     height: 10vh;
-    margin: auto;
 }
 
 .leverSpin {
@@ -473,7 +472,6 @@ body {
     --enhanced-glow-color: rgb(255, 206, 206);
     --btn-color: rgb(255, 0, 0);
     border: .25em solid var(--glow-color);
-    padding: 1em 3em;
     color: var(--glow-color);
     font-size: 1.5vh;
     font-weight: bold;
@@ -486,10 +484,9 @@ body {
     text-shadow: 0 0 .5em var(--glow-color);
     position: relative;
     transition: all 0.3s;
-    width: 60%;
+    width: 80%;
     height: 6vh;
     margin-top: 6vh;
-    margin-left: 13.5vh;
 }
 
 .history-button:after {
@@ -1037,4 +1034,74 @@ td {
 
 .btn-congra:active {
     --border-width: 5px;
+}
+
+.combo-box-div {
+    display: inline-block;
+    width: 70%;
+    height: 10vh;
+    padding-top: 6vh;
+}
+
+.combo-box-div::after {
+    content: '\25BC';
+    position: absolute;
+    top: 9vh;
+    right: 1vh;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+/* Hide the default dropdown arrow */
+.combo-box-div select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Adjust the padding to make space for the custom arrow */
+}
+
+.cbx-picker {
+    --glow-color: rgb(252, 252, 145);
+    --font-color: rgb(253, 255, 196);
+    --glow-spread-color: rgba(191, 123, 255, 0.781);
+    --enhanced-glow-color: rgb(255, 206, 206);
+    --cbx-color: rgb(255, 146, 44);
+    border: .10em solid var(--glow-color);
+    padding: 1vh 1.5vh;
+    color: var(--font-color);
+    font-size: 1vw;
+    font-weight: bold;
+    background-color: var(--cbx-color);
+    border-radius: 1vh;
+    outline: none;
+    box-shadow: 0 0 1em .25em var(--glow-color),
+        0 0 4em 1em var(--glow-spread-color),
+        inset 0 0 .75em .25em var(--glow-color);
+    text-shadow: 0 0 .5em var(--glow-color);
+    position: relative;
+    transition: all 0.3s;
+    width: 90%;
+    height: 6vh;
+    margin: auto;
+}
+
+.cbx-picker:hover {
+    color: rgb(255, 0, 0);
+    background-color: var(--glow-color);
+    box-shadow: 0 0 1em .25em var(--glow-color),
+        0 0 4em 2em var(--glow-spread-color),
+        inset 0 0 .75em .25em var(--glow-color);
+}
+
+.cbx-selected {
+    /* background-image: url("../style/image/btn-bg-4.png");
+    background-size: contain; */
+    background-color: rgb(255, 0, 0);
+}
+
+.button-div-footer {
+    display: flex;
+    margin: auto;
+    align-items: center;
+    text-align: center;
 }

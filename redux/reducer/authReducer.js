@@ -1,8 +1,9 @@
 // reducers/authReducer.js
-import { SET_AUTH_INFO, CLEAR_AUTH_INFO, UPDATE_ACCESS_TOKEN } from '../action/constants';
+import { SET_AUTH_INFO, CLEAR_AUTH_INFO, UPDATE_ACCESS_TOKEN, SET_USER_ROLE } from '../action/constants';
 
 const initialState = {
-    userInfo: null
+    userInfo: null,
+    userRole: null
 };
 
 const authReducer = (state = initialState, action) => {
@@ -23,6 +24,11 @@ const authReducer = (state = initialState, action) => {
                     ...state.userInfo,
                     accessToken: action.payload
                 }
+            }
+        case SET_USER_ROLE:
+            return {
+                ...state,
+                userRole: action.payload
             }
         default:
             return state;

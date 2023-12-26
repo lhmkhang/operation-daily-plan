@@ -4,7 +4,7 @@ import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Dr
 import Icons from '@/components/base/Icons'
 import Image from 'next/image';
 import logoBlue from '@/public/img/logoBlue.png'
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
 type NavbarSubItem = {
     itemName: string,

@@ -1,7 +1,12 @@
-import { SET_AUTH_INFO, CLEAR_AUTH_INFO } from './constants';
+import { SET_AUTH_INFO, CLEAR_AUTH_INFO, SET_USER_ROLE } from './constants';
 // Action creators
 export const setAuthInfo = (payload) => ({
     type: SET_AUTH_INFO,
+    payload
+});
+
+export const setUserRole = (payload) => ({
+    type: SET_USER_ROLE,
     payload
 });
 

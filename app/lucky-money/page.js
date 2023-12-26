@@ -6,21 +6,31 @@ import './spin.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import withAuth from "../../components/helpers/WithAuthen";
 import axios from '../../components/helpers/axiosHelper';
-import { AuthContext } from "@/components/helpers/AuthenContext";
-import { useSelector } from "react-redux";
+// import { AuthContext } from "@/components/helpers/AuthenContext";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserRole } from '../../redux/action/authActions'
 
 const Main = () => {
     // const [username, setUsername] = useState("username");
     const [availableUsers, setAvailableUsers] = useState([]);
     const { username, accessToken, refeshToken } = useSelector(state => state.auth.userInfo)
 
+    console.log(username);
+
+    const data = useSelector(state => state.auth.userRole)
+
+    const [teamList, setTeamList] = useState(["Chọn nhóm"]);
+    const [selectedOption, setSelectedOption] = useState(teamList[0]);
+
     // console.log(username);
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        const fetchUserList = async () => {
+        const fetchUserRole = async () => {
             try {
                 const response = await axios.get(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-users`,
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-role/${username}`,
                     {
                         headers: {
                             "Content-Type": "application/json",
@@ -28,13 +38,17 @@ const Main = () => {
                         },
                     }
                 );
-                setAvailableUsers(response.data.data);
+                dispatch(setUserRole({
+                    userRole: response.data.data[0]
+                }));
             } catch (error) {
                 console.log(error);
             }
         }
-        fetchUserList();
+        fetchUserRole();
     }, []);
+
+    console.log(data);
 
     const [displayedUsers, setDisplayedUsers] = useState([]);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -59,14 +73,13 @@ const Main = () => {
     };
 
     useEffect(() => {
-        fetchData();
+        fetchTeamData();
     }, []);
 
-
-    let fetchData = async () => {
+    let fetchTeamData = async () => {
         try {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-reward`,
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-team`,
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -74,11 +87,48 @@ const Main = () => {
                     },
                 }
             );
-            setData(response.data.data)
+            const teamListRes = response.data.data;
+            for (let index = 0; index < teamListRes.length; index++) {
+                setTeamList(teamList => [...teamList, teamListRes[index]])
+            }
         } catch (error) {
             console.log(error);
         }
     }
+
+    let fetchData = async (selected) => {
+        try {
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-reward-v2`,
+                {
+                    teamName: selected,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`,
+                    }
+                }
+
+            );
+            setData(response.data.data.prize)
+            setAvailableUsers(response.data.data.userList);
+            // console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleSelectChange = (event) => {
+        setSelectedOption(event.target.value);
+        if (event.target.value !== 'Chọn nhóm') {
+            fetchData(event.target.value);
+        } else {
+            setData([]);
+            setAvailableUsers([]);
+            setPrizeButton(0);
+        }
+    };
 
     const timerRef = useRef(null);
 
@@ -90,7 +140,6 @@ const Main = () => {
         if (spinStatus) {
             startRotation();
             activeLever();
-
         }
     }, [spinStatus])
 
@@ -119,8 +168,8 @@ const Main = () => {
                 setWinnerUsername(selectedUser);
                 setAvailableUsers([...availableUsers]);
                 setDisplayIndex(0);
-                // console.log("availableUsers: ", availableUsers);
-                // console.log("Selected user: " + selectedUser);
+                console.log("availableUsers: ", availableUsers);
+                console.log("Selected user: " + selectedUser);
                 return;
             }
 
@@ -263,11 +312,12 @@ const Main = () => {
     const handleRewardStore = async () => {
         const fetchDataReward = async () => {
             const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/check-reward`,
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/check-reward-v2`,
                 {
                     user: username,
                     winnerUsername: winnerUsername,
-                    selectPrize: selectPrize
+                    selectPrize: selectPrize,
+                    teamName: selectedOption
                 },
                 {
                     headers: {
@@ -278,7 +328,8 @@ const Main = () => {
             );
         }
         fetchDataReward();
-        fetchData();
+        fetchTeamData();
+        fetchData(selectedOption);
     }
 
     // console.log("winnerUsername:", winnerUsername);
@@ -303,6 +354,8 @@ const Main = () => {
         }
         fetchRewardInfo();
     }
+
+
 
     return (
         <main className='bgCfg'>
@@ -404,8 +457,19 @@ const Main = () => {
                             </div>
                         </div>
                     </div>
-                    <div id='div-history'>
-                        <button className='history-button' onClick={() => { handleHistoryOpen(); handleRewardInfo(); }}>XEM KẾT QUẢ</button>
+                    <div className="button-div-footer">
+                        <div className="combo-box-div">
+                            <select className={`cbx-picker ${selectedOption === 'Chọn nhóm' ? '' : 'cbx-selected'}`} value={selectedOption} onChange={handleSelectChange}>
+                                {teamList.map((option, index) => (
+                                    <option key={index} value={option}>
+                                        {option}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div id='div-history'>
+                            <button className='history-button' onClick={() => { handleHistoryOpen(); handleRewardInfo(); }}>XEM KẾT QUẢ</button>
+                        </div>
                     </div>
                 </div>
                 <div className='right-control'>

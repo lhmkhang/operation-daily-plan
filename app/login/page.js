@@ -7,11 +7,11 @@ import UseAuth from '@/components/helpers/UseAuth'
 import useUserAuth from '@/components/helpers/UseUserAuth';
 import UseSignUp from '@/components/helpers/UseSignUp';
 import { useRouter } from 'next/navigation';
-import { AuthContext } from '@/components/helpers/AuthenContext';
+// import { AuthContext } from '@/components/helpers/AuthenContext';
 import style from '../../styles/Login.module.css'
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setAuthInfo } from '../../redux/action/authActions'
-import { useContext } from 'react';
+// import { useContext } from 'react';
 
 const Login = () => {
     // const { login } = useContext(AuthContext);

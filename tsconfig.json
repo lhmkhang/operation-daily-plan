@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/lucky_money/page.js",
-    "app/layout.js",
+    "app/layout.tsx",
     "components/helpers/UseAuth.js",
     "app/login/page.js",
     "app/page.js"
