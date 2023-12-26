@@ -101,6 +101,11 @@ const quantityChecker = async (req, res, next) => {
 const quantityCheckerV2 = async (req, res, next) => {
   try {
     const { teamName, selectPrize, winnerUsername, user } = req.body;
+
+    if (!teamName || !selectPrize || !winnerUsername || !user) {
+      return next(new handleMessage('your request body is not valid!', StatusCodes.BAD_REQUEST));
+    }
+
     const prizeName = selectPrize === 1 ? '500.000 vnđ' : selectPrize === 2 ? '300.000 vnđ' : selectPrize === 3 ? '200.000 vnđ' : '100.000 vnđ'
 
     /* // Tìm và cập nhật số lượng phần thưởng
@@ -109,10 +114,6 @@ const quantityCheckerV2 = async (req, res, next) => {
       { $inc: { quantity: -1 } }, // Hành động: giảm số lượng đi 1
       { new: true } // Trả về document sau khi cập nhật
     ); */
-
-    if (!teamName || !selectPrize || !winnerUsername || user) {
-
-    }
 
     const result = await Prize.findOneAndUpdate(
       {
@@ -163,14 +164,36 @@ const getPrizes = async (req, res, next) => {
 
 const getPrizesV2 = async (req, res, next) => {
   const { teamName } = req.body;
+
   try {
+    if (!teamName) {
+      return next(new handleMessage('your request body is not valid!', StatusCodes.BAD_REQUEST));
+    }
+
     const result = await Prize.findOne({ team_name: teamName })
-    const transformData = result.prizes.map(item => {
+    const transformDataPrize = result.prizes.map(item => {
       return {
         name: item.name, quantity: item.quantity, prize: item.prize
       }
     })
-    return res.json({ data: transformData, status: 200 });
+
+    const rewardedUsers = await RewardInfo.find({ teamName }, { userName: 1, _id: 0 });
+    const rewardedUserNames = rewardedUsers.map(user => user.userName);
+
+    const users = await luckyMoneyUser.find({
+      TeamName: teamName,
+      Username: { $nin: rewardedUserNames }
+    }, {
+      Username: 1,
+      Fullname: 1,
+      _id: 0
+    });
+
+    // const result = await luckyMoneyUser.find({}, { "Username": 1, "Fullname": 1, "_id": 0 });
+
+    const transformedData = users.map(item => `${item.Username} - ${item.Fullname}`);
+
+    return res.json({ data: { prize: transformDataPrize, userList: transformedData }, status: 200 });
   } catch (error) {
     next(error);
   }

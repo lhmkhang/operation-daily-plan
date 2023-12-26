@@ -26,7 +26,6 @@ const verifyJWTToken = (req, res, next) => {
   } else {
     return next(new handleMessage(MESSAGE.AUTH.VERIFY_TOKEN.TOKEN_EXPIRED, StatusCodes.UNAUTHORIZED));
   }
-
 };
 
 module.exports = verifyJWTToken;
