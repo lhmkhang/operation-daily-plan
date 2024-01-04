@@ -1,4 +1,4 @@
-import { SET_AUTH_INFO, CLEAR_AUTH_INFO, SET_USER_ROLE } from './constants';
+import { SET_AUTH_INFO, CLEAR_AUTH_INFO, SET_USER_ROLE, UPDATE_ACCESS_TOKEN } from './constants';
 // Action creators
 export const setAuthInfo = (payload) => ({
     type: SET_AUTH_INFO,
@@ -15,6 +15,6 @@ export const clearAuthInfo = () => ({
 });
 
 export const updateAccessToken = (newAccessToken) => ({
-    type: 'UPDATE_ACCESS_TOKEN',
+    type: UPDATE_ACCESS_TOKEN,
     payload: newAccessToken
 });

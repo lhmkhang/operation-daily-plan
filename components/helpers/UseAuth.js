@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../helpers/axiosHelper';
 
 export default async function UseAuth(props) {
     try {

@@ -64,14 +64,14 @@ function withAuth(WrappedComponent) {
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    setIsNavigating(true);
+                    setIsNavigating(false);
                     setIsLoading(false);
                     router.push("/login");
                 }
             };
 
             checkTokenAndRefresh();
-        }, [userInfo, router, /* setUser */]);
+        }, [userInfo, router, dispath /* setUser */]);
 
         if (isNavigating) {
             return null;

@@ -54,17 +54,32 @@ const Login = () => {
 
             // console.log("userInfo: ", userInfo);
             let status = await UseAuth(userInfo);
-            // console.log("login:", login);
 
             if (status) {
                 const updateStatus = { ...status, username: userInfo.username };
 
-                // login(updateStatus);
                 dispatch(setAuthInfo({
-                    accessToken: updateStatus.accessToken,
-                    refreshToken: updateStatus.refreshToken,
-                    username: updateStatus.username
-                }))
+                    userInfo: updateStatus
+                }));
+
+                /* const fetchUserRole = async () => {
+                    try {
+                        const response = await axios.get(
+                            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-role/${updateStatus.username}`,
+                            {
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: `Bearer ${updateStatus.accessToken}`,
+                                },
+                            }
+                        );
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+                fetchUserRole(); */
+
+                // login(updateStatus);
                 router.push("/lucky-money");
             } else {
                 setSignInStatus("fail");
@@ -276,4 +291,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Login;

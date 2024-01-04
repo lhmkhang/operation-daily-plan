@@ -1,4 +1,5 @@
 'use client'
+
 import "@fontsource/dancing-script";
 import "@fontsource/lemonada";
 import { useEffect, useState, useContext, useRef, useMemo } from 'react';
@@ -7,49 +8,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import withAuth from "../../components/helpers/WithAuthen";
 import axios from '../../components/helpers/axiosHelper';
 // import { AuthContext } from "@/components/helpers/AuthenContext";
-import { useSelector, useDispatch } from "react-redux";
-import { setUserRole } from '../../redux/action/authActions'
+import { useSelector } from "react-redux";
+import WithPageAccessControl from '../../components/helpers/WithPageAccessControl';
 
 const Main = () => {
     // const [username, setUsername] = useState("username");
     const [availableUsers, setAvailableUsers] = useState([]);
-    const { username, accessToken, refeshToken } = useSelector(state => state.auth.userInfo)
-
-    console.log(username);
-
-    const data = useSelector(state => state.auth.userRole)
-
+    const { username, accessToken } = useSelector(state => state.auth.userInfo)
     const [teamList, setTeamList] = useState(["Chọn nhóm"]);
     const [selectedOption, setSelectedOption] = useState(teamList[0]);
-
-    // console.log(username);
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        const fetchUserRole = async () => {
-            try {
-                const response = await axios.get(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-role/${username}`,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    }
-                );
-                dispatch(setUserRole({
-                    userRole: response.data.data[0]
-                }));
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchUserRole();
-    }, []);
-
-    console.log(data);
-
     const [displayedUsers, setDisplayedUsers] = useState([]);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     // const [seletedUser, setSeletedUser] = useState("");
@@ -72,12 +39,15 @@ const Main = () => {
         setDisplayedUsers(previousUsers => [{ name: userName, key: Math.random(), top: 0 }, ...previousUsers]);
     };
 
+    // console.log(data);
+
     useEffect(() => {
         fetchTeamData();
     }, []);
 
     let fetchTeamData = async () => {
         try {
+            'use server'
             const response = await axios.get(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-team`,
                 {
@@ -168,8 +138,8 @@ const Main = () => {
                 setWinnerUsername(selectedUser);
                 setAvailableUsers([...availableUsers]);
                 setDisplayIndex(0);
-                console.log("availableUsers: ", availableUsers);
-                console.log("Selected user: " + selectedUser);
+                // console.log("availableUsers: ", availableUsers);
+                // console.log("Selected user: " + selectedUser);
                 return;
             }
 
@@ -355,8 +325,6 @@ const Main = () => {
         fetchRewardInfo();
     }
 
-
-
     return (
         <main className='bgCfg'>
             <div className='flex full-control'>
@@ -486,4 +454,4 @@ const Main = () => {
     );
 }
 
-export default withAuth(Main);
+export default Main;
