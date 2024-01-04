@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'production') {
 
     initWheelApiRoutes(app);
     initUserApiRoutes(app);
-    initAuthorizationRoutes(app);
+    // initAuthorizationRoutes(app);
 
     app.use((err, req, res, next) => {
       err.statusCode = err.statusCode || 500;

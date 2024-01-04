@@ -84,22 +84,104 @@ const userLogin = async (username, password, req, res, next) => {
     loggerInfo.info("Login successful");
 
     const userId = foundUser._id.toString();
-    const userRoleData = await UserRoleModel.findOne({
+    /* const userRoleData = await UserRoleModel.findOne({
       userId: { $in: [userId] },
     });
-    const roles = { [userRoleData.role]: userRoleData.functional };
+
+
+    const roles = { [userRoleData.role]: userRoleData.functional }; */
+
+    const roles = await UserModel.aggregate([
+      { $match: { username } },
+
+      {
+        $lookup: {
+          from: "user_roles",
+          localField: "roleId",
+          foreignField: "_id",
+          as: "roleInfo"
+        }
+      },
+      { $unwind: "$roleInfo" },
+
+      {
+        $lookup: {
+          from: "apps",
+          let: { userRoleId: "$roleId" },
+          pipeline: [
+            { $match: { $expr: { $in: ["$$userRoleId", "$roleId"] } } }
+          ],
+          as: "apps"
+        }
+      },
+
+      {
+        $lookup: {
+          from: "project_stores",
+          let: { userId: "$_id" },
+          pipeline: [
+            { $match: { $expr: { $in: ["$$userId", "$userId"] } } }
+          ],
+          as: "projects"
+        }
+      },
+      { $unwind: "$projects" },
+
+      {
+        $lookup: {
+          from: "project_tasks",
+          let: { projectId: "$projects._id", userId: "$_id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$$projectId", "$project_id"] } } },
+            { $match: { $expr: { $in: ["$$userId", "$userId"] } } }
+          ],
+          as: "projects.tasks"
+        }
+      },
+
+      {
+        $group: {
+          _id: "$_id",
+          username: { $first: "$username" },
+          apps: { $first: "$apps.route" },
+          projects: {
+            $push: {
+              name: "$projects.name",
+              tasks: "$projects.tasks.name"
+            }
+          }
+        }
+      },
+
+      {
+        $project: {
+          username: 1,
+          apps: 1,
+          projects: {
+            $arrayToObject: {
+              $map: {
+                input: "$projects",
+                as: "project",
+                in: { k: "$$project.name", v: "$$project.tasks" }
+              }
+            }
+          }
+        }
+      }
+    ]);
 
     // Create AT: username + user role + Id, RF: username, store RF in the database
     const accessToken = JWTService.createToken({
-      UserInfo: { userId, username, roles },
+      UserInfo: { userId, username, roles: roles[0] },
     });
 
     const refreshToken = JWTService.createRefreshToken({
-      UserInfo: { userId, username, roles },
+      UserInfo: { userId, username, roles: roles[0] },
     });
 
     await UserModel.findByIdAndUpdate(userId, { refreshToken: refreshToken });
-    return res.json({ accessToken, refreshToken });
+
+    return res.json({ accessToken, refreshToken, roles: roles[0] });
 
   } catch (err) {
     next(err);
