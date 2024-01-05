@@ -9,12 +9,47 @@ const dotenv = require("dotenv").config({ path: path.resolve(__dirname, "..", ".
 const logger = require("./helpers/logger");
 const loggerInfo = logger.getLogger("infoLogger");
 const app = express();
-const verifyJWTToken = require("./middlewaves/verifyJWTToken.js");
 const initAuthorizationRoutes = require("./routers/authorization.js");
 // const { UserRoleModel } = require("./models/UserRoleModel");
+const http = require("http");
+const socketIo = require("socket.io");
 
 // Connect to mongoDB
 connectDB();
+
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:3001", // Thay đổi với địa chỉ của client
+    methods: ["GET", "POST"]
+  }
+});
+
+const activeUsers = {};
+
+io.on('connection', (socket) => {
+  loggerInfo.info('User connected');
+
+  socket.on('joinLuckyMoney', (userId) => {
+    if (activeUsers[userId] && activeUsers[userId] !== socket.id) {
+      // Nếu người dùng đang sử dụng chức năng này, gửi sự kiện 'accessDenied'
+      socket.emit('accessDenied');
+    } else {
+      // Đánh dấu người dùng này với socket.id hiện tại
+      activeUsers[userId] = socket.id;
+    }
+  });
+
+  socket.on('disconnect', () => {
+    // Khi người dùng ngắt kết nối, xóa đánh dấu nếu không có kết nối khác
+    Object.keys(activeUsers).forEach(userId => {
+      if (activeUsers[userId] === socket.id) {
+        delete activeUsers[userId];
+      }
+    });
+    loggerInfo.info('User disconnected');
+  });
+});
 
 if (process.env.NODE_ENV === 'production') {
   const next = require('next');
@@ -117,10 +152,13 @@ if (process.env.NODE_ENV === 'production') {
     });
   });
 
-  app.listen(process.env.PORT || 8090, () => {
+  /* app.listen(process.env.PORT || 8090, () => {
+    loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
+  }); */
+
+  server.listen(process.env.PORT || 8090, () => {
     loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
   });
-
 
   // test rabbitmq
   /* app.post("/sendLog", async (req, res, next) => {
