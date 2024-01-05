@@ -20,7 +20,10 @@ const Main = () => {
 
     useEffect(() => {
         // Khởi tạo kết nối tới socket server
-        const socket = io('http://127.0.0.1:8090');
+
+        console.log(process.env.NEXT_PUBLIC_ALLOW_CORS_SOCKET);
+
+        const socket = io(process.env.NEXT_PUBLIC_ALLOW_CORS_SOCKET);
 
         // Gửi sự kiện kết nối tới server
         socket.emit('joinLuckyMoney', username);
