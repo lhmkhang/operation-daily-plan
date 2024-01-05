@@ -19,5 +19,5 @@ export function createPersistStorage() {
     }
 
     // Returns localStorage on client-side.
-    return createWebStorage('session');
+    return createWebStorage('local');
 }

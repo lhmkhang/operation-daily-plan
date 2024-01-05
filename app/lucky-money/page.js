@@ -5,16 +5,42 @@ import "@fontsource/lemonada";
 import { useEffect, useState, useContext, useRef, useMemo } from 'react';
 import './spin.css';
 import "bootstrap/dist/css/bootstrap.min.css";
-import withAuth from "../../components/helpers/WithAuthen";
+// import withAuth from "../../components/helpers/WithAuthen";
 import axios from '../../components/helpers/axiosHelper';
 // import { AuthContext } from "@/components/helpers/AuthenContext";
 import { useSelector } from "react-redux";
-import WithPageAccessControl from '../../components/helpers/WithPageAccessControl';
+// import WithPageAccessControl from '../../components/helpers/WithPageAccessControl';
+import io from 'socket.io-client';
+import NotAllow from '@/components/base/NotAllow';
 
 const Main = () => {
+
+    const { username, accessToken } = useSelector(state => state.auth.userInfo)
+    const [accessStatus, setAccessStatus] = useState(false);
+
+    useEffect(() => {
+        // Khởi tạo kết nối tới socket server
+        const socket = io('http://127.0.0.1:8090');
+
+        // Gửi sự kiện kết nối tới server
+        socket.emit('joinLuckyMoney', username);
+
+        // Lắng nghe phản hồi từ server
+        socket.on('accessDenied', () => {
+            setAccessStatus(true);
+            // Xử lý thêm như đóng trang, chuyển hướng, v.v.
+        });
+
+        // Xử lý khi component unmount
+        return () => {
+            // Gửi sự kiện người dùng rời khỏi trang lucky money
+            socket.emit('leaveLuckyMoney', username);
+            socket.disconnect();
+        };
+    }, []);
+
     // const [username, setUsername] = useState("username");
     const [availableUsers, setAvailableUsers] = useState([]);
-    const { username, accessToken } = useSelector(state => state.auth.userInfo)
     const [teamList, setTeamList] = useState(["Chọn nhóm"]);
     const [selectedOption, setSelectedOption] = useState(teamList[0]);
     const [displayedUsers, setDisplayedUsers] = useState([]);
@@ -325,6 +351,14 @@ const Main = () => {
         fetchRewardInfo();
     }
 
+    if (accessStatus) {
+        return (
+            <>
+                <NotAllow />
+            </>
+        )
+    }
+
     return (
         <main className='bgCfg'>
             <div className='flex full-control'>
@@ -452,6 +486,7 @@ const Main = () => {
             </div>
         </main>
     );
+
 }
 
 export default Main;

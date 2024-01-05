@@ -1,43 +1,34 @@
 'use client'
-import React, { useContext, useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
-import { AuthContext } from "../helpers/AuthenContext";
+import React, { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { updateAccessToken } from '../../redux/action/authActions'
+import { updateAccessToken } from '../../redux/action/authActions';
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 function withAuth(WrappedComponent) {
-
     function WithAuthComponent(props) {
         const router = useRouter();
-        // const { user, setUser } = useContext(AuthContext);
         const [isLoading, setIsLoading] = useState(true);
-        const [isNavigating, setIsNavigating] = useState(false);
-        const userInfo = useSelector(state => state.auth)
-        const dispath = useDispatch();
-        // console.log("URL: ", usePathname());
+        const userInfo = useSelector(state => state.auth);
+        const dispatch = useDispatch();
+        const currentPath = usePathname();
 
         useEffect(() => {
-            let accessToken;
-            let refreshToken;
-            let username;
-
-            // console.log(`User in WithAuthen HOC: ${user}`);
+            // Bỏ qua xác thực nếu đang ở trang /login
+            if (currentPath === '/login' || currentPath === '/') {
+                setIsLoading(false);
+                return;
+            }
 
             const checkTokenAndRefresh = async () => {
                 try {
                     if (!userInfo) {
-                        setIsNavigating(true);
                         router.push("/login");
                     } else {
-                        // accessToken = JSON.parse(user).accessToken;
-                        // refreshToken = JSON.parse(user).refreshToken;
-                        // username = JSON.parse(user).username;
-
-                        accessToken = userInfo.userInfo.accessToken;
-                        refreshToken = userInfo.userInfo.refreshToken;
-                        username = userInfo.userInfo.username;
+                        const accessToken = userInfo.userInfo.accessToken;
+                        const refreshToken = userInfo.userInfo.refreshToken;
+                        const username = userInfo.userInfo.username;
 
                         const decodedToken = jwtDecode(accessToken);
                         const currentTime = Date.now() / 1000;
@@ -51,12 +42,7 @@ function withAuth(WrappedComponent) {
 
                             const newAccessToken = response.data.newAccessToken;
 
-                            dispath(updateAccessToken(newAccessToken));
-
-                            // let tokenData = JSON.parse(sessionStorage.getItem("token"));
-                            // tokenData.accessToken = newAccessToken;
-                            // setUser(JSON.stringify(tokenData)); // Cập nhật context
-                            // sessionStorage.setItem("token", JSON.stringify(tokenData));
+                            dispatch(updateAccessToken(newAccessToken));
                             setIsLoading(false);
                         } else {
                             setIsLoading(false);
@@ -64,18 +50,12 @@ function withAuth(WrappedComponent) {
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    setIsNavigating(false);
-                    setIsLoading(false);
                     router.push("/login");
                 }
             };
 
             checkTokenAndRefresh();
-        }, [userInfo, router, dispath /* setUser */]);
-
-        if (isNavigating) {
-            return null;
-        }
+        }, [router, userInfo, dispatch]);
 
         if (isLoading) {
             return <div>Loading...</div>; // Hoặc một spinner
