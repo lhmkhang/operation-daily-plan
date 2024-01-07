@@ -16,8 +16,11 @@ axios.interceptors.response.use(
 
       try {
         // Yêu cầu lấy lại access token bằng refresh token
-        const sessionData = JSON.parse(sessionStorage.getItem("token"));
-        const { refreshToken, username } = sessionData;
+        const localData = JSON.parse(localStorage.getItem("persist:root"));
+
+        console.log(localData);
+
+        const { refreshToken, username } = localData.auth.userInfo;
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/refresh-token`,
           {
