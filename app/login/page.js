@@ -7,15 +7,11 @@ import UseAuth from '@/components/helpers/UseAuth'
 import useUserAuth from '@/components/helpers/UseUserAuth';
 import UseSignUp from '@/components/helpers/UseSignUp';
 import { useRouter } from 'next/navigation';
-// import { AuthContext } from '@/components/helpers/AuthenContext';
 import style from '../../styles/Login.module.css'
 import { useDispatch } from 'react-redux';
-import { setAuthInfo } from '../../redux/action/authActions'
-// import { useContext } from 'react';
+import { setAuthInfo } from '../../redux/reducer/authSlice';
 
 const Login = () => {
-    // const { login } = useContext(AuthContext);
-
     const router = useRouter();
     const [type, setType] = React.useState("signIn");
     const [passwordMatch, setPasswordMatch] = React.useState(true);
@@ -62,24 +58,6 @@ const Login = () => {
                     userInfo: updateStatus
                 }));
 
-                /* const fetchUserRole = async () => {
-                    try {
-                        const response = await axios.get(
-                            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/get-role/${updateStatus.username}`,
-                            {
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    Authorization: `Bearer ${updateStatus.accessToken}`,
-                                },
-                            }
-                        );
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-                fetchUserRole(); */
-
-                // login(updateStatus);
                 router.push("/lucky-money");
             } else {
                 setSignInStatus("fail");

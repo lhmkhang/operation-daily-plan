@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { updateAccessToken } from '../../redux/action/authActions';
+import { updateAccessToken } from '../../redux/reducer/authSlice';
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
@@ -51,6 +51,7 @@ function withAuth(WrappedComponent) {
                 } catch (error) {
                     console.error("Error:", error);
                     router.push("/login");
+                    setIsLoading(false);
                 }
             };
 

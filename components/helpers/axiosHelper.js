@@ -28,12 +28,6 @@ axios.interceptors.response.use(
 
         const newAccessToken = response.data.newAccessToken;
 
-        // Cập nhật access token mới vào sessionStorage
-        let tokenData = JSON.parse(sessionStorage.getItem("token"));
-        tokenData.accessToken = newAccessToken;
-
-        sessionStorage.setItem("token", JSON.stringify(tokenData));
-
         // Cập nhật access token mới vào header của request ban đầu
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
