@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { updateAccessToken } from '../../redux/reducer/authSlice';
+import { updateAccessToken } from '@/lib/redux/slices/authSlice/authSlice';
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 

@@ -2,12 +2,11 @@
 import './globals.css'
 // import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
-// import { AuthProvider } from '../components/helpers/AuthenContext';
-import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'; // Import PersistGate
-import { store, persistor } from '../redux/store/store';
+import { persistor } from '../lib/redux/store/store';
 import WithPageAccessControl from '@/components/helpers/WithPageAccessControl'
 import withAuth from '@/components/helpers/WithAuthen';
+import { Providers } from '../lib/redux/providers'
 
 const roboto = Roboto({ weight: ['300', '400', '500', '700'], subsets: ["cyrillic"] });
 
@@ -23,7 +22,7 @@ export default function RootLayout({ children }) {
 
   return (
     // <AuthProvider>
-    <Provider store={store}>
+    <Providers>
       <html lang="en">
         <head>
           <title>Operation</title>
@@ -35,7 +34,7 @@ export default function RootLayout({ children }) {
           </PersistGate>
         </body>
       </html>
-    </Provider>
+    </Providers>
     // </AuthProvider>
   );
 }

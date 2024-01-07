@@ -20,9 +20,6 @@ const Main = () => {
 
     useEffect(() => {
         // Khởi tạo kết nối tới socket server
-
-        console.log(process.env.NEXT_PUBLIC_ALLOW_CORS_SOCKET);
-
         const socket = io(process.env.NEXT_PUBLIC_ALLOW_CORS_SOCKET);
 
         // Gửi sự kiện kết nối tới server

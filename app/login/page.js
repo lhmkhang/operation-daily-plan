@@ -9,7 +9,7 @@ import UseSignUp from '@/components/helpers/UseSignUp';
 import { useRouter } from 'next/navigation';
 import style from '../../styles/Login.module.css'
 import { useDispatch } from 'react-redux';
-import { setAuthInfo } from '../../redux/reducer/authSlice';
+import { setAuthInfo } from '@/lib/redux/slices/authSlice/authSlice';
 
 const Login = () => {
     const router = useRouter();
