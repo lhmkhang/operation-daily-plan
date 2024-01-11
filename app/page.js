@@ -25,8 +25,6 @@ function App() {
         // Kiểm tra trạng thái đăng nhập từ AuthContext
         if (!userInfo) {
             router.push('/login'); // Chưa đăng nhập, chuyển hướng đến trang đăng nhập
-        } else {
-            router.push('/lucky-money'); // Đã đăng nhập, chuyển hướng đến trang /lucky-money
         }
     }, [userInfo, router]);
 

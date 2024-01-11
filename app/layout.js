@@ -1,5 +1,6 @@
 'use client'
 import './globals.css'
+import style from '@/styles/Main.module.css';
 // import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import { PersistGate } from 'redux-persist/integration/react'; // Import PersistGate
@@ -8,6 +9,10 @@ import WithPageAccessControl from '@/components/helpers/WithPageAccessControl'
 import withAuth from '@/components/helpers/WithAuthen';
 import { Providers } from '../lib/redux/providers'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
+import FooterMenu from '@/components/base/Footer';
+import HeaderDashboard from '@/components/base/HeaderDashboard';
+import SidebarMenu from '@/components/base/Sidebar';
+import { usePathname } from 'next/navigation';
 
 const roboto = Roboto({ weight: ['300', '400', '500', '700'], subsets: ["cyrillic"] });
 
@@ -20,9 +25,9 @@ const roboto = Roboto({ weight: ['300', '400', '500', '700'], subsets: ["cyrilli
 export default function RootLayout({ children }) {
   const ProtectedChildren = WithPageAccessControl(() => children);
   const AuthProtectedChildren = withAuth(ProtectedChildren);
+  const currentPath = usePathname();
 
   return (
-    // <AuthProvider>
     <Providers>
       <html lang="en">
         <head>
@@ -31,13 +36,24 @@ export default function RootLayout({ children }) {
         <body className={`${roboto.className} m-0`}>
           <PersistGate loading={null} persistor={persistor}>
             <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-              <AuthProtectedChildren />
+              {currentPath === '/login' ? <AuthProtectedChildren /> :
+                <main className={style.contain}>
+                  <div>
+                    <HeaderDashboard />
+                  </div>
+                  <div className={style.workspaceFlex}>
+                    <SidebarMenu />
+                    <div className={style.content}>
+                      <AuthProtectedChildren />
+                    </div>
+                  </div>
+                  <FooterMenu />
+                </main>
+              }
             </AppRouterCacheProvider>
-            {/* {children} */}
           </PersistGate>
         </body>
       </html>
     </Providers>
-    // </AuthProvider>
   );
 }

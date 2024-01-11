@@ -1,0 +1,41 @@
+.contain {
+    width: 100vw;
+    height: auto;
+}
+
+.workspaceFlex {
+    min-height: 1600px;
+    width: 100%;
+    background-color: white;
+    color: black;
+    position: relative;
+    display: flex
+}
+
+.content {
+    width: 100%;
+    max-height: 100vh;
+    background-color: white;
+    box-shadow: 5px 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 1vh;
+    padding-left: 1vw;
+    margin-left: 0.5vw;
+    overflow-y: scroll;
+}
+
+.disable {
+    display: none;
+}
+
+.test {
+    outline: auto blueviolet 10vh;
+}
+
+.test-div {
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background-color: burlywood;
+    margin: auto;
+    text-align: center;
+}

@@ -1,0 +1,31 @@
+.headerMain {
+  .headerContainer {
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.headerMain {
+  background-color: #2A76D2;
+}
+
+.avatarDiv {
+  float: right;
+  right: 0;
+  position: absolute;
+}
+
+.avatarButton {
+  padding: 2vh;
+  border-width: 5px;
+  border: 1vh;
+  border-radius: 1vh;
+  height: 6vh;
+  font-size: medium;
+
+  p {
+    padding-left: 1vh;
+    color: white;
+  }
+}

@@ -1,0 +1,21 @@
+/* Sidebar.css */
+
+.drawer-main .MuiPaper-root {
+    background-color: #2A76D2;
+    color: white;
+    border: 0;
+}
+
+.image-logo {
+    background-size: cover;
+    width: 20vh;
+    height: 3.5vh;
+    padding: 0 0.5vh 0 0.5vh
+}
+
+.image-logo-small {
+    background-size: cover;
+    width: 45px;
+    height: 25px;
+    padding: 0 5px 0 5px
+}
