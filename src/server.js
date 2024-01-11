@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
   });
 });
 
-if (process.env.NODE_ENV === 'production') {
+/* if (process.env.NODE_ENV === 'production') {
   const next = require('next');
   const dev = process.env.NODE_ENV !== 'production';
   const nextApp = next({ dev: dev, dir: process.env.PATH_FOLDER_FE, port: process.env.PORT });
@@ -148,51 +148,48 @@ if (process.env.NODE_ENV === 'production') {
       return handleNextRequests(req, res);
     });
 
-    /* app.listen(process.env.PORT || 8090, () => {
-      loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
-    }); */
-
     server.listen(process.env.PORT || 8090, () => {
       loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
     });
 
   })
-} else {
-  // Configuration of express server
-  serverConfiguration(app);
+}  */
 
-  initWheelApiRoutes(app);
-  initUserApiRoutes(app);
-  initWebRoutes(app);
-  // initAuthorizationRoutes(app);
+// Configuration of express server
+serverConfiguration(app);
 
-  app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || "error";
+initWheelApiRoutes(app);
+initUserApiRoutes(app);
+initWebRoutes(app);
+// initAuthorizationRoutes(app);
 
-    const loggerError = logger.getLogger("errorLogger");
-    loggerError.error(
-      `${req.ip} - ${req.method} ${req.url} ${err.statusCode} - ${err.name}: ${err.message}\n${err.stack}`
-    );
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || "error";
 
-    res.status(err.statusCode).json({
-      status: err.status,
-      code: err.statusCode,
-      message: err.message,
-    });
+  const loggerError = logger.getLogger("errorLogger");
+  loggerError.error(
+    `${req.ip} - ${req.method} ${req.url} ${err.statusCode} - ${err.name}: ${err.message}\n${err.stack}`
+  );
+
+  res.status(err.statusCode).json({
+    status: err.status,
+    code: err.statusCode,
+    message: err.message,
   });
+});
 
-  /* app.listen(process.env.PORT || 8090, () => {
-    loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
-  }); */
+/* app.listen(process.env.PORT || 8090, () => {
+  loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
+}); */
 
-  server.listen(process.env.PORT || 8090, () => {
-    loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
-  });
+server.listen(process.env.PORT || 8090, () => {
+  loggerInfo.info(`Express server is running on port ${process.env.PORT}`);
+});
 
-  // test rabbitmq
-  /* app.post("/sendLog", async (req, res, next) => {
-    await producer.publishMessage(req.body.logType, req.body.message);
-    res.send();
-  }); */
-}
+// test rabbitmq
+/* app.post("/sendLog", async (req, res, next) => {
+  await producer.publishMessage(req.body.logType, req.body.message);
+  res.send();
+}); */
+
