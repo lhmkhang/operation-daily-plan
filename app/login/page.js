@@ -1,7 +1,20 @@
 'use client'
 import Image from 'next/image';
-import * as React from 'react';
-import { Checkbox, Link, TextField, FormControlLabel, Button, CssBaseline } from '@mui/material';
+// import * as React from 'react';
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+
+// const TextField = dynamic(() => import('@mui/material/TextField'));
+
+
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import TextField from '@mui/material/TextField';
+// import Input from '@mui/material/Input';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Button from '@mui/material/Button';
+// import { TextField } from '@mui/material';
+
 import backgroundImg from '@/public/img/backgroundLogin7.jpg';
 import UseAuth from '@/components/helpers/UseAuth'
 import useUserAuth from '@/components/helpers/UseUserAuth';
@@ -13,14 +26,14 @@ import { setAuthInfo } from '@/lib/redux/slices/authSlice/authSlice';
 
 const Login = () => {
     const router = useRouter();
-    const [type, setType] = React.useState("signIn");
-    const [passwordMatch, setPasswordMatch] = React.useState(true);
-    const [signInStatus, setSignInStatus] = React.useState("");
-    const [signUpStatus, setSignUpStatus] = React.useState("");
-    const [usernameEmpty, setUsernameEmpty] = React.useState(false);
-    const [passwordEmpty, setPasswordEmpty] = React.useState(false);
-    const [confirmPasswordSignUpText, setConfirmPasswordSignUpText] = React.useState("");
-    const [confirmPasswordEmpty, setConfirmPasswordEmpty] = React.useState(false);
+    const [type, setType] = useState("signIn");
+    const [passwordMatch, setPasswordMatch] = useState(true);
+    const [signInStatus, setSignInStatus] = useState("");
+    const [signUpStatus, setSignUpStatus] = useState("");
+    const [usernameEmpty, setUsernameEmpty] = useState(false);
+    const [passwordEmpty, setPasswordEmpty] = useState(false);
+    const [confirmPasswordSignUpText, setConfirmPasswordSignUpText] = useState("");
+    const [confirmPasswordEmpty, setConfirmPasswordEmpty] = useState(false);
 
     //handle login from redus
     const dispatch = useDispatch();
@@ -58,7 +71,7 @@ const Login = () => {
                     userInfo: updateStatus
                 }));
 
-                router.push("/lucky-money");
+                router.push("/");
             } else {
                 setSignInStatus("fail");
                 // router.push("/");
@@ -88,13 +101,13 @@ const Login = () => {
         }
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         setUsernameEmpty(false);
         setPasswordEmpty(false);
         setConfirmPasswordEmpty(false);
     }, [type, userInfo])
 
-    React.useEffect(() => {
+    useEffect(() => {
         document.addEventListener('keydown', handleKeyPress);
         return () => {
             document.removeEventListener('keydown', handleKeyPress);

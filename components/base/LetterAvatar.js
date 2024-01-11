@@ -1,11 +1,8 @@
 import * as React from 'react'
 import { Avatar } from '@mui/material';
 
-type Props = {
-    name: string
-}
 
-function stringToColor(string: string) {
+function stringToColor(string) {
     let hash = 0;
     let i;
 
@@ -25,7 +22,7 @@ function stringToColor(string: string) {
     return color;
 }
 
-function stringAvatar(name: string) {
+function stringAvatar(name) {
     return {
         sx: {
             bgcolor: stringToColor(name),
@@ -34,7 +31,7 @@ function stringAvatar(name: string) {
     };
 }
 
-const LetterAvatar = (props: Props) => {
+const LetterAvatar = (props) => {
     return (
         <Avatar {...stringAvatar(props.name)} />
     )

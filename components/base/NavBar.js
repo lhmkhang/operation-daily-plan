@@ -6,25 +6,6 @@ import Image from 'next/image';
 import logoBlue from '@/public/img/logoBlue.png'
 // import { useRouter } from 'next/navigation';
 
-type NavbarSubItem = {
-    itemName: string,
-    itemIcon: string,
-    itemComponent: string
-}
-
-type NavbarItem = {
-    itemName: string,
-    itemIcon: string,
-    itemComponent: string
-    itemType: string
-    subItems?: NavbarSubItem[]
-}
-
-type Props = {
-    navbarItems?: NavbarItem[],
-    selectedComponent: (key: string) => void
-}
-
 const listNavItems = [
     {
         itemName: "Report",
@@ -48,7 +29,7 @@ const listNavItems = [
 
 const drawerWidth = 240;
 
-const openedMixin = (theme: Theme): CSSObject => ({
+const openedMixin = (theme) => ({
     width: drawerWidth,
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
@@ -57,7 +38,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
     overflowX: 'hidden',
 });
 
-const closedMixin = (theme: Theme): CSSObject => ({
+const closedMixin = (theme) => ({
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -95,12 +76,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const NavBar = (props: Props) => {
-    const [open, setOpen] = React.useState(false);
-    const [activeComponent, setActiveComponent] = React.useState("");
-    const [openSub, setOpenSub] = React.useState("");
+const NavBar = (props) => {
+    const [open, setOpen] = useState(false);
+    const [activeComponent, setActiveComponent] = useState("");
+    const [openSub, setOpenSub] = useState("");
 
-    const styleTextEaseInOut = (animate: string) => {
+    const styleTextEaseInOut = (animate) => {
         return {
             transitionTimingFunction: animate === "in" ? 'cubic-bezier(0.4, 0, 1, 1)' : 'cubic-bezier(0, 0, 0.2, 1)',
             transitionDuration: '300ms',
@@ -108,8 +89,8 @@ const NavBar = (props: Props) => {
         }
     }
 
-    const handleClick = (name: string, type?: string) => {
-        props.selectedComponent(name);
+    const handleClick = (name, type) => {
+        /* props.selectedComponent(name); */
         if (type !== "single") {
             let subState = openSub.includes("open") ? name + "_close" : name + "_open";
             setOpenSub(subState);

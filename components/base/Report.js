@@ -1,11 +1,9 @@
 import React from 'react'
 
-type Props = {}
-
-const Report = (props: Props) => {
+const Report = (props) => {
     return (
         <div>Report</div>
     )
 }
 
-export default Report
+export default Report;
