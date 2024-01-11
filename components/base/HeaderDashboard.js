@@ -33,7 +33,7 @@ function ResponsiveAppBar() {
                     <div className={style.avatarDiv}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} className={style.avatarButton}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" className={style.avatar} />
+                                <Avatar alt={userInfo.username} src="/static/images/avatar/2.jpg" className={style.avatar} />
                                 <p>{userInfo.username}</p>
                             </IconButton>
                         </Tooltip>

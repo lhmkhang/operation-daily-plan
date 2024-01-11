@@ -190,6 +190,7 @@ export default function Sidebar() {
                     onClick={handleDrawerOpen}
                     style={{ ...(open && { display: 'none' }) }}
                     className='image-logo-small'
+                    alt='Logo Company'
                 />
             </DrawerHeader>
             <Divider />
