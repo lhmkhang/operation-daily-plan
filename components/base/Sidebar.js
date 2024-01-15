@@ -19,6 +19,8 @@ import logoSCompany from '@/public/img/logoWhite.png'
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { setSelectPage } from '@/lib/redux/slices/pageSlice/pageSlice';
 
 
 const drawerWidth = 240;
@@ -104,11 +106,13 @@ const listNavItems = [
 ]
 
 export default function Sidebar() {
+    const dispatch = useDispatch();
     const router = useRouter();
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [activeComponent, setActiveComponent] = React.useState("");
     const userInfo = useSelector(state => state.auth.userInfo);
+    const pageSelect = useSelector(state => state.page.pageSelect);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -127,6 +131,8 @@ export default function Sidebar() {
     }
 
     const handleRoute = (route) => {
+        dispatch(setSelectPage(route));
+
         router.push("/" + route);
     }
 
@@ -145,7 +151,11 @@ export default function Sidebar() {
                             minHeight: 48,
                             justifyContent: open ? 'initial' : 'center',
                             px: 2.5,
-                            color: 'white'
+                            color: 'white',
+                            backgroundColor: obj.itemRoute == pageSelect ? "#ffffff5e" : "",
+                            '&:hover': {
+                                backgroundColor: obj.itemRoute == pageSelect ? "#ffffff5e" : "rgba(125, 231, 255, 0.672)"
+                            }
                         }}
                     >
                         <ListItemIcon
@@ -200,8 +210,7 @@ export default function Sidebar() {
                     alt='Logo Company'
                 />
             </DrawerHeader>
-            <Divider />
-            <List>
+            <List sx={{ p: 0 }}>
                 {renderNavItems()}
             </List>
         </Drawer>

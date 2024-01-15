@@ -26,6 +26,12 @@ function ResponsiveAppBar() {
         setAnchorElUser(null);
     };
 
+    const handleHeaderOps = (setting) => {
+        if (anchorElUser != null && setting === "Logout") {
+            console.log("Log out !");
+        }
+    }
+
     return userInfo ? (
         <AppBar position="static" className={style.headerMain}>
             <Container maxWidth="xl" className={style.headerContainer}>
@@ -33,7 +39,7 @@ function ResponsiveAppBar() {
                     <div className={style.avatarDiv}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} className={style.avatarButton}>
-                                <Avatar alt={userInfo.username} src="/static/images/avatar/2.jpg" className={style.avatar} />
+                                <Avatar alt={userInfo.username} className={style.avatar} />
                                 <p>{userInfo.username}</p>
                             </IconButton>
                         </Tooltip>
@@ -54,8 +60,8 @@ function ResponsiveAppBar() {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu} style={{ width: '25vh' }}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                                <MenuItem key={setting} style={{ width: '25vh' }}>
+                                    <Typography textAlign="center" onClick={() => { handleHeaderOps(setting) }} >{setting}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>

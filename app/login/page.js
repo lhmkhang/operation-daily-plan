@@ -23,6 +23,7 @@ import { useRouter } from 'next/navigation';
 import style from '../../styles/Login.module.css'
 import { useDispatch } from 'react-redux';
 import { setAuthInfo } from '@/lib/redux/slices/authSlice/authSlice';
+import { setSelectPage } from '@/lib/redux/slices/pageSlice/pageSlice';
 
 const Login = () => {
     const router = useRouter();
@@ -69,6 +70,10 @@ const Login = () => {
 
                 dispatch(setAuthInfo({
                     userInfo: updateStatus
+                }));
+
+                dispatch(setSelectPage({
+                    pageSelect: 'home'
                 }));
 
                 router.push("/home");

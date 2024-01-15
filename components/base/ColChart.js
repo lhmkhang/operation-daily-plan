@@ -40,17 +40,17 @@ const WineProductionChart = (props) => {
             },
             options: {
                 scales: {
-                    xAxes: [{
+                    x: {
                         ticks: {
                             display: true
                         }
-                    }],
-                    yAxes: [{
+                    },
+                    y: {
                         display: true,
                         ticks: {
                             beginAtZero: true,
                         }
-                    }]
+                    }
                 },
                 plugins: {
                     legend: {
