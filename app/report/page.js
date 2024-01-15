@@ -1,6 +1,6 @@
 function Report() {
     return (
-        <div>khang</div>
+        <div>loi</div>
     )
 }
 
