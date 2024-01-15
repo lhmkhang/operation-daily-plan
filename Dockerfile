@@ -29,5 +29,8 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/redux ./redux
 
+ENV NEXT_PUBLIC_API_BASE_URL=https://ops-int-be-uat.digi-texx.vn
+ENV NEXT_PUBLIC_ALLOW_CORS_SOCKET=https://ops-int-be-uat.digi-texx.vn
+
 # Chạy máy chủ Next.js
 CMD ["npm", "start"]

@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
             <AppRouterCacheProvider options={{ enableCssLayer: true }}>
               {currentPath === '/login' ? <AuthProtectedChildren /> :
                 <main className={style.contain}>
-                  <div>
+                  <div className={style.headerDiv}>
                     <HeaderDashboard />
                   </div>
                   <div className={style.workspaceFlex}>

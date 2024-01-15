@@ -1,26 +1,32 @@
 .contain {
-    width: 100vw;
+    width: 100%;
     height: auto;
 }
 
+.headerDiv {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: block;
+    z-index: 2;
+}
+
 .workspaceFlex {
-    min-height: 1600px;
+    min-height: 89vh;
     width: 100%;
     background-color: white;
     color: black;
     position: relative;
-    display: flex
+    display: flex;
+    margin-top: 7vh;
 }
 
 .content {
     width: 100%;
-    max-height: 100vh;
+    max-height: 96vh;
+    padding-bottom: 4vh;
     background-color: white;
     box-shadow: 5px 0 5px rgba(0, 0, 0, 0.1);
-    border-radius: 1vh;
-    padding-left: 1vw;
-    margin-left: 0.5vw;
-    overflow-y: scroll;
 }
 
 .disable {

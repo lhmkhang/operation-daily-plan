@@ -25,6 +25,8 @@ function App() {
         // Kiểm tra trạng thái đăng nhập từ AuthContext
         if (!userInfo) {
             router.push('/login'); // Chưa đăng nhập, chuyển hướng đến trang đăng nhập
+        } else {
+            router.push('/home')
         }
     }, [userInfo, router]);
 

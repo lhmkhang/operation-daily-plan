@@ -71,7 +71,7 @@ const Login = () => {
                     userInfo: updateStatus
                 }));
 
-                router.push("/");
+                router.push("/home");
             } else {
                 setSignInStatus("fail");
                 // router.push("/");

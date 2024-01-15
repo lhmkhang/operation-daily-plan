@@ -18,6 +18,7 @@ import logoCompany from '@/public/img/Logo_DIGI-TEXX_2021_White.png'
 import logoSCompany from '@/public/img/logoWhite.png'
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 
 const drawerWidth = 240;
@@ -73,36 +74,37 @@ const listNavItems = [
     {
         itemName: "Home",
         itemIcon: "IoHome",
-        itemComponent: "home",
+        itemRoute: "home",
         itemType: "single"
     },
     {
         itemName: "Lucky Money",
         itemIcon: "Games",
-        itemComponent: "lucky_money",
+        itemRoute: "lucky_money",
         itemType: "single"
     },
     {
         itemName: "Spin Machine",
         itemIcon: "SportsEsports",
-        itemComponent: "spin",
+        itemRoute: "spin",
         itemType: "single"
     },
     {
         itemName: "Report",
         itemIcon: "Description",
-        itemComponent: "report",
+        itemRoute: "report",
         itemType: "single"
     },
     {
         itemName: "Report Config",
         itemIcon: "SettingsSuggest",
-        itemComponent: "report_config",
+        itemRoute: "report-config",
         itemType: "single"
     }
 ]
 
 export default function Sidebar() {
+    const router = useRouter();
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
     const [activeComponent, setActiveComponent] = React.useState("");
@@ -124,6 +126,10 @@ export default function Sidebar() {
         }
     }
 
+    const handleRoute = (route) => {
+        router.push("/" + route);
+    }
+
     const renderNavItems = () => {
         const result = [];
         for (let i = 0; i < listNavItems.length; i++) {
@@ -132,6 +138,7 @@ export default function Sidebar() {
                 <ListItem
                     key={obj.itemName}
                     disablePadding
+                    onClick={() => handleRoute(obj.itemRoute)}
                 >
                     <ListItemButton
                         sx={{

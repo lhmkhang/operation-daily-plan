@@ -1,0 +1,23 @@
+.mainDiv {
+    width: 100%;
+    height: auto;
+    /* background-color: blue; */
+}
+
+.lineDiv {
+    display: inline-flex;
+    width: 94%;
+    padding: 5vh 5vh 0 5vh;
+}
+
+.chartDiv {
+    width: 45%;
+    height: 400px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1cap;
+    border-width: 2px;
+    border-style: outset;
+}
