@@ -9,12 +9,12 @@ const { StatusCodes } = require("http-status-codes");
 const handleMessage = require("../utils/HandleMessage");
 const MESSAGE = require("../utils/message");
 
-const createNewUser = async (username, password, res, next) => {
+const createNewUser = async (username, password, fullName, res, next) => {
   try {
     const existingUser = await UserModel.findOne({ username: username });
 
     // Username or password is empty
-    if (!username || !password)
+    if (!username || !password || !fullName)
       return next(
         new handleMessage(
           MESSAGE.AUTH.CREATE_USER.EMPTY_CREDENTIALS,
@@ -33,7 +33,7 @@ const createNewUser = async (username, password, res, next) => {
 
     //Store username and hash password in the database
     const hashUserPassword = bcryptServices.hashPassword(password);
-    const newUser = await UserModel.create({ username, password: hashUserPassword });
+    const newUser = await UserModel.create({ username, password: hashUserPassword, fullName });
 
     //Push default user role is VIEWER
     const userId = newUser._id;
@@ -143,6 +143,7 @@ const userLogin = async (username, password, req, res, next) => {
         $group: {
           _id: "$_id",
           username: { $first: "$username" },
+          fullName: { $first: "$fullName" },
           apps: { $first: "$apps.route" },
           projects: {
             $push: {
@@ -156,6 +157,7 @@ const userLogin = async (username, password, req, res, next) => {
       {
         $project: {
           username: 1,
+          fullName: 1,
           apps: 1,
           projects: {
             $arrayToObject: {

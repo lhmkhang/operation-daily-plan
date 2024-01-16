@@ -3,7 +3,8 @@ const userServices = require("../services/userService");
 const handleCreateNewUser = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
-  userServices.createNewUser(username, password, res, next);
+  const fullName = req.body.fullName;
+  userServices.createNewUser(username, password, fullName, res, next);
 };
 
 const handleChangePassword = async (req, res, next) => {
