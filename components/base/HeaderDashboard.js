@@ -43,7 +43,7 @@ function ResponsiveAppBar() {
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} className={style.avatarButton}>
                                 <Avatar alt={userInfo.username} className={style.avatar} />
-                                <p>{userInfo.username}</p>
+                                <p>{userInfo.roles.fullName}</p>
                                 {/* <p>Nguyễn Tân Quốc</p> */}
                             </IconButton>
                         </Tooltip>
