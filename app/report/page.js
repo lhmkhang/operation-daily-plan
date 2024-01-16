@@ -1,6 +1,6 @@
-function Report () {
+function Report() {
     return (
-        <div>aaaaaaaaaaaaaaaaaaaaa</div>
+        <div>khang</div>
     )
 }
 
