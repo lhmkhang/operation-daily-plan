@@ -1,7 +1,7 @@
 /* Sidebar.css */
 
 .drawer-main .MuiPaper-root {
-    background-color: #2A76D2;
+    background-color: rgba(24,71,119,255);
     color: white;
     border: 0;
 }

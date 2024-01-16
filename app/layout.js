@@ -37,18 +37,24 @@ export default function RootLayout({ children }) {
           <PersistGate loading={null} persistor={persistor}>
             <AppRouterCacheProvider options={{ enableCssLayer: true }}>
               {currentPath === '/login' ? <AuthProtectedChildren /> :
-                <main className={style.contain}>
-                  <div className={style.headerDiv}>
-                    <HeaderDashboard />
+                <div className={style.contain}>
+                  <div className={style.sidebarDiv}>
+                    <SidebarMenu />
                   </div>
                   <div className={style.workspaceFlex}>
-                    <SidebarMenu />
+                    <div className={style.headerDiv}>
+                      <HeaderDashboard />
+                    </div>
                     <div className={style.content}>
-                      <AuthProtectedChildren />
+                      <div className={style.contentDiv}>
+                        <AuthProtectedChildren />
+                      </div>
+                      <div className={style.footerDiv}>
+                        <FooterMenu />
+                      </div>
                     </div>
                   </div>
-                  <FooterMenu />
-                </main>
+                </div>
               }
             </AppRouterCacheProvider>
           </PersistGate>
