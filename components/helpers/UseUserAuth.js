@@ -3,7 +3,8 @@ import { useState } from 'react';
 export default function UseUserAuth() {
   const [userInfo, setUserInfo] = useState({
     username: "",
-    password: ""
+    password: "",
+    fullName: ""
   });
 
   const handleUserChange = (e) => {

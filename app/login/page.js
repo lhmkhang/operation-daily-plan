@@ -2,18 +2,12 @@
 import Image from 'next/image';
 // import * as React from 'react';
 import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
-
-// const TextField = dynamic(() => import('@mui/material/TextField'));
-
 
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
-// import Input from '@mui/material/Input';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Button from '@mui/material/Button';
-// import { TextField } from '@mui/material';
 
 import backgroundImg from '@/public/img/backgroundLogin7.jpg';
 import UseAuth from '@/components/helpers/UseAuth'
@@ -28,11 +22,12 @@ import { setSelectPage } from '@/lib/redux/slices/pageSlice/pageSlice';
 const Login = () => {
     const router = useRouter();
     const [type, setType] = useState("signIn");
-    const [passwordMatch, setPasswordMatch] = useState(true);
+    const [passwordMatch, setPasswordMatch] = useState(undefined);
     const [signInStatus, setSignInStatus] = useState("");
     const [signUpStatus, setSignUpStatus] = useState("");
     const [usernameEmpty, setUsernameEmpty] = useState(false);
     const [passwordEmpty, setPasswordEmpty] = useState(false);
+    const [fullNameEmpty, setFullNameEmpty] = useState(false);
     const [confirmPasswordSignUpText, setConfirmPasswordSignUpText] = useState("");
     const [confirmPasswordEmpty, setConfirmPasswordEmpty] = useState(false);
 
@@ -50,7 +45,12 @@ const Login = () => {
     const handleBlur = ({ target }) => {
         if (target.name == "username") setUsernameEmpty(!target.value);
         if (target.name == "password") setPasswordEmpty(!target.value);
-        if (target.name == "confirmPassword") setConfirmPasswordEmpty(!target.value);
+        if (target.name == "fullName") setFullNameEmpty(!target.value);
+        if (target.name == "confirmPassword") {
+            setConfirmPasswordEmpty(!target.value);
+            setPasswordMatch(() => confirmPasswordSignUpText === userInfo.password);
+        }
+
     }
 
     const handleSignIn = async () => {
@@ -83,12 +83,25 @@ const Login = () => {
     }
 
     const handleSignUp = async () => {
-        if (userInfo.username && userInfo.password) {
+        if (!userInfo.username) {
+            setUsernameEmpty(true);
+        }
+        if (!userInfo.password) {
+            setPasswordEmpty(true);
+        }
+        if (!userInfo.fullName) {
+            setFullNameEmpty(true);
+        }
+        if (confirmPasswordSignUpText !== userInfo.password) {
+            setPasswordMatch(false);
+        }
+        if (userInfo.username && userInfo.password && userInfo.fullName && confirmPasswordSignUpText === userInfo.password) {
             let status = await UseSignUp(userInfo);
             if (status) {
                 setType("signIn");
-                setUserInfo({ username: "", password: "" });
+                setUserInfo({ username: "", password: "", fullName: "" });
                 setConfirmPasswordSignUpText("");
+                setPasswordMatch(undefined);
                 setSignUpStatus("signIn");
             } else {
                 setSignUpStatus("fail");
@@ -108,6 +121,8 @@ const Login = () => {
         setUsernameEmpty(false);
         setPasswordEmpty(false);
         setConfirmPasswordEmpty(false);
+        setPasswordMatch(undefined);
+        setFullNameEmpty(false);
     }, [type, userInfo])
 
     useEffect(() => {
@@ -143,7 +158,7 @@ const Login = () => {
                                 variant='contained'
                                 size='small'
                                 className={`${style.btn_switch_right} ${type === 'signIn' ? style.btn_inactive : ""}`}
-                                /* onClick={() => setType("signUp")} */>
+                                onClick={() => setType("signUp")}>
                                 Sign Up
                             </Button>
                         </div>
@@ -209,7 +224,7 @@ const Login = () => {
                                     Sign In
                                 </Button>
                                 <Link
-                                    /* onClick={() => setType("signUp")} */
+                                    onClick={() => setType("signUp")}
                                     underline="hover"
                                     className='text-xs cursor-pointer'>
                                     Create an account
@@ -231,6 +246,20 @@ const Login = () => {
                                 onChange={handleUserChange}
                                 onBlur={handleBlur}
                                 value={userInfo.username}
+                            />
+                            <TextField
+                                id='fullNameSignUp'
+                                label='Full Name'
+                                variant='standard'
+                                size='small'
+                                fullWidth
+                                required
+                                name='fullName'
+                                helperText={fullNameEmpty ? "Fullname cannot be empty" : " "}
+                                error={fullNameEmpty}
+                                onChange={handleUserChange}
+                                onBlur={handleBlur}
+                                value={userInfo.fullName}
                             />
                             <TextField
                                 id='passwordSignUp'
@@ -256,9 +285,9 @@ const Login = () => {
                                 required
                                 name='confirmPassword'
                                 type='password'
-                                helperText={confirmPasswordEmpty ? "Password cannot be empty" : !passwordMatch ? "Passwords does not match" : " "}
+                                helperText={confirmPasswordEmpty ? "Password cannot be empty" : passwordMatch === false ? "Passwords does not match" : " "}
                                 onChange={handleConfirmPassword}
-                                error={confirmPasswordEmpty || !passwordMatch}
+                                error={confirmPasswordEmpty || passwordMatch === false}
                                 onBlur={handleBlur}
                                 value={confirmPasswordSignUpText}
                             />
