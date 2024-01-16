@@ -1,9 +1,9 @@
 'use client'
-import style from './../../styles/Home.module.css';
-import PieChartComponent from './../../components/base/PieChart';
-import ColumnChartCompoent from './../../components/base/ColChart';
-import LineChartComponent from './../../components/base/LineChart'
-import DonutChartComponent from './../../components/base/DonutChart'
+import style from '@/styles/Home.module.css';
+import PieChartComponent from '@/components/base/PieChart';
+import ColumnChartCompoent from '@/components/base/ColChart';
+import LineChartComponent from '@/components/base/LineChart'
+import DonutChartComponent from '@/components/base/DonutChart'
 import Error from 'next/error';
 
 const HomePage = () => {

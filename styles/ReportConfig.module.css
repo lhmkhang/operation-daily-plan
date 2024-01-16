@@ -1,0 +1,18 @@
+.contain {
+    width: 97%;
+    height: 100%;
+    margin: 0;
+    padding: 2vh;
+    position: relative;
+}
+
+.titleDiv {
+    display: flex;
+    width: 100%;
+    height: auto;
+    color: blue;
+}
+
+.middleDiv {
+    width: 83%;
+}

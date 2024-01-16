@@ -14,8 +14,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import '@/styles/sidebar.css';
 import IconComponent from '@/components/base/Icon';
-import logoCompany from '@/public/img/Logo_DIGI-TEXX_2021_White.png'
-import logoSCompany from '@/public/img/logoWhite.png'
+import logoCompany from '@/public/img/Logo3.png'
+import logoSCompany from '@/public/img/Logo2.png'
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
@@ -80,15 +80,9 @@ const listNavItems = [
         itemType: "single"
     },
     {
-        itemName: "Lucky Money",
+        itemName: "Projects",
         itemIcon: "Games",
-        itemRoute: "lucky_money",
-        itemType: "single"
-    },
-    {
-        itemName: "Spin Machine",
-        itemIcon: "SportsEsports",
-        itemRoute: "spin",
+        itemRoute: "project",
         itemType: "single"
     },
     {
@@ -113,6 +107,7 @@ export default function Sidebar() {
     const [activeComponent, setActiveComponent] = React.useState("");
     const userInfo = useSelector(state => state.auth.userInfo);
     const pageSelect = useSelector(state => state.page.pageSelect);
+    console.log(pageSelect);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -150,11 +145,11 @@ export default function Sidebar() {
                         sx={{
                             minHeight: 48,
                             justifyContent: open ? 'initial' : 'center',
-                            px: 2.5,
-                            color: 'white',
-                            backgroundColor: obj.itemRoute == pageSelect ? "#ffffff5e" : "",
+                            px: 2,
+                            color: '#B6CADC',
+                            backgroundColor: obj.itemRoute === pageSelect ? "#ffffff5e" : "",
                             '&:hover': {
-                                backgroundColor: obj.itemRoute == pageSelect ? "#ffffff5e" : "rgba(125, 231, 255, 0.672)"
+                                backgroundColor: obj.itemRoute === pageSelect ? "#ffffff5e" : "rgba(125, 231, 255, 0.672)"
                             }
                         }}
                     >
@@ -163,7 +158,7 @@ export default function Sidebar() {
                                 minWidth: 0,
                                 mr: open ? 3 : 'auto',
                                 justifyContent: 'center',
-                                color: 'white'
+                                color: `${obj.itemRoute === pageSelect ? "white" : "#B6CADC"}`,
                             }}
                         // className={`${activeComponent == obj.itemComponent ? "text-white" : ""}`}
                         >
@@ -174,7 +169,7 @@ export default function Sidebar() {
                             sx={{ opacity: open ? 1 : 0, }}
                             primaryTypographyProps={{
                                 sx: {
-                                    color: `${activeComponent == obj.itemComponent ? "rgba(0, 0, 0, 0.54)" : "white"}`,
+                                    color: `${obj.itemRoute === pageSelect ? "white" : "#B6CADC"}`,
                                     fontWeight: 600,
                                 }
                                 // style: open ? styleTextEaseInOut("in") : styleTextEaseInOut("out")
@@ -189,7 +184,7 @@ export default function Sidebar() {
 
     return userInfo ? (
         <Drawer variant="permanent" open={open} className='drawer-main'>
-            <DrawerHeader>
+            <DrawerHeader sx={{p: 0}}>
                 <Image
                     alt='Logo Company'
                     src={logoCompany}
