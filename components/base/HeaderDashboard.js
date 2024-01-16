@@ -10,13 +10,16 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import style from '@/styles/Header.module.css';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import {clearAuthInfo} from '@/lib/redux/slices/authSlice/authSlice';
+
 
 const settings = ['User Profile', 'Account Setting', 'Logout'];
 
 function ResponsiveAppBar() {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const userInfo = useSelector(state => state.auth.userInfo);
+    const dispatch = useDispatch();
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -28,7 +31,7 @@ function ResponsiveAppBar() {
 
     const handleHeaderOps = (setting) => {
         if (anchorElUser != null && setting === "Logout") {
-            console.log("Log out !");
+            dispatch(clearAuthInfo());
         }
     }
 
@@ -41,6 +44,7 @@ function ResponsiveAppBar() {
                             <IconButton onClick={handleOpenUserMenu} className={style.avatarButton}>
                                 <Avatar alt={userInfo.username} className={style.avatar} />
                                 <p>{userInfo.username}</p>
+                                {/* <p>Nguyễn Tân Quốc</p> */}
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -60,8 +64,8 @@ function ResponsiveAppBar() {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} style={{ width: '25vh' }}>
-                                    <Typography textAlign="center" onClick={() => { handleHeaderOps(setting) }} >{setting}</Typography>
+                                <MenuItem key={setting} style={{ width: '25vh' }} onClick={() => { handleHeaderOps(setting) }}>
+                                    <Typography textAlign="center">{setting}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>

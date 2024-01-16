@@ -72,9 +72,7 @@ const Login = () => {
                     userInfo: updateStatus
                 }));
 
-                dispatch(setSelectPage({
-                    pageSelect: 'home'
-                }));
+                dispatch(setSelectPage('home'));
 
                 router.push("/home");
             } else {

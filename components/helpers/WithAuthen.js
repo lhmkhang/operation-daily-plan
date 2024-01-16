@@ -49,7 +49,7 @@ function withAuth(WrappedComponent) {
                         }
                     }
                 } catch (error) {
-                    console.error("Error:", error);
+                    console.error("Error:", error.message);
                     router.push("/login");
                     setIsLoading(false);
                 }
