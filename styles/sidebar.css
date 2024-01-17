@@ -11,14 +11,14 @@
     width: 25vh;
     height: 5vh;
     padding: 0 0.5vh 0 0.5vh;
-    cursor: grab;
+    cursor: pointer;
 }
 
 .image-logo-small {
     background-size: cover;
     width: 8vh;
     height: 5.8vh;
-    cursor: grab;
+    cursor: pointer;
     padding: 0;
     /* padding: 0 5px 0 5px */
 }

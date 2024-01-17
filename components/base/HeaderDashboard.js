@@ -44,11 +44,10 @@ function ResponsiveAppBar() {
                             <IconButton onClick={handleOpenUserMenu} className={style.avatarButton}>
                                 <Avatar alt={userInfo.username} className={style.avatar} />
                                 <p>{userInfo.roles.fullName}</p>
-                                {/* <p>Nguyễn Tân Quốc</p> */}
                             </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{ mt: '45px' }}
+                            sx={{ mt: '4.5vh' }}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{

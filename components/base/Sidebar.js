@@ -3,11 +3,6 @@ import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -23,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import { setSelectPage } from '@/lib/redux/slices/pageSlice/pageSlice';
 
 
-const drawerWidth = 240;
+const drawerWidth = '24vh';
 
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -40,9 +35,9 @@ const closedMixin = (theme) => ({
         duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
-    width: `calc(${theme.spacing(7)} + 1px)`,
+    width: `calc(${theme.spacing(7)} + 0.1vh)`,
     [theme.breakpoints.up('sm')]: {
-        width: `calc(${theme.spacing(8)} + 1px)`,
+        width: `calc(${theme.spacing(8)} + 0.1vh)`,
     },
 });
 
@@ -104,10 +99,8 @@ export default function Sidebar() {
     const router = useRouter();
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
-    const [activeComponent, setActiveComponent] = React.useState("");
     const userInfo = useSelector(state => state.auth.userInfo);
     const pageSelect = useSelector(state => state.page.pageSelect);
-    console.log(pageSelect);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -143,9 +136,9 @@ export default function Sidebar() {
                 >
                     <ListItemButton
                         sx={{
-                            minHeight: 48,
+                            minHeight: '4.8vh',
                             justifyContent: open ? 'initial' : 'center',
-                            px: 2,
+                            px: '2.1vh',
                             color: '#B6CADC',
                             backgroundColor: obj.itemRoute === pageSelect ? "#ffffff5e" : "",
                             '&:hover': {
@@ -156,11 +149,10 @@ export default function Sidebar() {
                         <ListItemIcon
                             sx={{
                                 minWidth: 0,
-                                mr: open ? 3 : 'auto',
+                                mr: open ? '3.1vh' : 'auto',
                                 justifyContent: 'center',
                                 color: `${obj.itemRoute === pageSelect ? "white" : "#B6CADC"}`,
                             }}
-                        // className={`${activeComponent == obj.itemComponent ? "text-white" : ""}`}
                         >
                             <IconComponent iconName={obj.itemIcon} size='normal' />
                         </ListItemIcon>
@@ -172,7 +164,6 @@ export default function Sidebar() {
                                     color: `${obj.itemRoute === pageSelect ? "white" : "#B6CADC"}`,
                                     fontWeight: 600,
                                 }
-                                // style: open ? styleTextEaseInOut("in") : styleTextEaseInOut("out")
                             }}
                         />
                     </ListItemButton>
@@ -184,7 +175,7 @@ export default function Sidebar() {
 
     return userInfo ? (
         <Drawer variant="permanent" open={open} className='drawer-main'>
-            <DrawerHeader sx={{p: 0}}>
+            <DrawerHeader sx={{p: '0vh'}}>
                 <Image
                     alt='Logo Company'
                     src={logoCompany}
@@ -193,9 +184,6 @@ export default function Sidebar() {
                     onClick={handleDrawerClose}
                     style={open ? styleTextEaseInOut("in") : styleTextEaseInOut("out")}
                 />
-                {/* <IconButton onClick={handleDrawerOpen} style={{ ...(open && { display: 'none' }), }}>
-                    <MenuIcon sx={{ color: 'white' }} />
-                </IconButton> */}
                 <Image
                     src={logoSCompany}
                     priority
@@ -205,7 +193,7 @@ export default function Sidebar() {
                     alt='Logo Company'
                 />
             </DrawerHeader>
-            <List sx={{ p: 0 }}>
+            <List sx={{ p: '0vh' }}>
                 {renderNavItems()}
             </List>
         </Drawer>

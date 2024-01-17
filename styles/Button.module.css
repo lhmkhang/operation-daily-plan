@@ -29,3 +29,11 @@
     opacity: .85;
     box-shadow: none;
 }
+
+.btnDelete {
+    color: red;
+}
+
+.btnEdit {
+    color: #488aec;
+}
