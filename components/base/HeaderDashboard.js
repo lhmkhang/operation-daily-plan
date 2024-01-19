@@ -37,7 +37,7 @@ function ResponsiveAppBar() {
 
     return userInfo ? (
         <AppBar position="static" className={style.headerMain}>
-            <Container maxWidth="xl" className={style.headerContainer}>
+            <Container className={style.headerContainer}>
                 <Toolbar disableGutters>
                     <div className={style.avatarDiv}>
                         <Tooltip title="Open settings">

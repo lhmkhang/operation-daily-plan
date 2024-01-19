@@ -32,10 +32,23 @@
 .slideElement {
     border: solid 1px;
     border-radius: 20px;
-    padding-left: 2vh;
-    padding-right: 2vh;
+    border-color: rgba(136, 136, 136, 0.34);
+    padding: 2vh 2vh 0 2vh;
     width: 90%;
     background-color: white;
+
+    /* inline-size: 150px; */
+}
+
+.slideTitle {
+    white-space: nowrap;
+    overflow: hidden;
+    height: auto;
+    width: 10%0%;
+    padding: 0.5vh;
+    border-radius: 1vh;
+    background-color: rgba(0, 255, 255, 0.5);
+    align-items: center;
 }
 
 .slideElement:hover {

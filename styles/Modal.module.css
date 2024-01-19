@@ -1,0 +1,72 @@
+.addNewModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #000;
+    background-color: rgb(255, 255, 255);
+    padding: 4;
+}
+
+.addNewModalDiv {
+    position: relative;
+    display: inline-block;
+    color: rgb(0, 20, 243);
+    height: auto;
+    width: 120vh;
+    text-align: center;
+    margin: auto;
+    padding: 1vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.addNewModalBody {
+    display: block;
+    position: relative;
+    /* display: flex; */
+    height: auto;
+    width: 80%;
+    /* background-color: rgb(0, 0, 0); */
+    margin: auto;
+}
+
+.addNewInputGroup {
+    text-align: left;
+    position: relative;
+    display: inline-table;
+    padding-bottom: 2vh;
+    width: 100%;
+    float: left;
+
+    b {
+        padding: 1vh 0 1vh 3vh;
+        color: blue;
+        position: relative;
+        display: inline-block;
+    }
+}
+
+.inputAddNew {
+    width: 100%;
+    background-color: white
+}
+
+.groupTitle {
+    display: flex;
+}
+
+.slideAddNew {
+    width: auto;
+    padding-left: 2vh;
+}
+
+.pacingGroupDiv {
+    width: 50%;
+}
+
+.textAreaModal {
+    width: 100%;
+    background-color: white;
+    height: 30vh;
+}

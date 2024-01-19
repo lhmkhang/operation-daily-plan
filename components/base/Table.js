@@ -15,8 +15,12 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { visuallyHidden } from '@mui/utils';
-import style from '../../styles/Table.module.css'
+import ComboboxComponent from '@/components/base/Combobox';
+import Collapse from '@mui/material/Collapse';
 import ButtonComponent from './Button';
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -63,6 +67,17 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
+                <TableCell
+                    key='action'
+                    align='center'
+                    padding='normal'
+                    sx={{
+                        backgroundColor: 'lightblue',
+                        fontStyle: 'bold',
+                        color: 'blue'
+                    }}
+                >
+                </TableCell>
                 {props.headers.map((headCell) => (
                     <TableCell
                         key={headCell}
@@ -72,7 +87,8 @@ function EnhancedTableHead(props) {
                         sx={{
                             backgroundColor: 'lightblue',
                             fontStyle: 'bold',
-                            color: 'blue'
+                            color: 'blue',
+                            maxWidth: '200px'
                         }}
                     >
                         <TableSortLabel
@@ -115,7 +131,6 @@ EnhancedTableHead.propTypes = {
 
 function EnhancedTableToolbar(props) {
     const { title } = props;
-
     return (
         <Toolbar
             sx={{
@@ -135,10 +150,21 @@ function EnhancedTableToolbar(props) {
             >
                 {title}
             </Typography>
-
+            <ComboboxComponent cbcData={props.cbcData} cbcType='SearchTable' cbcId="cbcSearchGroup" />
             <TextField id="outlined-basic" label="Search Report" variant="outlined" sx={{ backgroundColor: 'white', minWidth: '30vh' }} />
         </Toolbar>
     );
+}
+
+function ConvertTitle(listGroup) {
+    console.log(listGroup);
+    let listHeader = [];
+    for (let index = 0; index < listGroup.length; index++) {
+        const formattedStrings = listGroup[index].replace(/^_/, '').replace("_", " ");
+        const resultString = formattedStrings.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        listHeader = [...listHeader, resultString]
+    }
+    return listHeader;
 }
 
 const TableComponent = (props) => {
@@ -147,8 +173,8 @@ const TableComponent = (props) => {
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    let jsonKey = [...new Set(props.tblDataString.map(value => Object.keys(value)).flat())];
-    jsonKey = jsonKey.filter(value => !props.listInvisible.includes(value));
+    const [fomrValue, setFormValue] = React.useState({}); //{combox:"abc", searchText:"def"}
+    const [open, setOpen] = React.useState(-1);
 
     const visibleRows = React.useMemo(
         () =>
@@ -159,7 +185,11 @@ const TableComponent = (props) => {
         [order, orderBy, page, rowsPerPage],
     );
 
+
     if (props.tblType === "ListReport") {
+        let jsonKey = [...new Set(props.tblDataString.map(value => Object.keys(value)).flat())];
+        jsonKey = jsonKey.filter(value => !props.listInvisible.includes(value));
+        let listGroup = [...new Set(props.tblDataString.map(value => value.Group).flat())];
 
         const handleRequestSort = (event, property) => {
             const isAsc = orderBy === property && order === 'asc';
@@ -176,6 +206,11 @@ const TableComponent = (props) => {
             setPage(0);
         };
 
+        const handleComboboxSelect = (e) => {
+            setFormValue({ ...fomrValue, group: e.target.value });
+        }
+
+
         // Avoid a layout jump when reaching the last page with empty rows.
         const emptyRows =
             page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.tblDataString.length) : 0;
@@ -183,7 +218,7 @@ const TableComponent = (props) => {
         return (
             <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar title="List Report" />
+                    <EnhancedTableToolbar title="List Report" cbcData={listGroup} comboboxSelect={handleComboboxSelect} />
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
@@ -200,7 +235,6 @@ const TableComponent = (props) => {
                             <TableBody>
                                 {visibleRows.map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
-
                                     return (
                                         <TableRow
                                             hover
@@ -209,11 +243,20 @@ const TableComponent = (props) => {
                                             sx={{ cursor: 'pointer' }}
                                         >
                                             {jsonKey.map(keys =>
-                                                <TableCell align="left" key={keys + index}>{row[keys]}</TableCell>
+                                                <TableCell
+                                                    align="left"
+                                                    key={keys + index}
+                                                    sx={{
+                                                        maxWidth: '200px',
+                                                        overflowWrap: 'break-word'
+                                                    }}
+                                                >
+                                                    {row[keys]}
+                                                </TableCell>
                                             )}
                                             <TableCell align="center">
-                                                <ButtonComponent id='btnEdit' btnType="ReportConfig" btnValue="EditNote" btnLabel="Edit" btnClass='btnEdit'/>
-                                                <ButtonComponent id='btnDelete' btnType="ReportConfig" btnValue="DeleteForever" btnLabel="Delete" btnClass='btnDelete'/>
+                                                <ButtonComponent id='btnEdit' btnType="ReportConfig" btnValue="EditNote" btnLabel="Edit" btnClass='btnEdit' />
+                                                <ButtonComponent id='btnDelete' btnType="ReportConfig" btnValue="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -242,8 +285,160 @@ const TableComponent = (props) => {
                 </Paper>
             </Box>
         );
-    } else {
+    } else if (props.tblType === "ListReportv2") {
         // thêm các nút cho các btnType khác nhau
+        let jsonKey = [...new Set(props.tblDataString.map(value => Object.keys(value)).flat())];
+        jsonKey = jsonKey.filter(value => !props.listInvisible.includes(value));
+        let listGroup = [...new Set(props.tblDataString.map(value => value.Group).flat())];
+        let listHeader = ConvertTitle(jsonKey)
+
+        const handleRequestSort = (event, property) => {
+            const isAsc = orderBy === property && order === 'asc';
+            setOrder(isAsc ? 'desc' : 'asc');
+            setOrderBy(property);
+        };
+
+        const handleChangePage = (event, newPage) => {
+            setPage(newPage);
+        };
+
+        const handleChangeRowsPerPage = (event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0);
+        };
+
+        const handleComboboxSelect = (e) => {
+            setFormValue({ ...fomrValue, group: e.target.value });
+        }
+
+
+        // Avoid a layout jump when reaching the last page with empty rows.
+        const emptyRows =
+            page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.tblDataString.length) : 0;
+
+        return (
+            <Box sx={{ width: '100%' }}>
+                <Paper sx={{ width: '100%', mb: 2 }}>
+                    <EnhancedTableToolbar title="List Report" cbcData={listGroup} comboboxSelect={handleComboboxSelect} />
+                    <TableContainer component={Paper}>
+                        <Table
+                            sx={{ minWidth: 750 }}
+                            aria-labelledby="tableTitle"
+                            size='medium'>
+                            <EnhancedTableHead
+                                headers={listHeader}
+                                order={order}
+                                orderBy={orderBy}
+                                onRequestSort={handleRequestSort}
+                                rowCount={props.tblDataString.length}
+                            />
+                            <TableBody>
+                                {visibleRows.map((row, index) => {
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                                    return (
+                                        <React.Fragment>
+                                            <TableRow
+                                                hover
+                                                tabIndex={-1}
+                                                key={index}
+                                                sx={{ cursor: 'pointer', '& > *': { borderBottom: 'unset' }, backgroundColor: '#7bb0ff' }}
+                                            >
+                                                <TableCell>
+                                                    <IconButton
+                                                        aria-label="expand row"
+                                                        size="small"
+                                                        onClick={() => setOpen(open == index ? -1 : index)}
+                                                        
+                                                    >
+                                                        {open == index ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                                    </IconButton>
+                                                </TableCell>
+                                                {jsonKey.map(keys =>
+                                                    <TableCell
+                                                        align="left"
+                                                        key={keys + index}
+                                                        sx={{
+                                                            maxWidth: '200px',
+                                                            overflowWrap: 'break-word',
+                                                            backgroundColor: '#7bb0ff'
+                                                        }}
+                                                    >
+                                                        {row[keys]}
+                                                    </TableCell>
+                                                )}
+                                                <TableCell align="center" sx={{backgroundColor: '#7bb0ff'}}>
+                                                    <ButtonComponent id='btnEdit' btnType="ReportConfig" btnValue="EditNote" btnLabel="Edit" btnClass='btnEdit' />
+                                                    <ButtonComponent id='btnDelete' btnType="ReportConfig" btnValue="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell style={{ padding: 0}} colSpan={6}>
+                                                    <Collapse in={open == index} timeout="auto" unmountOnExit>
+                                                        <Box sx={{ margin: 1 }}>
+                                                            <Typography variant="h6" gutterBottom component="div">
+                                                                Detail Group
+                                                            </Typography>
+                                                            <Table size="small" aria-label="purchases">
+                                                                <TableHead>
+                                                                    <TableRow>
+                                                                        <TableCell>ID</TableCell>
+                                                                        <TableCell>Report Name</TableCell>
+                                                                        <TableCell>Create Date</TableCell>
+                                                                        <TableCell>Description</TableCell>
+                                                                        <TableCell>Action</TableCell>
+                                                                    </TableRow>
+                                                                </TableHead>
+                                                                <TableBody>
+                                                                    {row.reports.map((reportRow) => (
+                                                                        <TableRow key={reportRow._id}>
+                                                                            <TableCell component="th" scope="row">
+                                                                                {reportRow._id}
+                                                                            </TableCell>
+                                                                            <TableCell>{reportRow.report_name}</TableCell>
+                                                                            <TableCell>{reportRow.date_create}</TableCell>
+                                                                            <TableCell>
+                                                                                {reportRow.description}
+                                                                            </TableCell>
+                                                                            <TableCell align="center">
+                                                                                <ButtonComponent id='btnEdit' btnType="ReportConfig" btnValue="EditNote" btnLabel="Edit" btnClass='btnEdit' />
+                                                                                <ButtonComponent id='btnDelete' btnType="ReportConfig" btnValue="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    ))}
+                                                                </TableBody>
+                                                            </Table>
+                                                        </Box>
+                                                    </Collapse>
+                                                </TableCell>
+                                            </TableRow>
+                                        </React.Fragment>
+                                    );
+                                })}
+                                {emptyRows > 0 && (
+                                    <TableRow
+                                        style={{
+                                            height: 53 * emptyRows,
+                                        }}
+                                    >
+                                        <TableCell colSpan={6} />
+                                    </TableRow>
+                                )}
+
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[10, 25, 50, 100]}
+                        component="div"
+                        count={props.tblDataString.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </Paper>
+            </Box>
+        );
     }
 
 };

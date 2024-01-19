@@ -2,139 +2,200 @@
 import style from '@/styles/ReportConfig.module.css';
 import ButtonComponent from '@/components/base/Button';
 import TableComponent from '@/components/base/Table';
+import ModalComponent from '@/components/base/Modal';
+
+import { useState } from 'react'
+
 
 const jsonData = [
     {
-        "ID": "01",
-        "Report Name": "Maximize Efficiency Report",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
+        "_id": "01",
+        "group_name": "Maximize Efficiency Report",
+        "description": "",
+        "user_create": "loilm",
+        "date_create": "01.12.2023",
+        "reports": [
+            {
+                "_id": "01",
+                "report_name": "Maximize Efficiency Report",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Maximize Efficiency Report For Q3, Q4 2023"
+            }
+        ],
     },
     {
-        "ID": "02",
-        "Report Name": "Customer Satisfaction Report",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
+        "_id": "02",
+        "group_name": "Customer Satisfaction Report",
+        "description": "",
+        "user_create": "loilm",
+        "date_create": "01.12.2023",
+        "reports": [
+            {
+                "_id": "02",
+                "report_name": "Customer Satisfaction Report",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Customer Satisfaction Report For Q3, Q4 2023"
+            }
+        ],
     },
     {
-        "ID": "03",
-        "Report Name": "Project Design Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
+        "_id": "03",
+        "group_name": "Internal Process Improvement Report",
+        "description": "",
+        "user_create": "loilm",
+        "date_create": "01.12.2023",
+        "reports": [
+            {
+                "_id": "03",
+                "report_name": "Project Design Report",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Project Design Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "04",
+                "report_name": "Incident Report",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Incident Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "05",
+                "report_name": "Task Manual Report",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Task Manual Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "06",
+                "report_name": "Improvement Ideas Report",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Improvement Ideas Report For Q3, Q4 2023"
+            }
+        ],
     },
     {
-        "ID": "04",
-        "Report Name": "Incident Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
+        "_id": "04",
+        "group_name": "Internal Process Improvement Report 1",
+        "description": "",
+        "user_create": "loilm",
+        "date_create": "01.12.2023",
+        "reports": [
+            {
+                "_id": "07",
+                "report_name": "Project Design Report 1",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Project Design Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "08",
+                "report_name": "Incident Report 1",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Incident Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "09",
+                "report_name": "Task Manual Report 1",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Task Manual Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "10",
+                "report_name": "Improvement Ideas Report 1",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Improvement Ideas Report For Q3, Q4 2023"
+            }
+        ],
     },
     {
-        "ID": "05",
-        "Report Name": "Task Manual Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
+        "_id": "05",
+        "group_name": "Internal Process Improvement Report 2",
+        "description": "",
+        "user_create": "loilm",
+        "date_create": "01.12.2023",
+        "reports": [
+            {
+                "_id": "11",
+                "report_name": "Project Design Report 2",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Project Design Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "12",
+                "report_name": "Incident Report 2",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Incident Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "13",
+                "report_name": "Task Manual Report 2",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Task Manual Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "14",
+                "report_name": "Improvement Ideas Report 2",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Improvement Ideas Report For Q3, Q4 2023"
+            }
+        ],
     },
     {
-        "ID": "06",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
+        "_id": "06",
+        "group_name": "Internal Process Improvement Report 3",
+        "description": "",
+        "user_create": "loilm",
+        "date_create": "01.12.2023",
+        "reports": [
+            {
+                "_id": "15",
+                "report_name": "Project Design Report 3",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Project Design Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "16",
+                "report_name": "Incident Report 3",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Incident Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "17",
+                "report_name": "Task Manual Report 3",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Task Manual Report For Q3, Q4 2023"
+            },
+            {
+                "_id": "18",
+                "report_name": "Improvement Ideas Report 3",
+                "user_create": "loilm",
+                "date_create": "01.12.2023",
+                "description": "Improvement Ideas Report For Q3, Q4 2023"
+            }
+        ],
     },
-    {
-        "ID": "07",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
-    },
-    {
-        "ID": "08",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
-    },
-    {
-        "ID": "09",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report 1",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
-    },
-    {
-        "ID": "10",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report 2",
-        "User Create": "loilm 123",
-        "Date Create": "01.12.2023"
-    },
-    {
-        "ID": "11",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report 3",
-        "User Create": "loilm",
-        "Date Create": "03.12.2023"
-    },
-    {
-        "ID": "12",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "12.12.2023"
-    },
-    {
-        "ID": "13",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
-    },
-    {
-        "ID": "14",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "09.12.2023"
-    },
-    {
-        "ID": "15",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "01.12.2023"
-    },
-    {
-        "ID": "16",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "05.12.2023"
-    },
-    {
-        "ID": "17",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "01.11.2023"
-    },
-    {
-        "ID": "18",
-        "Report Name": "Improvement Ideas Report",
-        "Group": "Internal Process Improvement Report",
-        "User Create": "loilm",
-        "Date Create": "06.13.2023",
-    }
 ]
 
-let listInvisible = ["dateDifference"];
+let listInvisible = ["dateDifference","reports"];
+
 
 // Calculate the difference between the current date and each "Date Create"
 jsonData.forEach(item => {
-    const createDate = item['Date Create'];
+    const createDate = item.date_create;
     const [day, month, year] = createDate.split('.');
     const createDateObject = new Date(`${year}-${month}-${day}`);
 
@@ -157,20 +218,24 @@ validObjects.sort((a, b) => a.dateDifference - b.dateDifference);
 const nearestObjects = validObjects.slice(0, 5);
 
 const ReportConfig = () => {
+    const [addNewMododal, setAddNewModal] = useState(false);
 
     return (
         <div className={style.contain}>
+            <ModalComponent mdStype="NewReport" mdStatus={addNewMododal} mdFnc={setAddNewModal} cbDataString={jsonData} />
             <div className={style.titleDiv}>
                 <h3>Recent report</h3>
                 <div className={style.middleDiv}></div>
-                <ButtonComponent btnType="NewReport" btnValue="NEW REPORT" />
+                <ButtonComponent btnType="NewReport" btnValue="NEW REPORT" onClick={() => { setAddNewModal(true) }} />
             </div>
             <div className={style.slideDiv}>
                 {nearestObjects.map(items => {
                     return (
                         <div className={style.slide} key={items['ID']}>
                             <div className={style.slideElement}>
-                                <h4>{items['Report Name']}</h4>
+                                <div className={style.slideTitle}>
+                                    <b>{items['Report Name']}</b>
+                                </div>
                                 <p>{items['Date Create']}</p>
                             </div>
                         </div>
@@ -178,7 +243,7 @@ const ReportConfig = () => {
                 })}
             </div>
             <div style={{ paddingTop: '3vh' }}>
-                <TableComponent tblType="ListReport" tblDataString={jsonData} listInvisible={listInvisible} />
+                <TableComponent tblType="ListReportv2" tblDataString={jsonData} listInvisible={listInvisible} />
             </div>
         </div>
     )
