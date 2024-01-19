@@ -102,7 +102,7 @@ const userLogin = async (username, password, req, res, next) => {
           as: "roleInfo"
         }
       },
-      { $unwind: "$roleInfo" },
+      { $unwind: { path: "$roleInfo", preserveNullAndEmptyArrays: true } },
 
       {
         $lookup: {
@@ -120,37 +120,21 @@ const userLogin = async (username, password, req, res, next) => {
           from: "project_stores",
           let: { userId: "$_id" },
           pipeline: [
-            { $match: { $expr: { $in: ["$$userId", "$userId"] } } }
+            { $match: { $expr: { $in: ["$$userId", "$userId"] } } },
+            {
+              $lookup: {
+                from: "project_tasks",
+                let: { projectId: "$_id", currentUserId: "$$userId" },
+                pipeline: [
+                  { $match: { $expr: { $eq: ["$$projectId", "$project_id"] } } },
+                  { $match: { $expr: { $in: ["$$currentUserId", "$userId"] } } }
+                ],
+                as: "tasks"
+              }
+            },
+            { $project: { name: 1, tasks: "$tasks.name", route: 1 } }
           ],
           as: "projects"
-        }
-      },
-      { $unwind: "$projects" },
-
-      {
-        $lookup: {
-          from: "project_tasks",
-          let: { projectId: "$projects._id", userId: "$_id" },
-          pipeline: [
-            { $match: { $expr: { $eq: ["$$projectId", "$project_id"] } } },
-            { $match: { $expr: { $in: ["$$userId", "$userId"] } } }
-          ],
-          as: "projects.tasks"
-        }
-      },
-
-      {
-        $group: {
-          _id: "$_id",
-          username: { $first: "$username" },
-          fullName: { $first: "$fullName" },
-          apps: { $first: "$apps.route" },
-          projects: {
-            $push: {
-              name: "$projects.name",
-              tasks: "$projects.tasks.name"
-            }
-          }
         }
       },
 
@@ -158,19 +142,34 @@ const userLogin = async (username, password, req, res, next) => {
         $project: {
           username: 1,
           fullName: 1,
-          apps: 1,
+          apps: { $ifNull: ["$apps.route", []] },
           projects: {
-            $arrayToObject: {
-              $map: {
-                input: "$projects",
-                as: "project",
-                in: { k: "$$project.name", v: "$$project.tasks" }
+            $cond: {
+              if: { $eq: [{ $size: "$projects" }, 0] },
+              then: {},
+              else: {
+                $arrayToObject: {
+                  $map: {
+                    input: "$projects",
+                    as: "project",
+                    in: {
+                      k: "$$project.name",
+                      v: {
+                        route: "$$project.route",
+                        tasks: { $ifNull: ["$$project.tasks", []] }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
         }
       }
+
     ]);
+
+    console.log('Roles: ', roles);
 
     // Create AT: username + user role + Id, RF: username, store RF in the database
     const accessToken = JWTService.createToken({
