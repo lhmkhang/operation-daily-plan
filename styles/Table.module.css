@@ -1,0 +1,85 @@
+.tableTitle {
+    flex: 1 1 100%;
+    color: blue;
+}
+
+.tableInputSearch {
+    background-color: white;
+    min-width: 30vh
+}
+
+.tableHeader {
+    background-color: lightblue;
+    font-style: bold;
+    color: blue;
+    max-width: 20vh
+}
+
+.tableHeaderNo {
+    background-color: lightblue;
+    font-style: bold;
+    color: blue;
+    width: 5vh;
+    text-align: left;
+}
+
+.tableHeaderAction {
+    background-color: lightblue;
+    font-style: bold;
+    color: blue;
+    width: 10vh;
+    text-align: center;
+}
+
+.tableBox {
+    width: 100%
+}
+
+.tablePaper {
+    width: 100%;
+    margin-bottom: 2vh;
+}
+
+.tableMain {
+    max-width: 750;
+}
+
+.tableMainCell {
+    max-width: 20vh;
+    overflow-wrap: break-word
+}
+
+.tableSubCell {
+    padding: 0;
+}
+
+.tableSubCallBox {
+    margin: 1
+}
+
+.tableSubTitle{
+    padding-left: 2vh;
+    color: rgba(66, 0, 141, 0.533);
+    background-color: rgba(159, 159, 159, 0.472);
+    margin-bottom: 0;
+}
+
+.tableSubTitleTable {
+    color: rgba(66, 0, 141, 0.533);
+    background-color: rgba(159, 159, 159, 0.472);
+}
+
+.tableSubHeaderNo {
+    width: 5vh;
+    text-align: left;
+}
+
+.tableSubHeaderAction {
+    font-style: bold;
+    width: 10vh;
+    text-align: center;
+}
+
+.tableSubRow {
+    background-color: rgba(159, 159, 159, 0.235);
+}

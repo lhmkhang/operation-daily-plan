@@ -21,7 +21,7 @@ import ButtonComponent from './Button';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-
+import style from '@/styles/Table.module.css';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -55,8 +55,6 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-
-
 function EnhancedTableHead(props) {
     const { order, orderBy, onRequestSort } =
         props;
@@ -71,12 +69,9 @@ function EnhancedTableHead(props) {
                     key='action'
                     align='center'
                     padding='normal'
-                    sx={{
-                        backgroundColor: 'lightblue',
-                        fontStyle: 'bold',
-                        color: 'blue'
-                    }}
+                    className={style.tableHeaderNo}
                 >
+                    No
                 </TableCell>
                 {props.headers.map((headCell) => (
                     <TableCell
@@ -84,12 +79,7 @@ function EnhancedTableHead(props) {
                         align='left'
                         padding='normal'
                         sortDirection={orderBy === headCell ? order : false}
-                        sx={{
-                            backgroundColor: 'lightblue',
-                            fontStyle: 'bold',
-                            color: 'blue',
-                            maxWidth: '200px'
-                        }}
+                        className={style.tableHeader}
                     >
                         <TableSortLabel
                             active={orderBy === headCell}
@@ -109,11 +99,7 @@ function EnhancedTableHead(props) {
                     key='action'
                     align='center'
                     padding='normal'
-                    sx={{
-                        backgroundColor: 'lightblue',
-                        fontStyle: 'bold',
-                        color: 'blue'
-                    }}
+                    className={style.tableHeaderAction}
                 >
                     Action
                 </TableCell>
@@ -143,15 +129,14 @@ function EnhancedTableToolbar(props) {
             }}
         >
             <Typography
-                sx={{ flex: '1 1 100%' }}
-                variant="h6"
+                className={style.tableTitle}
+                variant="h5"
                 id="tableTitle"
                 component="div"
             >
                 {title}
             </Typography>
-            <ComboboxComponent cbcData={props.cbcData} cbcType='SearchTable' cbcId="cbcSearchGroup" />
-            <TextField id="outlined-basic" label="Search Report" variant="outlined" sx={{ backgroundColor: 'white', minWidth: '30vh' }} />
+            <TextField id="outlined-basic" label="Search Report" variant="outlined" className={style.tableInputSearch} />
         </Toolbar>
     );
 }
@@ -218,7 +203,7 @@ const TableComponent = (props) => {
         return (
             <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar title="List Report" cbcData={listGroup} comboboxSelect={handleComboboxSelect} />
+                    <EnhancedTableToolbar title="List Group Report" cbcData={listGroup} comboboxSelect={handleComboboxSelect} />
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
@@ -317,12 +302,12 @@ const TableComponent = (props) => {
             page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.tblDataString.length) : 0;
 
         return (
-            <Box sx={{ width: '100%' }}>
-                <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar title="List Report" cbcData={listGroup} comboboxSelect={handleComboboxSelect} />
+            <Box className={style.tableBox} >
+                <Paper className={style.tablePaper}>
+                    <EnhancedTableToolbar title="List Group Report" cbcData={listGroup} comboboxSelect={handleComboboxSelect} />
                     <TableContainer component={Paper}>
                         <Table
-                            sx={{ minWidth: 750 }}
+                            className={style.tableMain}
                             aria-labelledby="tableTitle"
                             size='medium'>
                             <EnhancedTableHead
@@ -341,56 +326,82 @@ const TableComponent = (props) => {
                                                 hover
                                                 tabIndex={-1}
                                                 key={index}
-                                                sx={{ cursor: 'pointer', '& > *': { borderBottom: 'unset' }, backgroundColor: '#7bb0ff' }}
+                                                sx={{ cursor: 'pointer' }}
                                             >
-                                                <TableCell>
+                                                <TableCell
+                                                    align="left"
+                                                    key={index}
+                                                    className={style.tableMainCell}
+                                                >
+                                                    {index + 1}
+
                                                     <IconButton
                                                         aria-label="expand row"
                                                         size="small"
                                                         onClick={() => setOpen(open == index ? -1 : index)}
-                                                        
+
                                                     >
                                                         {open == index ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                                     </IconButton>
                                                 </TableCell>
-                                                {jsonKey.map(keys =>
-                                                    <TableCell
-                                                        align="left"
-                                                        key={keys + index}
-                                                        sx={{
-                                                            maxWidth: '200px',
-                                                            overflowWrap: 'break-word',
-                                                            backgroundColor: '#7bb0ff'
-                                                        }}
-                                                    >
-                                                        {row[keys]}
-                                                    </TableCell>
+                                                {jsonKey.map(keys => {
+                                                    if (keys == "_id") {
+                                                        return (
+                                                            <TableCell
+                                                                align="left"
+                                                                key={keys + index}
+                                                                className={style.tableMainCell}
+                                                            >
+                                                                {index + 1}
+
+                                                                <IconButton
+                                                                    aria-label="expand row"
+                                                                    size="small"
+                                                                    onClick={() => setOpen(open == index ? -1 : index)}
+
+                                                                >
+                                                                    {open == index ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                                                </IconButton>
+                                                            </TableCell>
+                                                        )
+                                                    } else {
+                                                        return (
+                                                            <TableCell
+                                                                align="left"
+                                                                key={keys + index}
+                                                                className={style.tableMainCell}
+                                                            >
+                                                                {row[keys]}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                }
                                                 )}
-                                                <TableCell align="center" sx={{backgroundColor: '#7bb0ff'}}>
+                                                <TableCell align="center" >
                                                     <ButtonComponent id='btnEdit' btnType="ReportConfig" btnValue="EditNote" btnLabel="Edit" btnClass='btnEdit' />
                                                     <ButtonComponent id='btnDelete' btnType="ReportConfig" btnValue="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell style={{ padding: 0}} colSpan={6}>
+                                                <TableCell className={style.tableSubCell} colSpan={6}>
                                                     <Collapse in={open == index} timeout="auto" unmountOnExit>
-                                                        <Box sx={{ margin: 1 }}>
-                                                            <Typography variant="h6" gutterBottom component="div">
+                                                        <Box className={style.tableSubCallBox}>
+                                                            <Typography variant="h6" gutterBottom component="div" className={style.tableSubTitle}>
                                                                 Detail Group
                                                             </Typography>
                                                             <Table size="small" aria-label="purchases">
                                                                 <TableHead>
-                                                                    <TableRow>
-                                                                        <TableCell>ID</TableCell>
+                                                                    <TableRow className={style.tableSubTitleTable}>
+                                                                        <TableCell className={style.tableSubHeaderNo}>No</TableCell>
                                                                         <TableCell>Report Name</TableCell>
                                                                         <TableCell>Create Date</TableCell>
                                                                         <TableCell>Description</TableCell>
-                                                                        <TableCell>Action</TableCell>
+                                                                        <TableCell className={style.tableSubHeaderAction}>Action</TableCell>
                                                                     </TableRow>
                                                                 </TableHead>
                                                                 <TableBody>
                                                                     {row.reports.map((reportRow) => (
-                                                                        <TableRow key={reportRow._id}>
+                                                                        <TableRow key={reportRow._id} className={style.tableSubRow}>
                                                                             <TableCell component="th" scope="row">
                                                                                 {reportRow._id}
                                                                             </TableCell>

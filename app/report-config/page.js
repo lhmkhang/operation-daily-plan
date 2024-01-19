@@ -190,7 +190,7 @@ const jsonData = [
     },
 ]
 
-let listInvisible = ["dateDifference","reports"];
+let listInvisible = ["dateDifference","reports","_id"];
 
 
 // Calculate the difference between the current date and each "Date Create"
