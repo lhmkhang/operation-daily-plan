@@ -15,7 +15,6 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { visuallyHidden } from '@mui/utils';
-import ComboboxComponent from '@/components/base/Combobox';
 import Collapse from '@mui/material/Collapse';
 import ButtonComponent from './Button';
 import IconButton from '@mui/material/IconButton';
@@ -66,7 +65,7 @@ function EnhancedTableHead(props) {
         <TableHead>
             <TableRow>
                 <TableCell
-                    key='action'
+                    key='no'
                     align='center'
                     padding='normal'
                     className={style.tableHeaderNo}
@@ -86,7 +85,7 @@ function EnhancedTableHead(props) {
                             direction={orderBy === headCell ? order : 'asc'}
                             onClick={createSortHandler(headCell)}
                         >
-                            {headCell}
+                            {ConvertTitle(headCell)}
                             {orderBy === headCell ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -141,24 +140,18 @@ function EnhancedTableToolbar(props) {
     );
 }
 
-function ConvertTitle(listGroup) {
-    console.log(listGroup);
-    let listHeader = [];
-    for (let index = 0; index < listGroup.length; index++) {
-        const formattedStrings = listGroup[index].replace(/^_/, '').replace("_", " ");
-        const resultString = formattedStrings.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-        listHeader = [...listHeader, resultString]
-    }
-    return listHeader;
+function ConvertTitle(dbString) {
+    const formattedStrings = dbString.replace(/^_/, '').replace("_", " ");
+    const resultString = formattedStrings.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    return resultString;
 }
 
 const TableComponent = (props) => {
     //props = {tblType, tblTitle, tblHeader, tblData}
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [orderBy, setOrderBy] = React.useState('group_name');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [fomrValue, setFormValue] = React.useState({}); //{combox:"abc", searchText:"def"}
     const [open, setOpen] = React.useState(-1);
 
     const visibleRows = React.useMemo(
@@ -170,8 +163,7 @@ const TableComponent = (props) => {
         [order, orderBy, page, rowsPerPage],
     );
 
-
-    if (props.tblType === "ListReport") {
+    if (props.tblType === "ListReportv2") {
         let jsonKey = [...new Set(props.tblDataString.map(value => Object.keys(value)).flat())];
         jsonKey = jsonKey.filter(value => !props.listInvisible.includes(value));
         let listGroup = [...new Set(props.tblDataString.map(value => value.Group).flat())];
@@ -191,25 +183,19 @@ const TableComponent = (props) => {
             setPage(0);
         };
 
-        const handleComboboxSelect = (e) => {
-            setFormValue({ ...fomrValue, group: e.target.value });
-        }
-
-
         // Avoid a layout jump when reaching the last page with empty rows.
         const emptyRows =
             page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.tblDataString.length) : 0;
 
         return (
-            <Box sx={{ width: '100%' }}>
-                <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar title="List Group Report" cbcData={listGroup} comboboxSelect={handleComboboxSelect} />
-                    <TableContainer>
+            <Box className={style.tableBox} >
+                <Paper className={style.tablePaper}>
+                    <EnhancedTableToolbar title="List Group Report" cbcData={listGroup} />
+                    <TableContainer component={Paper}>
                         <Table
-                            sx={{ minWidth: 750 }}
+                            className={style.tableMain}
                             aria-labelledby="tableTitle"
-                            size='medium'
-                        >
+                            size='medium'>
                             <EnhancedTableHead
                                 headers={jsonKey}
                                 order={order}
@@ -221,123 +207,21 @@ const TableComponent = (props) => {
                                 {visibleRows.map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     return (
-                                        <TableRow
-                                            hover
-                                            tabIndex={-1}
-                                            key={index}
-                                            sx={{ cursor: 'pointer' }}
-                                        >
-                                            {jsonKey.map(keys =>
-                                                <TableCell
-                                                    align="left"
-                                                    key={keys + index}
-                                                    sx={{
-                                                        maxWidth: '200px',
-                                                        overflowWrap: 'break-word'
-                                                    }}
-                                                >
-                                                    {row[keys]}
-                                                </TableCell>
-                                            )}
-                                            <TableCell align="center">
-                                                <ButtonComponent id='btnEdit' btnType="ReportConfig" btnValue="EditNote" btnLabel="Edit" btnClass='btnEdit' />
-                                                <ButtonComponent id='btnDelete' btnType="ReportConfig" btnValue="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                                {emptyRows > 0 && (
-                                    <TableRow
-                                        style={{
-                                            height: 53 * emptyRows,
-                                        }}
-                                    >
-                                        <TableCell colSpan={6} />
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={[10, 25, 50, 100]}
-                        component="div"
-                        count={props.tblDataString.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </Paper>
-            </Box>
-        );
-    } else if (props.tblType === "ListReportv2") {
-        // thêm các nút cho các btnType khác nhau
-        let jsonKey = [...new Set(props.tblDataString.map(value => Object.keys(value)).flat())];
-        jsonKey = jsonKey.filter(value => !props.listInvisible.includes(value));
-        let listGroup = [...new Set(props.tblDataString.map(value => value.Group).flat())];
-        let listHeader = ConvertTitle(jsonKey)
-
-        const handleRequestSort = (event, property) => {
-            const isAsc = orderBy === property && order === 'asc';
-            setOrder(isAsc ? 'desc' : 'asc');
-            setOrderBy(property);
-        };
-
-        const handleChangePage = (event, newPage) => {
-            setPage(newPage);
-        };
-
-        const handleChangeRowsPerPage = (event) => {
-            setRowsPerPage(parseInt(event.target.value, 10));
-            setPage(0);
-        };
-
-        const handleComboboxSelect = (e) => {
-            setFormValue({ ...fomrValue, group: e.target.value });
-        }
-
-
-        // Avoid a layout jump when reaching the last page with empty rows.
-        const emptyRows =
-            page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.tblDataString.length) : 0;
-
-        return (
-            <Box className={style.tableBox} >
-                <Paper className={style.tablePaper}>
-                    <EnhancedTableToolbar title="List Group Report" cbcData={listGroup} comboboxSelect={handleComboboxSelect} />
-                    <TableContainer component={Paper}>
-                        <Table
-                            className={style.tableMain}
-                            aria-labelledby="tableTitle"
-                            size='medium'>
-                            <EnhancedTableHead
-                                headers={listHeader}
-                                order={order}
-                                orderBy={orderBy}
-                                onRequestSort={handleRequestSort}
-                                rowCount={props.tblDataString.length}
-                            />
-                            <TableBody>
-                                {visibleRows.map((row, index) => {
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-                                    return (
-                                        <React.Fragment>
+                                        <React.Fragment key={labelId}>
                                             <TableRow
                                                 hover
                                                 tabIndex={-1}
-                                                key={index}
                                                 sx={{ cursor: 'pointer' }}
                                             >
                                                 <TableCell
                                                     align="left"
-                                                    key={index}
                                                     className={style.tableMainCell}
                                                 >
                                                     {index + 1}
-
                                                     <IconButton
                                                         aria-label="expand row"
                                                         size="small"
+                                                        id={labelId}
                                                         onClick={() => setOpen(open == index ? -1 : index)}
 
                                                     >
@@ -345,41 +229,20 @@ const TableComponent = (props) => {
                                                     </IconButton>
                                                 </TableCell>
                                                 {jsonKey.map(keys => {
-                                                    if (keys == "_id") {
-                                                        return (
-                                                            <TableCell
-                                                                align="left"
-                                                                key={keys + index}
-                                                                className={style.tableMainCell}
-                                                            >
-                                                                {index + 1}
-
-                                                                <IconButton
-                                                                    aria-label="expand row"
-                                                                    size="small"
-                                                                    onClick={() => setOpen(open == index ? -1 : index)}
-
-                                                                >
-                                                                    {open == index ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                                                                </IconButton>
-                                                            </TableCell>
-                                                        )
-                                                    } else {
-                                                        return (
-                                                            <TableCell
-                                                                align="left"
-                                                                key={keys + index}
-                                                                className={style.tableMainCell}
-                                                            >
-                                                                {row[keys]}
-                                                            </TableCell>
-                                                        )
-                                                    }
+                                                    return (
+                                                        <TableCell
+                                                            align="left"
+                                                            className={style.tableMainCell}
+                                                            key={keys + index}
+                                                        >
+                                                            {row[keys]}
+                                                        </TableCell>
+                                                    )
                                                 }
                                                 )}
                                                 <TableCell align="center" >
-                                                    <ButtonComponent id='btnEdit' btnType="ReportConfig" btnValue="EditNote" btnLabel="Edit" btnClass='btnEdit' />
-                                                    <ButtonComponent id='btnDelete' btnType="ReportConfig" btnValue="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
+                                                    <ButtonComponent btnType="ReportConfig" btnIcon="EditNote" btnLabel="Edit" btnClass='btnEdit' />
+                                                    <ButtonComponent btnType="ReportConfig" btnIcon="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow>
@@ -401,7 +264,7 @@ const TableComponent = (props) => {
                                                                 </TableHead>
                                                                 <TableBody>
                                                                     {row.reports.map((reportRow) => (
-                                                                        <TableRow key={reportRow._id} className={style.tableSubRow}>
+                                                                        <TableRow className={style.tableSubRow} key={reportRow._id}>
                                                                             <TableCell component="th" scope="row">
                                                                                 {reportRow._id}
                                                                             </TableCell>
@@ -411,8 +274,8 @@ const TableComponent = (props) => {
                                                                                 {reportRow.description}
                                                                             </TableCell>
                                                                             <TableCell align="center">
-                                                                                <ButtonComponent id='btnEdit' btnType="ReportConfig" btnValue="EditNote" btnLabel="Edit" btnClass='btnEdit' />
-                                                                                <ButtonComponent id='btnDelete' btnType="ReportConfig" btnValue="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
+                                                                                <ButtonComponent btnType="ReportConfig" btnValue="EditNote" btnLabel="Edit" btnClass='btnEdit' />
+                                                                                <ButtonComponent btnType="ReportConfig" btnValue="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
                                                                             </TableCell>
                                                                         </TableRow>
                                                                     ))}
@@ -451,7 +314,6 @@ const TableComponent = (props) => {
             </Box>
         );
     }
-
 };
 
 export default TableComponent;

@@ -8,9 +8,9 @@ const ButtonComponent = (props) => {
     //props = {btnType, btnValue, btnLabel}
     const btnClass = props.btnClass;
 
-    if (props.btnType === "NewReport") {
+    if (props.btnType === "GeneralButton") {
         return (
-            <button className={style.btnAdd} onClick={props.onClick}>
+            <button className={style.btnGeneral} onClick={props.onClick}>
                 {props.btnValue}
             </button>
         );
@@ -18,10 +18,12 @@ const ButtonComponent = (props) => {
         return (
             <Tooltip title={props.btnLabel} className={style[btnClass]}>
                 <IconButton aria-label={props.btnLabel}>
-                    <IconComponent iconName={props.btnValue} size='normal' />
+                    <IconComponent iconName={props.btnIcon} size='normal' />
                 </IconButton>
             </Tooltip>
         )
+    } else if(props.btnType === "AddConfirm") {
+
     } else {
         // thêm các nút cho các btnType khác nhau
     }

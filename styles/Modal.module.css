@@ -22,12 +22,9 @@
 }
 
 .addNewModalBody {
-    display: block;
     position: relative;
-    /* display: flex; */
     height: auto;
     width: 80%;
-    /* background-color: rgb(0, 0, 0); */
     margin: auto;
 }
 
@@ -37,14 +34,6 @@
     display: inline-table;
     padding-bottom: 2vh;
     width: 100%;
-    float: left;
-
-    b {
-        padding: 1vh 0 1vh 3vh;
-        color: blue;
-        position: relative;
-        display: inline-block;
-    }
 }
 
 .inputAddNew {
@@ -52,21 +41,17 @@
     background-color: white
 }
 
-.groupTitle {
+.groupInput {
     display: flex;
-}
-
-.slideAddNew {
-    width: auto;
-    padding-left: 2vh;
-}
-
-.pacingGroupDiv {
-    width: 50%;
 }
 
 .textAreaModal {
     width: 100%;
     background-color: white;
-    height: 30vh;
+}
+
+.errorString {
+    opacity: 1;
+    color: red;
+    font-size: medium;
 }

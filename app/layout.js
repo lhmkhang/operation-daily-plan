@@ -46,13 +46,11 @@ export default function RootLayout({ children }) {
                       <HeaderDashboard />
                     </div>
                     <div className={style.content}>
-                      <div className={style.contentDiv}>
-                        <AuthProtectedChildren />
-                      </div>
-                      <div className={style.footerDiv}>
-                        <FooterMenu />
-                      </div>
+                      <AuthProtectedChildren />
                     </div>
+                  </div>
+                  <div className={style.footerDiv}>
+                    <FooterMenu />
                   </div>
                 </div>
               }

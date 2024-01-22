@@ -16,8 +16,8 @@ export default function Footer() {
                     theme.palette.mode === "light"
                         ? theme.palette.grey[200]
                         : theme.palette.grey[800],
-                p: 1,
-                height: '25px'
+                p: 0,
+                height: 'auto'
             }}
             component="footer"
         >

@@ -226,17 +226,17 @@ const ReportConfig = () => {
             <div className={style.titleDiv}>
                 <h3>Recent report</h3>
                 <div className={style.middleDiv}></div>
-                <ButtonComponent btnType="NewReport" btnValue="NEW REPORT" onClick={() => { setAddNewModal(true) }} />
+                <ButtonComponent btnType="GeneralButton" btnValue="NEW REPORT" onClick={() => { setAddNewModal(true) }} />
             </div>
             <div className={style.slideDiv}>
                 {nearestObjects.map(items => {
                     return (
-                        <div className={style.slide} key={items['ID']}>
+                        <div className={style.slide} key={items.group_name}>
                             <div className={style.slideElement}>
                                 <div className={style.slideTitle}>
-                                    <b>{items['Report Name']}</b>
+                                    <b>{items.group_name}</b>
                                 </div>
-                                <p>{items['Date Create']}</p>
+                                <p>{items.date_create}</p>
                             </div>
                         </div>
                     )

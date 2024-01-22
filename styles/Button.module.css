@@ -1,4 +1,4 @@
-.btnAdd {
+.btnGeneral {
     border: none;
     background-color: #488aec;
     color: #ffffff;
@@ -16,14 +16,17 @@
     transition: all .6s ease;
     width: 15vh;
     max-height: 5vh;
+    min-height: 3vh;
+    padding: 1vh;
+    cursor: pointer;
 }
 
-.btnAdd:hover {
+.btnGeneral:hover {
     box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17;
 }
 
-.btnAdd:focus,
-.btnAdd:active {
+.btnGeneral:focus,
+.btnGeneral:active {
     opacity: .85;
     box-shadow: none;
 }
