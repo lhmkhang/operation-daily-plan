@@ -21,6 +21,7 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import style from '@/styles/Table.module.css';
+import { useRouter } from 'next/navigation'
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -153,6 +154,7 @@ const TableComponent = (props) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [open, setOpen] = React.useState(-1);
+    const router = useRouter();
 
     const visibleRows = React.useMemo(
         () =>
@@ -168,6 +170,7 @@ const TableComponent = (props) => {
         jsonKey = jsonKey.filter(value => !props.listInvisible.includes(value));
         let listGroup = [...new Set(props.tblDataString.map(value => value.Group).flat())];
 
+
         const handleRequestSort = (event, property) => {
             const isAsc = orderBy === property && order === 'asc';
             setOrder(isAsc ? 'desc' : 'asc');
@@ -182,6 +185,10 @@ const TableComponent = (props) => {
             setRowsPerPage(parseInt(event.target.value, 10));
             setPage(0);
         };
+
+        const handleEditReportOnclick = (props) => {
+            router.push("/report-config/" + props);
+        }
 
         // Avoid a layout jump when reaching the last page with empty rows.
         const emptyRows =
@@ -241,7 +248,7 @@ const TableComponent = (props) => {
                                                 }
                                                 )}
                                                 <TableCell align="center" >
-                                                    <ButtonComponent btnType="ReportConfig" btnIcon="EditNote" btnLabel="Edit" btnClass='btnEdit' />
+                                                    <ButtonComponent btnType="ReportConfig" btnIcon="BorderColor" btnLabel="Edit" btnClass='btnEdit' />
                                                     <ButtonComponent btnType="ReportConfig" btnIcon="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
                                                 </TableCell>
                                             </TableRow>
@@ -274,8 +281,8 @@ const TableComponent = (props) => {
                                                                                 {reportRow.description}
                                                                             </TableCell>
                                                                             <TableCell align="center">
-                                                                                <ButtonComponent btnType="ReportConfig" btnValue="EditNote" btnLabel="Edit" btnClass='btnEdit' />
-                                                                                <ButtonComponent btnType="ReportConfig" btnValue="DeleteForever" btnLabel="Delete" btnClass='btnDelete' />
+                                                                                <ButtonComponent btnType="ReportConfig" btnIcon="EditNote" btnLabel="Edit" btnClass='btnEdit' onClick={() => handleEditReportOnclick(reportRow._id)} />
+                                                                                <ButtonComponent btnType="ReportConfig" btnIcon="DeleteSweep" btnLabel="Delete" btnClass='btnDelete' />
                                                                             </TableCell>
                                                                         </TableRow>
                                                                     ))}

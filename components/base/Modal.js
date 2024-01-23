@@ -61,12 +61,9 @@ const ModalComponent = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <ToastComponent toastDisplay={isError === "" ? "hidden" : "show"} toastMessage={isError === "" ? "" : isError} />
-                        </div>
                     </div>
                 </Modal >
-
+                <ToastComponent toastDisplay={isError === "" ? "hidden" : "show"} toastMessage={isError === "" ? "" : isError} />
             </>
 
         )
