@@ -24,7 +24,8 @@
     ],
     "paths": {
       "@/*": [
-        "./*"
+        "./*",
+        "../*"
       ]
     }
   },
@@ -36,7 +37,7 @@
     "app/lucky_money/page.js",
     "app/layout.tsx",
     "components/helpers/UseAuth.js",
-    "app/login/page.js",
+    "app/(auth)/login/page.js",
     "app/page.js"
   ],
   "exclude": [
