@@ -23,10 +23,14 @@ import { ReportContext } from '../helpers/ReportContext';
 // });
 
 const ComboboxComponent = (props) => {
+    console.log("abc")
+    console.log(props)
     const [value, setValue] = React.useState("");
     const [valueSource, setValueSource] = React.useState("");
     const context = useContext(ReportContext);
     const { reports, setReports } = context;
+
+
 
     if (props.cbcType === "cbcChartType") {
         if (props.defaultValue !== undefined && value == "") {
@@ -40,8 +44,14 @@ const ComboboxComponent = (props) => {
                 // id={props.cbcId}
                 value={value}
                 onChange={(event, newValue) => {
+                    props.fncChange("chart_type", newValue)
                     setValue(newValue);
-                    setReports({ ...reports, cbcChartType: newValue })
+                    if (newValue) {
+                        // setReports({ ...reports, cbcChartType: newValue })
+                        props.fncChange("chart_type", newValue)
+                    } else {
+                        props.fncChange("chart_type", "")
+                    }
                 }}
                 className={style[props.cbcType]}
                 options={props.cbcData}
@@ -57,6 +67,8 @@ const ComboboxComponent = (props) => {
                             ...params.inputProps,
                             autoComplete: 'new-password', // disable autocomplete and autofill
                         }}
+                        helperText={props.errorData["chart_type"] ? props.errorData["chart_type"] : ""}
+                        error={props.errorData["chart_type"] ? true : false}
                     />
                 )}
             />
@@ -70,18 +82,31 @@ const ComboboxComponent = (props) => {
         }
         return (
             <Autocomplete
-                id="data-source"
+                // id="data-source"
                 value={valueSource}
                 onChange={(event, newValue) => {
                     setValueSource(newValue);
-                    setReports({ ...reports, cbcDataSource: newValue })
+                    if (newValue) {
+                        console.log('===============New Value=====================');
+                        console.log(newValue);
+                        console.log('====================================');
+                        let index = props.cbcData.findIndex(value => value._id === newValue._id);
+                        if (index !== -1) {
+                            props.fncChange("data_source_id", newValue._id)
+                        } else {
+                            props.fncChange("data_source_id", "")
+                        }
+                    } else {
+                        props.fncChange("data_source_id", "")
+                    }
+                    // setReports({ ...reports, cbcDataSource: newValue })
                 }}
                 options={props.cbcData}
                 autoHighlight
-                getOptionLabel={(option) => option.name===undefined ? "" : option.name}
+                getOptionLabel={(option) => option.name === undefined ? "" : option.name}
                 size='small'
-                renderOption={(props, option) => (
-                    <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                renderOption={(keys, option) => (
+                    <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} key={option.name} {...keys}>
                         {option.name}
                     </Box>
                 )}
@@ -93,6 +118,8 @@ const ComboboxComponent = (props) => {
                             ...params.inputProps,
                             autoComplete: 'new-password', // disable autocomplete and autofill
                         }}
+                        helperText={props.errorData["data_source_id"] ? props.errorData["data_source_id"] : ""}
+                        error={props.errorData["data_source_id"] ? true : false}
                     />
                 )}
             />
