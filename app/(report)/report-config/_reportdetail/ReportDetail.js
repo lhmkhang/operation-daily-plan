@@ -104,15 +104,13 @@ const ReportDetailComponent = (props) => {
             </div>
 
             <Box sx={{ flexGrow: 1, backgroundColor: 'lightgray' }}>
-                <Suspense fallback={<LoadingComponent />}>
-                    <Grid container>
-                        {reportsInfo.charts.map(chart =>
-                            <Grid xs={12} md={6} xl={4} sx={{ margin: 'auto' }} key={chart._id}>
-                                <StepperComponent stpChartId={chart._id} stpData={chart} stpDataSource={dataString_demo} stpUpdate={setCharts} />
-                            </Grid>
-                        )}
-                    </Grid>
-                </Suspense>
+                <Grid container>
+                    {reportsInfo.charts && Array.isArray(reportsInfo.charts) && reportsInfo.charts.map(chart =>
+                        <Grid xs={12} md={6} xl={4} sx={{ margin: 'auto' }} key={chart._id}>
+                            <StepperComponent stpChartId={chart._id} stpData={chart} stpDataSource={dataString_demo} stpUpdate={setCharts} />
+                        </Grid>
+                    )}
+                </Grid>
             </Box>
         </div >
     )
