@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import style from '../../styles/Combobox.module.css';
-import { ReportContext } from '../helpers/ReportContext';
 // import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // const theme = createTheme({
@@ -23,14 +22,9 @@ import { ReportContext } from '../helpers/ReportContext';
 // });
 
 const ComboboxComponent = (props) => {
-    console.log("abc")
-    console.log(props)
     const [value, setValue] = React.useState("");
     const [valueSource, setValueSource] = React.useState("");
-    const context = useContext(ReportContext);
-    const { reports, setReports } = context;
-
-
+    
 
     if (props.cbcType === "cbcChartType") {
         if (props.defaultValue !== undefined && value == "") {
@@ -87,9 +81,6 @@ const ComboboxComponent = (props) => {
                 onChange={(event, newValue) => {
                     setValueSource(newValue);
                     if (newValue) {
-                        console.log('===============New Value=====================');
-                        console.log(newValue);
-                        console.log('====================================');
                         let index = props.cbcData.findIndex(value => value._id === newValue._id);
                         if (index !== -1) {
                             props.fncChange("data_source_id", newValue._id)

@@ -1,12 +1,13 @@
 
-import React from 'react'
+import React, { useEffect, Suspense } from 'react'
 import style from '@/styles/ReportDetail.module.css';
 import ButtonComponent from '@/components/base/Button';
 import { useState, useContext } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Box } from '@mui/material';
-import { ReportContext } from '@/components/helpers/ReportContext';
-import StepperComponent from '@/components/base/reportdetail/Stepper'
+import { ReportDetailContext } from '@/components/helpers/ReportDetailContext';
+import StepperComponent from './Stepper'
+import LoadingComponent from '@/components/base/Loading'
 
 const dataString_demo = [
     {
@@ -21,43 +22,66 @@ const dataString_demo = [
     },
 ]
 
-const data_demo = [
-    {
-        "_id": "01",
-        "chart_name": "Incident Chart",
-        "chart_type": "Column Chart",
-        "data_source_id": "01",
-        "table_info": {
+const data_demo = {
+    charts: [
+        {
             "_id": "01",
+            "chart_name": "Incident Chart",
+            "chart_type": "Column Chart",
+            "data_source_id": "01",
+            "table_info": {
+                "_id": "01",
+                "table_title": "Incident Datatable",
+                "caption": "abc",
+                "data_source_id": "01"
+            }
+        }
+    ],
+    tables: [
+        {
+            "_id": "01",
+            "chart_id": "01",
             "table_title": "Incident Datatable",
             "caption": "abc",
             "data_source_id": "01"
         }
-    }
-];
+    ]
+};
 
 const ReportDetailComponent = (props) => {
-    let context = useContext(ReportContext);
-    let { reports, setReports } = context;
-    setReports(data_demo)
-    // console.log('====================================');
-    // console.log(reports);
-    // console.log('====================================');
-    const [charts, setCharts] = useState(data_demo);
-    const [isUpdate, setStatus] = React.useState(false);
+
+    let { reportsInfo, setReportsInfo } = useContext(ReportDetailContext);
+    let [count, setCount] = useState(0);
+
+    useEffect(() => {
+        setReportsInfo(data_demo)
+    }, [])
+
+    const [charts, setCharts] = useState(data_demo.charts);
+    const [tables, setTables] = useState(data_demo.tables);
+    const [isUpdate, setStatus] = useState(false);
 
     const generateRandomId = () => {
         // Generate a random number between 10000 and 99999
         const randomId = Math.floor(Math.random() * 90000) + 10000;
         return randomId;
-    };    
+    };
 
     const handleAddChartBtn = () => {
         if (charts.length < 3) {
             const randomId = generateRandomId();
-            setCharts([...charts, { _id: randomId, chart_name: "", chart_type: "", data_source_id: "", isNew: true, table_info: { _id: randomId, table_title: "", caption: "", data_source_id: "" } }]);
+            setCharts([...charts, { _id: randomId, chart_name: "", chart_type: "", data_source_id: "", isNew: true }]);
+            setReportsInfo({
+                ...reportsInfo,
+                charts: [...reportsInfo.charts, { _id: randomId, chart_name: "", chart_type: "", data_source_id: "" }],
+                tables: [...reportsInfo.tables, { _id: randomId, chart_id: randomId, table_title: "", caption: "", data_source_id: "" }],
+            });
         }
     }
+
+    console.log('====================================');
+    console.log(reportsInfo);
+    console.log('====================================');
 
     return (
         <div className={style.contain}>
@@ -78,14 +102,17 @@ const ReportDetailComponent = (props) => {
                     <ButtonComponent btnType="AddButton" btnValue="Add Chart" onClick={() => { handleAddChartBtn() }} />
                 </div>
             </div>
+
             <Box sx={{ flexGrow: 1, backgroundColor: 'lightgray' }}>
-                <Grid container>
-                    {charts.map(chart =>
-                        <Grid xs={12} md={6} xl={4} sx={{ margin: 'auto' }}>
-                            <StepperComponent stpData={chart} stpDataSource={dataString_demo} stpUpdate={setCharts} />
-                        </Grid>
-                    )}
-                </Grid>
+                <Suspense fallback={<LoadingComponent />}>
+                    <Grid container>
+                        {reportsInfo.charts.map(chart =>
+                            <Grid xs={12} md={6} xl={4} sx={{ margin: 'auto' }} key={chart._id}>
+                                <StepperComponent stpChartId={chart._id} stpData={chart} stpDataSource={dataString_demo} stpUpdate={setCharts} />
+                            </Grid>
+                        )}
+                    </Grid>
+                </Suspense>
             </Box>
         </div >
     )

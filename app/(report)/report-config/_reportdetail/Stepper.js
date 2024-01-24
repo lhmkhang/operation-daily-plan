@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState, useContext } from 'react';
 import { Box } from '@mui/material';
 import TextField from '@mui/material/TextField';
@@ -9,15 +9,27 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ComboboxComponent from '@/components/base/Combobox';
+import { ReportDetailContext } from '@/components/helpers/ReportDetailContext';
 
 const StepperComponent = (props) => {
+
+    const [chartData, setCharData] = useState({});
+    const { reportsInfo, setReportsInfo } = useContext(ReportDetailContext);
+    let chart_id = props.stpChartId;
+
+    useEffect(() => {
+        if (Object.keys(reportsInfo).length !== 0) {
+            setCharData({ [chart_id]: reportsInfo.charts.find(chart => chart._id === chart_id) })
+        }
+    }, [reportsInfo])
+
     const steps = ['Config Charts', 'Config Table', 'Review'];
     const chart_type = ["Column Chart", "Pie Chart", "Line Chart", "Donut Chart"];
-    let chart_id = props.stpData._id;
     //props = {btnType, btnValue, btnLabel}
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [chartData, setCharData] = React.useState({ [chart_id]: props.stpData });
-    const [errorData, setErrorData] = React.useState({});
+    const [activeStep, setActiveStep] = useState(0);
+    const [errorData, setErrorData] = useState({});
+    const [isUpdate, setIsUpdate] = useState(props.stpChartId ? false : true);
+
 
     const checkNull = (value) => {
         if (value === "" || value === undefined) {
@@ -30,10 +42,6 @@ const StepperComponent = (props) => {
     const handleNext = () => {
         if (activeStep === 0) {
             let emptyField = ["chart_name", "chart_type", "data_source_id"].filter(key => checkNull(chartData[chart_id][key]) == false)
-            console.log('==================Empty Field==================');
-            // console.log(chartData[chart_id][data_source_id]);
-            console.log(emptyField);
-            console.log('====================================');
             if (emptyField.length === 0) {
                 setActiveStep((prevActiveStep) => prevActiveStep + 1);
             } else {
@@ -57,15 +65,15 @@ const StepperComponent = (props) => {
         setActiveStep(0);
     };
 
-    const handleChange = (field_key, value) => {
+    const handleChangeChart = (field_key, value) => {
         let chart_id = props.stpData._id;
+
         setCharData({ ...chartData, [chart_id]: { ...chartData[chart_id], [field_key]: value } });
         setErrorData({ ...errorData, [field_key]: "" })
-        console.log('==================Onchange==================');
-        console.log(errorData);
-        console.log(field_key);
-        console.log(value);
-        console.log('====================================');
+    }
+
+    const handleChangeTable = (field_key, value) => {
+        let chart_id = props.stpData._id;
     }
 
     return (
@@ -77,7 +85,7 @@ const StepperComponent = (props) => {
                         label="Chart Title" variant="standard"
                         defaultValue={props.stpData.chart_name}
                         sx={{ width: '80%', pb: 5 }}
-                        onChange={(e) => handleChange("chart_name", e.target.value)}
+                        onChange={(e) => handleChangeChart("chart_name", e.target.value)}
                         helperText={errorData["chart_name"] ? errorData["chart_name"] : ""}
                         error={errorData["chart_name"] ? true : false}
                     />
@@ -86,7 +94,7 @@ const StepperComponent = (props) => {
                         cbcLabel="Chart Type"
                         cbcType="cbcChartType"
                         defaultValue={props.stpData.chart_type}
-                        fncChange={handleChange}
+                        fncChange={handleChangeChart}
                         errorData={errorData}
                     />
                     <ComboboxComponent
@@ -94,17 +102,20 @@ const StepperComponent = (props) => {
                         cbcLabel="Data Source"
                         cbcType="cbcDataSource"
                         defaultValue={props.stpData.data_source_id}
-                        fncChange={handleChange}
+                        fncChange={handleChangeChart}
                         errorData={errorData}
                     />
                 </Box>
-                <Box sx={{ display: activeStep === 1 ? '' : 'none' }}>
+                {/* <Box sx={{ display: activeStep === 1 ? '' : 'none' }}>
                     <TextField
                         id="standard-basic"
                         label="Table Title"
                         variant="standard"
                         defaultValue={props.stpData.table_info.table_title}
                         sx={{ width: '80%', pb: 5 }}
+                        onChange={(e) => handleChangeTable("table_title", e.target.value)}
+                        helperText={errorData["table_title"] ? errorData["table_title"] : ""}
+                        error={errorData["table_title"] ? true : false}
                     />
                     <TextField
                         id="outlined-multiline-static"
@@ -119,10 +130,10 @@ const StepperComponent = (props) => {
                         cbcLabel="Data Source"
                         cbcType="cbcDataSource"
                         defaultValue={props.stpData.table_info.data_source_id}
-                        fncChange={handleChange}
+                        fncChange={handleChangeTable}
                         errorData={errorData}
                     />
-                </Box>
+                </Box> */}
             </Box>
             <Box sx={{ p: 2 }}>
                 <Stepper activeStep={activeStep} alternativeLabel>

@@ -1,14 +1,13 @@
 'use client'
-import { ReportProvider } from '@/components/helpers/ReportContext'
-import ReportDetailComponent from '@/components/base/reportdetail/ReportDetail'
+import { ReportDetailProvider } from '@/components/helpers/ReportDetailContext'
+import ReportDetailComponent from '../_reportdetail/ReportDetail'
 // import { useParams } from 'next/navigation';
 
 const ReportDetailPage = (params) => {
-
     return (
-        <ReportProvider>
+        <ReportDetailProvider>
             <ReportDetailComponent report_id={params.params.report_id} />
-        </ReportProvider>
+        </ReportDetailProvider>
     )
 }
 
