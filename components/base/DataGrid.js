@@ -21,7 +21,7 @@ function EditToolbar(props) {
 
     const handleClick = () => {
         const id = rows.length + 1;
-        
+
         setRows((oldRows) => [...oldRows, { id, name: '', description: '', isNew: true }]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
@@ -115,12 +115,14 @@ export default function FullFeaturedCrudGrid(props) {
                 if (isInEditMode) {
                     return [
                         <GridActionsCellItem
+                            key={`${id}-save`}
                             icon={<SaveIcon />}
                             label="Save"
                             sx={{ color: 'primary.main' }}
                             onClick={handleSaveClick(id)}
                         />,
                         <GridActionsCellItem
+                            key={`${id}-cancel`}
                             icon={<CancelIcon />}
                             label="Cancel"
                             className="textPrimary"
@@ -132,6 +134,7 @@ export default function FullFeaturedCrudGrid(props) {
 
                 return [
                     <GridActionsCellItem
+                        key={`${id}-edit`}
                         icon={<EditIcon />}
                         label="Edit"
                         className="textPrimary"
@@ -139,6 +142,7 @@ export default function FullFeaturedCrudGrid(props) {
                         color="inherit"
                     />,
                     <GridActionsCellItem
+                        key={`${id}-delete`}
                         icon={<DeleteIcon />}
                         label="Delete"
                         onClick={handleDeleteClick(id)}
@@ -174,7 +178,7 @@ export default function FullFeaturedCrudGrid(props) {
                     toolbar: EditToolbar,
                 }}
                 slotProps={{
-                    toolbar: { rows, setRows, setRowModesModel},
+                    toolbar: { rows, setRows, setRowModesModel },
                 }}
             />
         </Box>
