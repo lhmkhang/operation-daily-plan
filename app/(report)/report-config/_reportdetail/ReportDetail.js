@@ -29,12 +29,7 @@ const data_demo = {
             "chart_name": "Incident Chart",
             "chart_type": "Column Chart",
             "data_source_id": "01",
-            "table_info": {
-                "_id": "01",
-                "table_title": "Incident Datatable",
-                "caption": "abc",
-                "data_source_id": "01"
-            }
+            
         }
     ],
     tables: [
@@ -69,7 +64,7 @@ const ReportDetailComponent = (props) => {
 
     const handleAddChartBtn = () => {
         if (charts.length < 3) {
-            const randomId = generateRandomId();
+            const randomId = generateRandomId().toString();
             setCharts([...charts, { _id: randomId, chart_name: "", chart_type: "", data_source_id: "", isNew: true }]);
             setReportsInfo({
                 ...reportsInfo,
@@ -106,7 +101,7 @@ const ReportDetailComponent = (props) => {
             <Box sx={{ flexGrow: 1, backgroundColor: 'lightgray' }}>
                 <Suspense fallback={<LoadingComponent />}>
                     <Grid container>
-                        {reportsInfo.charts.map(chart =>
+                        {reportsInfo.charts && Array.isArray(reportsInfo.charts) && reportsInfo.charts.map(chart =>
                             <Grid xs={12} md={6} xl={4} sx={{ margin: 'auto' }} key={chart._id}>
                                 <StepperComponent stpChartId={chart._id} stpData={chart} stpDataSource={dataString_demo} stpUpdate={setCharts} />
                             </Grid>
