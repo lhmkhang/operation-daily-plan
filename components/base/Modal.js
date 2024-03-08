@@ -3,9 +3,10 @@ import Modal from '@mui/material/Modal';
 import style from '../../styles/Modal.module.css';
 import ButtonComponent from '@/components/base/Button';
 import DataGridComponent from '@/components/base/DataGrid';
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import TextField from '@mui/material/TextField';
 import ToastComponent from '@/components/base/Toast';
+import { ReportDetailContext } from '@/components/helpers/ReportDetailContext';
 
 const ModalComponent = (props) => {
     const [reportData, setReportData] = useState([]);
@@ -19,13 +20,11 @@ const ModalComponent = (props) => {
 
     const handleConfirm = () => {
         if (status === 200) {
-            console.log('====================================');
-            console.log(reportData);
-            console.log('====================================');
-            /*Persist reportData*/
             handleClose();
         }
     }
+
+
 
     if (props.mdStype === "NewReport") {
         return (
@@ -54,7 +53,7 @@ const ModalComponent = (props) => {
                             </div>
                             <div style={{ display: 'inline-flex' }}>
                                 <div style={{ paddingRight: '1vh' }}>
-                                    <ButtonComponent btnType="GeneralButton" btnValue="CONFIRM" onclick={() => { handleConfirm() }} />
+                                    <ButtonComponent btnType="GeneralButton" btnValue="CONFIRM" onClick={() => { handleConfirm() }} />
                                 </div>
                                 <div>
                                     <ButtonComponent btnType="GeneralButton" btnValue="CANCEL" onClick={() => { handleClose() }} />
@@ -67,8 +66,54 @@ const ModalComponent = (props) => {
             </>
 
         )
-    } else {
+    } else if (props.mdStype === "DeleteStepper") {
+        let chart_id = props.chart_id;
+        let { reportsInfo, setReportsInfo } = useContext(ReportDetailContext);
 
+        const handleDeleteConfirm = () => {
+            if (reportsInfo.charts) {
+                // let chartData = reportsInfo.charts.find(chart => chart._id === chart_id);
+                let chartIdx = reportsInfo.charts.findIndex(chart => chart._id === chart_id);
+                let tableIdx = reportsInfo.tables.findIndex(table => table.chart_id === chart_id);
+                if (reportsInfo.charts[chartIdx].isNew) {
+                    reportsInfo.charts.splice(chartIdx, 1);
+                    reportsInfo.tables.splice(tableIdx, 1)
+                } else {
+                    //xoa tren db va refresh lai context
+                }
+            }
+            handleClose();
+        }
+
+        return (
+            <>
+                <Modal
+                    open={props.mdStatus}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <div className={style.addNewModal}>
+                        <div className={style.deleteStepperModalDiv}>
+                            <h1>Delete Chart</h1>
+                            <div className={style.deleteStepperModalBody}>
+                                <div className={style.deleteStepperInputGroup}>
+                                    <p>Do you want to delete chart #{chart_id}</p>
+                                </div>
+                            </div>
+                            <div style={{ display: 'inline-flex' }}>
+                                <div style={{ paddingRight: '1vh' }}>
+                                    <ButtonComponent btnType="GeneralButton" btnValue="CONFIRM" onClick={() => { handleDeleteConfirm() }} />
+                                </div>
+                                <div>
+                                    <ButtonComponent btnType="GeneralButton" btnValue="CANCEL" onClick={() => { handleClose() }} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Modal >
+                <ToastComponent toastDisplay={isError === "" ? "hidden" : "show"} toastMessage={isError === "" ? "" : isError} />
+            </>
+        )
     }
 }
 

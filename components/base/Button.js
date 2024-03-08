@@ -11,9 +11,9 @@ const ButtonComponent = (props) => {
 
     if (props.btnType === "GeneralButton") {
         return (
-            <button className={style.btnGeneral} onClick={props.onClick}>
+            <Button className={style.btnGeneral} onClick={props.onClick}>
                 {props.btnValue}
-            </button>
+            </Button>
         );
     } else if (props.btnType === "ReportConfig") {
         return (

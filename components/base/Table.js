@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -22,130 +22,14 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import style from '@/styles/Table.module.css';
 import { useRouter } from 'next/navigation'
+import { ReportDetailContext } from '@/components/helpers/ReportDetailContext';
 
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-function getComparator(order, orderBy) {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
 
 // Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
 // stableSort() brings sort stability to non-modern browsers (notably IE11). If you
 // only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
 // with exampleArray.slice().sort(exampleComparator)
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
 
-function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } =
-        props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
-
-    return (
-        <TableHead>
-            <TableRow>
-                <TableCell
-                    key='no'
-                    align='center'
-                    padding='normal'
-                    className={style.tableHeaderNo}
-                >
-                    No
-                </TableCell>
-                {props.headers.map((headCell) => (
-                    <TableCell
-                        key={headCell}
-                        align='left'
-                        padding='normal'
-                        sortDirection={orderBy === headCell ? order : false}
-                        className={style.tableHeader}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell}
-                            direction={orderBy === headCell ? order : 'asc'}
-                            onClick={createSortHandler(headCell)}
-                        >
-                            {ConvertTitle(headCell)}
-                            {orderBy === headCell ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-                <TableCell
-                    key='action'
-                    align='center'
-                    padding='normal'
-                    className={style.tableHeaderAction}
-                >
-                    Action
-                </TableCell>
-            </TableRow>
-        </TableHead>
-    );
-}
-
-EnhancedTableHead.propTypes = {
-    onRequestSort: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
-};
-
-function EnhancedTableToolbar(props) {
-    const { title } = props;
-    return (
-        <Toolbar
-            sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
-                ...({
-                    bgcolor: (theme) =>
-                        alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-                }),
-            }}
-        >
-            <Typography
-                className={style.tableTitle}
-                variant="h5"
-                id="tableTitle"
-                component="div"
-            >
-                {title}
-            </Typography>
-            <TextField id="outlined-basic" label="Search Report" variant="outlined" className={style.tableInputSearch} />
-        </Toolbar>
-    );
-}
-
-function ConvertTitle(dbString) {
-    const formattedStrings = dbString.replace(/^_/, '').replace("_", " ");
-    const resultString = formattedStrings.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    return resultString;
-}
 
 const TableComponent = (props) => {
     //props = {tblType, tblTitle, tblHeader, tblData}
@@ -156,20 +40,139 @@ const TableComponent = (props) => {
     const [open, setOpen] = React.useState(-1);
     const router = useRouter();
 
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(props.tblDataString, getComparator(order, orderBy)).slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-            ),
-        [order, orderBy, page, rowsPerPage],
-    );
-
     if (props.tblType === "ListReportv2") {
         let jsonKey = [...new Set(props.tblDataString.map(value => Object.keys(value)).flat())];
         jsonKey = jsonKey.filter(value => !props.listInvisible.includes(value));
         let listGroup = [...new Set(props.tblDataString.map(value => value.Group).flat())];
 
+        function descendingComparator(a, b, orderBy) {
+            if (b[orderBy] < a[orderBy]) {
+                return -1;
+            }
+            if (b[orderBy] > a[orderBy]) {
+                return 1;
+            }
+            return 0;
+        }
+
+        function getComparator(order, orderBy) {
+            return order === 'desc'
+                ? (a, b) => descendingComparator(a, b, orderBy)
+                : (a, b) => -descendingComparator(a, b, orderBy);
+        }
+
+        const visibleRows = React.useMemo(
+            () =>
+                stableSort(props.tblDataString, getComparator(order, orderBy)).slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage,
+                ),
+            [order, orderBy, page, rowsPerPage],
+        );
+
+        function stableSort(array, comparator) {
+            const stabilizedThis = array.map((el, index) => [el, index]);
+            stabilizedThis.sort((a, b) => {
+                const order = comparator(a[0], b[0]);
+                if (order !== 0) {
+                    return order;
+                }
+                return a[1] - b[1];
+            });
+            return stabilizedThis.map((el) => el[0]);
+        }
+
+        function EnhancedTableHead(props) {
+            const { order, orderBy, onRequestSort } =
+                props;
+            const createSortHandler = (property) => (event) => {
+                onRequestSort(event, property);
+            };
+
+            return (
+                <TableHead>
+                    <TableRow>
+                        <TableCell
+                            key='no'
+                            align='center'
+                            padding='normal'
+                            className={style.tableHeaderNo}
+                        >
+                            No
+                        </TableCell>
+                        {props.headers.map((headCell) => (
+                            <TableCell
+                                key={headCell}
+                                align='left'
+                                padding='normal'
+                                sortDirection={orderBy === headCell ? order : false}
+                                className={style.tableHeader}
+                            >
+                                <TableSortLabel
+                                    active={orderBy === headCell}
+                                    direction={orderBy === headCell ? order : 'asc'}
+                                    onClick={createSortHandler(headCell)}
+                                >
+                                    {ConvertTitle(headCell)}
+                                    {orderBy === headCell ? (
+                                        <Box component="span" sx={visuallyHidden}>
+                                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                        </Box>
+                                    ) : null}
+                                </TableSortLabel>
+                            </TableCell>
+                        ))}
+                        <TableCell
+                            key='action'
+                            align='center'
+                            padding='normal'
+                            className={style.tableHeaderAction}
+                        >
+                            Action
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+            );
+        }
+
+        EnhancedTableHead.propTypes = {
+            onRequestSort: PropTypes.func.isRequired,
+            order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+            orderBy: PropTypes.string.isRequired,
+            rowCount: PropTypes.number.isRequired,
+        };
+
+        function EnhancedTableToolbar(props) {
+            const { title } = props;
+            return (
+                <Toolbar
+                    sx={{
+                        pl: { sm: 2 },
+                        pr: { xs: 1, sm: 1 },
+                        ...({
+                            bgcolor: (theme) =>
+                                alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+                        }),
+                    }}
+                >
+                    <Typography
+                        className={style.tableTitle}
+                        variant="h5"
+                        id="tableTitle"
+                        component="div"
+                    >
+                        {title}
+                    </Typography>
+                    <TextField id="outlined-basic" label="Search Report" variant="outlined" className={style.tableInputSearch} />
+                </Toolbar>
+            );
+        }
+
+        function ConvertTitle(dbString) {
+            const formattedStrings = dbString.replace(/^_/, '').replace("_", " ");
+            const resultString = formattedStrings.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            return resultString;
+        }
 
         const handleRequestSort = (event, property) => {
             const isAsc = orderBy === property && order === 'asc';
@@ -191,8 +194,7 @@ const TableComponent = (props) => {
         }
 
         // Avoid a layout jump when reaching the last page with empty rows.
-        const emptyRows =
-            page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.tblDataString.length) : 0;
+        const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.tblDataString.length) : 0;
 
         return (
             <Box className={style.tableBox} >
@@ -295,16 +297,6 @@ const TableComponent = (props) => {
                                         </React.Fragment>
                                     );
                                 })}
-                                {emptyRows > 0 && (
-                                    <TableRow
-                                        style={{
-                                            height: 53 * emptyRows,
-                                        }}
-                                    >
-                                        <TableCell colSpan={6} />
-                                    </TableRow>
-                                )}
-
                             </TableBody>
                         </Table>
                     </TableContainer>
@@ -320,6 +312,46 @@ const TableComponent = (props) => {
                 </Paper>
             </Box>
         );
+    } else if (props.tblType === "DemoConfig") {
+
+        let { reportsInfo } = useContext(ReportDetailContext);
+
+        const tblData = props.tblData;
+        const tblStringData = reportsInfo.dataString_demo.find(item => item._id === tblData.data_source_id);
+        const tblDatainfo = tblStringData ? JSON.parse(tblStringData.dataString) : [];
+
+        return (
+            <TableContainer component={Paper}>
+                <Typography level="body-sm" textAlign="left" sx={{ ml: 2, fontSize: 13 }}>
+                    {tblData.caption ? "Caption:" + tblData.caption : ""}
+                </Typography>
+                <Table size="small" sx={{ width: 470, fontSize: 5 }} aria-label="caption table">
+                    <TableHead>
+                        <TableRow>
+                            {
+                                Object.keys(tblDatainfo[0]).map(key => (
+                                    <TableCell key={key} align='center' sx={{ fontSize: 12 }}>{key}</TableCell>
+                                ))
+                            }
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {tblDatainfo.map((row) => (
+                            <TableRow key={row.Quarter}>
+                                <TableCell component="th" scope="row" align='left' sx={{ fontSize: 12 }}>
+                                    {row.Quarter}
+                                </TableCell>
+                                <TableCell align="center" sx={{ fontSize: 12 }}>{row.Actual}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: 12 }}>{row.Expect}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: 12 }}>{row["Expect%"]}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: 12 }}>{row["Actual%"]}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: 12 }}>{row["Archirved"]}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        )
     }
 };
 

@@ -1,0 +1,32 @@
+.mainContainer {
+    background-color: #0f2f56a0;
+}
+
+.mainNarbar {
+    flex-grow: 1;
+    display: flex;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+}
+
+.itemNarbar {
+    margin-top: 2;
+    margin-bottom: 2;
+    color: white;
+    display: block;
+    width: 350px;
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.itemBox {
+    display: flex;
+}
+
+.itemMenu {
+    width: 350px;
+}

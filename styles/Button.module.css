@@ -42,3 +42,30 @@
 .btnAdd {
     border: 1px solid blue;
 }
+
+.btnClearStep {
+    color: red;
+    margin-left: 40px;
+    position: absolute;
+}
+
+.btnClearStep1 {
+    color: red;
+    margin-left: 17px;
+    position: absolute;
+}
+
+.btnClearStep2 {
+    color: red;
+    margin-left: 206px;
+    margin-top: -16px;
+    position: absolute;
+}
+
+.btnLeft {
+    color: white;
+}
+
+.btnRight {
+    color: white;
+}

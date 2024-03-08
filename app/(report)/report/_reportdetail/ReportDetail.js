@@ -1,10 +1,10 @@
-'use client'
-import React, { useEffect, Suspense } from 'react'
-import { Box, Grid } from '@mui/material';
-import LoadingComponent from '@/components/base/Loading'
-import CardItemComponent from '@/components/base/CardItem'
 
-const jsonData = [
+import React, { useEffect, Suspense, useState, useContext } from 'react';
+import { ReportNarbarContext } from '@/components/helpers/ReportNarbarContext';
+import NarbarComponent from './Narbar'
+import LoadingComponent from '@/components/base/Loading'
+
+const data_narbar_demo = [
     {
         "_id": "01",
         "group_name": "Maximize Efficiency Report",
@@ -76,26 +76,25 @@ const jsonData = [
     }
 ]
 
-const Report = () => {
-    
+const ReportDetailComponent = (props) => {
+    const { report_id } = props;
+    let { reportsNarbar, setReportsNarbar } = useContext(ReportNarbarContext);
 
-    const listgroup = [...new Set(jsonData.filter(value => value.group_name != ''))]
+    useEffect(() => {
+        setReportsNarbar(data_narbar_demo)
+    }, [setReportsNarbar])
+
+    const loadReportDetail = () => {
+        
+    }
 
     return (
-        <Box sx={{ flexGrow: 1, p: 2 }}>
-            <Suspense fallback={<LoadingComponent />}>
-                <Grid container>
-                    {listgroup.map((row, index) => {
-                        return (
-                            <Grid item xs={12} md={6} xl={3} key={row._id}>
-                                <CardItemComponent data={row} />
-                            </Grid>
-                        )
-                    })}
-                </Grid>
-            </Suspense>
-        </Box>
+        <div>
+            <NarbarComponent />
+            <p>loilm</p>
+        </div >
     )
+
 }
 
-export default Report;
+export default ReportDetailComponent;

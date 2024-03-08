@@ -55,3 +55,32 @@
     color: red;
     font-size: medium;
 }
+
+.deleteStepperModalDiv {
+    position: relative;
+    display: inline-block;
+    color: rgb(0, 0, 0);
+    height: auto;
+    width: 60vh;
+    text-align: center;
+    margin: auto;
+    padding: 1vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.deleteStepperModalBody {
+    text-align: center;
+    position: relative;
+    height: auto;
+    width: 60%;
+    margin: auto;
+}
+
+.deleteStepperInputGroup {
+    text-align: center;
+    position: relative;
+    display: inline-table;
+    padding-bottom: 2vh;
+    width: 100%;
+}

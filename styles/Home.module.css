@@ -6,7 +6,13 @@
 .lineDiv {
     display: inline-flex;
     width: 94%;
-    padding: 3vh 5vh 0 5vh;
+    padding: 3vh 5vh 0vh 5vh;
+}
+
+.lineDiv1 {
+    display: inline-flex;
+    width: 94%;
+    padding: 3vh 5vh 3vh 5vh;
 }
 
 .chartDiv {

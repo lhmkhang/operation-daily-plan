@@ -15,18 +15,17 @@ const HomePage = () => {
                     <PieChartComponent chartID='1' />
                 </div>
                 <div className={style.chartDiv}>
-                    <ColumnChartCompoent chartID='2' />
+                    <ColumnChartCompoent chartID='col_chart_demo' pgType="HomeDemo"/>
                 </div>
             </div>
-            <div className={style.lineDiv}>
+            <div className={style.lineDiv1}>
                 <div className={style.chartDiv}>
-                    <LineChartComponent />
+                    <LineChartComponent pgType="HomeDemo"/>
                 </div>
                 <div className={style.chartDiv}>
                     <DonutChartComponent />
                 </div>
             </div>
-
         </div>
     )
 }
