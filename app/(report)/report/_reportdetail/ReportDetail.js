@@ -76,6 +76,28 @@ const data_narbar_demo = [
     }
 ]
 
+const data_report_deme = {
+    "_id": "01",
+    "report_name": "Maximize Efficiency Report",
+    "user_create": "loilm",
+    "date_create": "01.12.2023",
+    "description": "Maximize Efficiency Report For Q3, Q4 2023",
+    "charts": [
+        {
+            "_id": "01",
+            "chart_name": "Incident Chart",
+            "chart_type": "Column Chart",
+            "data_source_id": "01",
+        },
+        {
+            "_id": "02",
+            "chart_name": "Tasks Chart",
+            "chart_type": "Column Chart",
+            "data_source_id": "01",
+        }
+    ]
+}
+
 const ReportDetailComponent = (props) => {
     const { report_id } = props;
     let { reportsNarbar, setReportsNarbar } = useContext(ReportNarbarContext);
@@ -85,7 +107,7 @@ const ReportDetailComponent = (props) => {
     }, [setReportsNarbar])
 
     const loadReportDetail = () => {
-        
+
     }
 
     return (

@@ -16,7 +16,6 @@ const data_demo = {
             "chart_name": "Incident Chart",
             "chart_type": "Column Chart",
             "data_source_id": "01",
-
         }
     ],
     tables: [
